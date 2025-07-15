@@ -1,0 +1,13 @@
+# Netlify redirects file for NeuroSpark
+# This handles client-side routing for the React SPA
+
+# Admin panel shortcut
+/admin              /?admin=true                301
+
+# API redirects (if using external APIs)
+/api/gemini/*       https://generativelanguage.googleapis.com/:splat  200
+/api/stripe/*       https://api.stripe.com/:splat                     200
+
+# Catch-all for React Router (SPA)
+# This must be last - it catches all routes and serves index.html
+/*                  /index.html                 200
