@@ -1,5 +1,5 @@
 /**
- * Clerk Authentication Service for NeuroSpark
+ * Clerk Authentication Service for GreyWaken
  * 
  * This service provides integration points for Clerk authentication.
  * Replace mock implementations with actual Clerk SDK calls.
@@ -67,7 +67,7 @@ export class ClerkService {
     // });
     // return result.status === 'complete';
     
-    return email === 'admin@neurospark.ai' && password === 'admin123';
+    return email === 'admin@greywaken.ai' && password === 'admin123';
   }
 
   /**

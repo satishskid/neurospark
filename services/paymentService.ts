@@ -1,5 +1,5 @@
 /**
- * Payment Service for NeuroSpark
+ * Payment Service for GreyWaken
  * 
  * This service provides integration points for Stripe payment processing.
  * Replace mock implementations with actual Stripe SDK calls.

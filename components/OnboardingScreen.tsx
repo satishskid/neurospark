@@ -46,7 +46,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
               <LogoIcon className="w-16 h-16 text-cyan-400" />
             </div>
             <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight tracking-tighter">
-              NeuroSpark<br/>Ignite Your AI Learning Journey
+              GreyWaken<br/>Awaken Your AI Potential
             </h1>
             <p className="text-lg md:text-xl text-slate-400 mb-8 max-w-lg mx-auto lg:mx-0">
               You&apos;re standing at the dawn of a new age. From government halls to startup garages, everyone is talking about Artificial Intelligence. Why? Because it&apos;s a fundamental shift in civilization, like the invention of electricity or the internet.
@@ -72,7 +72,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
         </div>
       </div>
       <footer className="w-full text-center text-xs text-slate-600 py-4 mt-auto flex-shrink-0">
-          <p>© {new Date().getFullYear()} NeuroSpark by greybrain.ai. Ignite your potential.</p>
+          <p>© {new Date().getFullYear()} GreyWaken by greybrain.ai. Awaken your potential.</p>
       </footer>
     </div>
   );

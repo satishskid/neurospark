@@ -1,4 +1,4 @@
-# 🚀 NeuroSpark Deployment Checklist
+# 🚀 GreyWaken Deployment Checklist
 
 ## ✅ **Pre-Deployment Checklist**
 
@@ -15,7 +15,7 @@
 - [ ] `npm run dev` starts local server
 - [ ] Main app loads at `http://localhost:5393/`
 - [ ] Admin panel loads at `http://localhost:5393/?admin=true`
-- [ ] Admin login works with `admin@neurospark.ai` / `admin123`
+- [ ] Admin login works with `admin@greywaken.ai` / `admin123`
 
 ---
 
@@ -23,9 +23,9 @@
 
 ### **Step 1: Push to GitHub**
 ```bash
-# Create repository on GitHub named "neurospark"
+# Create repository on GitHub named "greywaken"
 # Then run:
-git remote add origin https://github.com/YOUR_USERNAME/neurospark.git
+git remote add origin https://github.com/YOUR_USERNAME/greywaken.git
 git branch -M main
 git push -u origin main
 ```
@@ -39,7 +39,7 @@ git push -u origin main
 1. **Go to [Netlify.com](https://netlify.com)**
 2. **Click "New site from Git"**
 3. **Connect GitHub account**
-4. **Select your `neurospark` repository**
+4. **Select your `greywaken` repository**
 5. **Verify build settings** (auto-detected):
    - Build command: `npm run build`
    - Publish directory: `dist`
@@ -67,7 +67,7 @@ GEMINI_API_KEY=your_actual_gemini_api_key_here
 **Test these URLs:**
 - [ ] **Main App**: `https://your-site.netlify.app` loads correctly
 - [ ] **Admin Panel**: `https://your-site.netlify.app/?admin=true` loads
-- [ ] **Admin Login**: Can login with `admin@neurospark.ai` / `admin123`
+- [ ] **Admin Login**: Can login with `admin@greywaken.ai` / `admin123`
 - [ ] **AI Features**: Exercise evaluation works (requires Gemini API key)
 - [ ] **Mobile**: Site is responsive on mobile devices
 
@@ -105,10 +105,10 @@ GEMINI_API_KEY=your_actual_gemini_api_key_here
 - **Live Site**: `https://your-site.netlify.app`
 - **Admin Panel**: `https://your-site.netlify.app/?admin=true`
 - **Netlify Dashboard**: `https://app.netlify.com/sites/your-site-name`
-- **GitHub Repository**: `https://github.com/YOUR_USERNAME/neurospark`
+- **GitHub Repository**: `https://github.com/YOUR_USERNAME/greywaken`
 
 ### **🔑 Important Credentials**
-- **Admin Login**: `admin@neurospark.ai` / `admin123`
+- **Admin Login**: `admin@greywaken.ai` / `admin123`
 - **Gemini API Key**: Stored in Netlify environment variables
 
 ---
@@ -170,7 +170,7 @@ GEMINI_API_KEY=your_actual_gemini_api_key_here
 
 ## 🎯 **Deployment Complete!**
 
-**Congratulations! Your NeuroSpark AI Learning Platform is now live and ready for students!**
+**Congratulations! Your GreyWaken AI Learning Platform is now live and ready for students!**
 
 **Share your success:**
 - [ ] Test with a few students
@@ -178,4 +178,4 @@ GEMINI_API_KEY=your_actual_gemini_api_key_here
 - [ ] Monitor usage and performance
 - [ ] Plan for scaling and additional features
 
-**🧠 NeuroSpark - Igniting AI Learning Journeys Worldwide! 🚀**
+**🧠 GreyWaken - Awakening AI Learning Journeys Worldwide! 🚀**

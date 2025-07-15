@@ -1,0 +1,15 @@
+# Alternative Netlify configuration if main one still fails
+# This uses a different approach to ensure Vite is available
+
+[build]
+  command = "npm install && npx vite build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

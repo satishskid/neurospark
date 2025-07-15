@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.NODE_ENV': JSON.stringify(mode),
-        'process.env.VITE_APP_NAME': JSON.stringify('NeuroSpark'),
+        'process.env.VITE_APP_NAME': JSON.stringify('GreyWaken'),
         'process.env.VITE_COMPANY_NAME': JSON.stringify('greybrain.ai')
       },
       resolve: {

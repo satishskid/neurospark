@@ -85,7 +85,7 @@ const AdminApp: React.FC = () => {
               <span className="text-white font-bold text-sm">GB</span>
             </div>
             <div>
-              <h1 className="text-white font-bold">NeuroSpark</h1>
+              <h1 className="text-white font-bold">GreyWaken</h1>
               <p className="text-slate-400 text-xs">Admin Portal</p>
             </div>
           </div>

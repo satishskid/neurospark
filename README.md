@@ -1,6 +1,6 @@
-# 🧠 NeuroSpark - AI Learning Platform
+# 🧠 GreyWaken - AI Learning Platform
 
-> **Ignite Your AI Learning Journey**
+> **Awaken Your AI Potential**
 
 An interactive educational platform that transforms how students learn AI through engaging lessons, quizzes, and hands-on exercises. Built with React, TypeScript, and powered by Google's Gemini AI.
 
@@ -33,10 +33,10 @@ npm run build
 
 #### **Step 2: Push to GitHub**
 ```bash
-# Create a new repository on GitHub named "neurospark"
+# Create a new repository on GitHub named "greywaken"
 # Then run these commands:
 
-git remote add origin https://github.com/YOUR_USERNAME/neurospark.git
+git remote add origin https://github.com/YOUR_USERNAME/greywaken.git
 git branch -M main
 git push -u origin main
 ```
@@ -44,7 +44,7 @@ git push -u origin main
 #### **Step 3: Deploy to Netlify**
 1. **Go to [Netlify.com](https://netlify.com)**
 2. **Click "New site from Git"**
-3. **Connect GitHub** and select your `neurospark` repository
+3. **Connect GitHub** and select your `greywaken` repository
 4. **Build settings** (auto-detected from `netlify.toml`):
    - Build command: `npm run build`
    - Publish directory: `dist`
@@ -63,7 +63,7 @@ Get your Gemini API key: [Google AI Studio](https://makersuite.google.com/app/ap
 #### **Step 5: Test Your Live Site**
 - **Main App**: `https://your-site.netlify.app`
 - **Admin Panel**: `https://your-site.netlify.app/?admin=true`
-- **Admin Login**: `admin@neurospark.ai` / `admin123`
+- **Admin Login**: `admin@greywaken.ai` / `admin123`
 
 ### **🎯 That's It! Your AI Learning Platform is Live!**
 
@@ -238,8 +238,8 @@ npm run test:coverage # Coverage report
 1. **Push to Git repository**:
    ```bash
    git add .
-   git commit -m "Initial commit: NeuroSpark AI Learning Platform"
-   git remote add origin https://github.com/yourusername/neurospark.git
+   git commit -m "Initial commit: GreyWaken AI Learning Platform"
+   git remote add origin https://github.com/yourusername/greywaken.git
    git push -u origin main
    ```
 
@@ -355,4 +355,4 @@ DATABASE_URL=your_database_connection_string
 
 **Happy Learning! 🧠✨**
 
-*NeuroSpark - Ignite your AI learning journey*
+*GreyWaken - Awaken your AI learning journey*

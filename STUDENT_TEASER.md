@@ -1,10 +1,10 @@
-# 🧠 **NeuroSpark** - Ignite Your AI Learning Journey
+# 🧠 **GreyWaken** - Awaken Your AI Potential
 
-> **The Future is AI. Your Journey Starts Now.**
+> **The Future is AI. Your Awakening Starts Now.**
 
 ---
 
-## 🚀 **Why NeuroSpark?**
+## 🚀 **Why GreyWaken?**
 
 **Artificial Intelligence isn't just the future—it's happening NOW.** While others are still wondering what AI can do, you'll be the one building it, understanding it, and leading with it.
 
@@ -93,7 +93,7 @@ Every day you wait, someone else is getting ahead. But here's the good news: **N
 
 ## 🌟 **Success Stories**
 
-*"I went from knowing nothing about AI to landing an internship at a tech startup. NeuroSpark made complex concepts actually make sense!"*  
+*"I went from knowing nothing about AI to landing an internship at a tech startup. GreyWaken made complex concepts actually make sense!"*
 **— Sarah, Computer Science Student**
 
 *"The hands-on exercises were game-changers. I finally understood how neural networks work by building them myself."*  
@@ -123,7 +123,7 @@ Every day you wait, someone else is getting ahead. But here's the good news: **N
 
 ## ⚡ **Start Your Journey in 30 Seconds**
 
-1. **Visit**: [Your NeuroSpark URL]
+1. **Visit**: [Your GreyWaken URL]
 2. **Enter Your Name**: Personalize your experience
 3. **Choose Your Path**: Start with Module 1 or take the assessment
 4. **Begin Learning**: Your AI future starts now!
@@ -136,9 +136,9 @@ Every day you wait, someone else is getting ahead. But here's the good news: **N
 
 ### **Your AI Journey Starts with a Single Click.**
 
-**🧠 NeuroSpark - Where Curiosity Meets Intelligence**
+**🧠 GreyWaken - Where Curiosity Meets Intelligence**
 
-*Ready to ignite your potential? The future is waiting.*
+*Ready to awaken your potential? The future is waiting.*
 
 ---
 

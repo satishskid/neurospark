@@ -149,7 +149,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       <header className="bg-slate-800/50 border-b border-slate-700/50 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">NeuroSpark Admin</h1>
+            <h1 className="text-2xl font-bold text-white">GreyWaken Admin</h1>
             <p className="text-slate-400">AI Learning Platform Management</p>
           </div>
           <button

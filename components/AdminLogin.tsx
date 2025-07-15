@@ -122,7 +122,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
           {/* Demo Credentials */}
           <div className="mt-8 p-4 bg-slate-700/30 rounded-lg border border-slate-600/30">
             <p className="text-xs text-slate-400 mb-2">Demo Credentials:</p>
-            <p className="text-xs text-slate-300">Email: admin@neurospark.ai</p>
+            <p className="text-xs text-slate-300">Email: admin@greywaken.ai</p>
             <p className="text-xs text-slate-300">Password: admin123</p>
             <p className="text-xs text-slate-400 mt-2">🚧 Replace with Clerk authentication</p>
           </div>
@@ -131,7 +131,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
           <div className="mt-8 text-center">
             <div className="flex items-center justify-center gap-2 text-slate-500 text-sm">
               <LogoIcon className="w-4 h-4" />
-              <span>NeuroSpark Admin</span>
+              <span>GreyWaken Admin</span>
             </div>
             <p className="text-xs text-slate-600 mt-1">by greybrain.ai</p>
           </div>

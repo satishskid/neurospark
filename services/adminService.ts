@@ -3,7 +3,7 @@ import { ClerkService } from './clerkService';
 import { PaymentService } from './paymentService';
 
 /**
- * Admin Service for NeuroSpark
+ * Admin Service for GreyWaken
  *
  * This service orchestrates data from various sources (Clerk, Stripe, Database)
  * to provide a unified admin interface.
