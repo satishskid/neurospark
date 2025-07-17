@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LogoIcon, BrainIcon, CodeBracketSquareIcon, CubeTransparentIcon } from './Icons';
+import { authService } from '../services/firebaseService';
 
 interface OnboardingScreenProps {
   onStart: (name: string) => void;
@@ -13,19 +14,31 @@ const ConceptCard = ({ icon, name, className }: { icon: React.ReactNode, name: s
 );
 
 const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
-  const [name, setName] = useState('');
 
-  const handleStartClick = () => {
-    if (name.trim()) {
-      onStart(name.trim());
-    } else {
-        // Simple validation feedback
-        const input = document.getElementById('name-input');
-        input?.focus();
-        input?.classList.add('ring-2', 'ring-red-500');
-        setTimeout(() => input?.classList.remove('ring-2', 'ring-red-500'), 2000);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const user = await authService.signInWithGoogle();
+
+      if (user) {
+        onStart(user.name);
+      } else {
+        setError('Failed to sign in with Google. Please try again.');
+      }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      console.error('Error signing in with Google:', error);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }
+
+  
 
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4 overflow-hidden">
@@ -53,21 +66,18 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
               AI is helping cure diseases, create breathtaking art, and solve global challenges. Becoming AI-aware is the key to participating in the future. This journey will empower you to understand this revolution and turn its potential into your personal superpower.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
-                 <input
-                    id="name-input"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your name to begin..."
-                    className="bg-slate-800 border border-slate-700 text-white placeholder-slate-500 rounded-full py-4 px-6 w-full sm:w-auto flex-grow transition-all duration-300 focus:ring-2 focus:ring-cyan-500"
-                    onKeyDown={(e) => e.key === 'Enter' && handleStartClick()}
-                />
                 <button
-                onClick={handleStartClick}
-                className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/20 w-full sm:w-auto flex-shrink-0"
+                  onClick={handleGoogleSignIn}
+                  disabled={isLoading}
+                  className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/20 sm:w-auto flex-shrink-0"
                 >
-                Start Your Journey
+                  {isLoading ? 'Loading...' : 'Get Started'}
                 </button>
+            </div>
+            <div className='flex'>
+              {error && (
+                <p className="text-red-500 mt-2">{error}</p>
+              )}
             </div>
         </div>
       </div>
