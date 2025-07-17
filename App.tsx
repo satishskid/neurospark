@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { CURRICULUM } from './constants';
 import { AppView, Lesson, Module, UserProgress } from './types';
@@ -10,6 +11,7 @@ import { LogoIcon, ArrowPathIcon } from './components/Icons';
 import CertificateView from './components/CertificateView';
 import { TutorialView } from './components/TutorialView';
 import AdminApp from './AdminApp';
+import { authService } from './services/firebaseService';
 
 
 const APP_STORAGE_KEY = 'greybrain-ai-journey-progress';
@@ -180,6 +182,11 @@ export default function App() {
     setProgress({ completedLessons: new Set(), userName: null, tutorialCompleted: false });
     setCurrentLessonId(CURRICULUM[0].lessons[0].id);
   }
+
+  const handleLogout = () => {
+    authService.signOut();
+    handleReset();
+  }
   
   const JourneyView = (
      <div className="flex h-screen bg-slate-900 font-sans">
@@ -196,8 +203,8 @@ export default function App() {
           isLessonUnlocked={isLessonUnlocked}
         />
         <footer className="mt-auto text-center text-xs text-slate-600 pt-4">
-          <p>© {new Date().getFullYear()} greybrain.ai</p>
-          <p>Tickle your grey matter.</p>
+          <button onClick={handleLogout} className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/20 sm:w-auto flex-shrink-0"
+          >Sign Out</button>
         </footer>
       </aside>
       
