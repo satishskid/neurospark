@@ -19,39 +19,33 @@ export const dbService = {
 
     createUser: async (user: User): Promise<void> => {
         const docRef = doc(db, USERS_COLLECTION, user.uid);
-        const docSnap = await getDoc(docRef);
 
-        if (!docSnap.exists()) {
-            const userData = {
-                uid: user.uid,
-                name: user.name,
-                email: user.email,
-                createdAt: new Date().toISOString(),
-                isLoggedIn: user.isLoggedIn,
-                updatedAt: new Date().toISOString(),
-                userPersona: null,
-                courseMode: null,
-                userProfession: null,
-                currentLevelIndex: 0,
-                totalPoints: 0,
-                achievedBadgeIds: [],
-                completedSteps: {},
-                theme: 'playful',
-                analogyTheme: null,
-            };
-        
-            await setDoc(docRef, userData);
-            console.log(`New user created: ${user.email}`);
-        } else {
-            console.log(`User already exists: ${user.email}`);
-            throw new Error("User already exists");
-        }
+        const userData: User = {
+            uid: user.uid,
+            name: user.name,
+            email: user.email,
+            createdAt: new Date().toISOString(),
+            isLoggedIn: user.isLoggedIn,
+            updatedAt: new Date().toISOString(),
+            userPersona: null,
+            courseMode: null,
+            userProfession: null,
+            currentLevelIndex: 0,
+            totalPoints: 0,
+            achievedBadgeIds: [],
+            completedSteps: {},
+            theme: 'playful',
+            analogyTheme: null,
+            isAdmin: false,
+        };
+    
+        await setDoc(docRef, userData);
     },
 
-    findUser: async (uid: string): Promise<any | null> => {
+    findUser: async (uid: string): Promise<User | null> => {
         const docRef = doc(db, USERS_COLLECTION, uid);
         const docSnap = await getDoc(docRef);
-        return docSnap.exists() ? docSnap.data() : null;
+        return docSnap.exists() ? docSnap.data() as User : null;
     },
 
     updateUser: async (uid: string, user: any): Promise<void> => {
