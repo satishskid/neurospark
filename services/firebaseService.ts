@@ -4,6 +4,7 @@ import {
     signOut,
     onAuthStateChanged,
     User as FirebaseUser,
+    signInWithEmailAndPassword,
 } from 'firebase/auth';
 
 import { auth } from '../firebaseConfig';
@@ -13,45 +14,80 @@ import { User } from '@/types';
 const provider = new GoogleAuthProvider();
   
 export const authService = {
-    signInWithGoogle: async (): Promise<User | null> => {
-        const result = await signInWithPopup(auth, provider);
 
-        if (!result.user) {
-            throw new Error("Sign in failed, no user returned.");
-        }
+    signInWithEmail: async (email: string, password: string): Promise<User | null> => {
+        try {
+            const result = await signInWithEmailAndPassword(auth, email, password);
 
-        // Is the User allowed to login?
-        const isWhitelisted = await dbService.isUserWhitelisted(result.user.email || '');
-
-        if (!isWhitelisted) {
-            throw new Error("User is not whitelisted. Please contact support.");
-        }
-
-        // Is the User already logged in?
-        const user = await dbService.findUser(result.user.uid);
-
-        if (user) {
-            if (user.isLoggedIn) {
-                throw new Error("User is already logged in.");
+            // This means either the user creds are wrong or
+            // the user is not whitelisted.
+            if (!result.user) {
+                throw new Error("Sign in failed. User is not authorized. Please contact support.");
             }
 
-            await dbService.updateUser(result.user.uid, { isLoggedIn: true });
-            return user;
+            // Only whitelisted users reach this part.
+            let user = await dbService.findUser(result.user.uid);
+
+            if (user) {
+                if (user.isLoggedIn) {
+                    throw new Error("User is already logged in.");
+                }
+
+                await dbService.updateUser(result.user.uid, { isLoggedIn: true });
+            } else {
+
+                // If user is whitelisted but not in db means first login
+                // So create the user.
+                await dbService.createUser({
+                    uid: result.user.uid,
+                    name: result.user.displayName || 'Anonymous',
+                    email: result.user.email || '',
+                    isLoggedIn: true,
+                });
+            }
+
+            return await dbService.findUser(result.user.uid);
+        } catch (err) {
+            console.log(err);
+            throw new Error('Authorization Error. Please contact support');
         }
+    },
 
-        // Create user in database
-        const appUser: User = {
-            uid: result.user.uid,
-            name: result.user.displayName || 'Anonymous',
-            email: result.user.email || '',
-            isLoggedIn: true,
-        };
-
+    signInWithGoogle: async (): Promise<User | null> => {
         try {
-            await dbService.createUser(appUser);
-            return appUser;
-        } catch (error) {
-            throw new Error('Failed to create user in database');
+            const result = await signInWithPopup(auth, provider);
+
+            // This means either the user creds are wrong or
+            // the user is not whitelisted.
+            if (!result.user) {
+                throw new Error("Sign in failed. User is not authorized. Please contact support.");
+            }
+            
+            // Only whitelisted users reach this part.
+            let user = await dbService.findUser(result.user.uid);
+
+            if (user) {
+                if (user.isLoggedIn) {
+                    throw new Error("User is already logged in.");
+                }
+
+                await dbService.updateUser(result.user.uid, { isLoggedIn: true });
+            } else {
+
+                // If user is whitelisted but not in db means first login
+                // So create the user.
+                await dbService.createUser({
+                    uid: result.user.uid,
+                    name: result.user.displayName || 'Anonymous',
+                    email: result.user.email || '',
+                    isLoggedIn: true,
+                });
+            }
+
+            return await dbService.findUser(result.user.uid);
+        } catch (err) {
+            console.log(err);
+            throw new Error('Authorization Error. Please contact support');
         }
     },
 
@@ -68,13 +104,16 @@ export const authService = {
     onAuthStateChanged: (callback: (user: any | null) => void): (() => void) => {
     return onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
         if (firebaseUser) {
-        const appUser = {
-            uid: firebaseUser.uid,
-            name: firebaseUser.displayName || 'Anonymous',
-            email: firebaseUser.email || '',
-            isLoggedIn: true,
-        };
-        callback(appUser);
+
+            dbService.findUser(firebaseUser.uid).then((dbUser) => {
+                const appUser = {
+                    uid: firebaseUser.uid,
+                    name: firebaseUser.displayName || 'Anonymous',
+                    email: firebaseUser.email || '',
+                    isLoggedIn: dbUser?.isLoggedIn || false,
+                };
+                callback(appUser);
+            });
         } else {
         callback(null);
         }

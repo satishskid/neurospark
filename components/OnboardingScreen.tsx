@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { LogoIcon, BrainIcon, CodeBracketSquareIcon, CubeTransparentIcon } from './Icons';
-import { authService } from '../services/firebaseService';
 
 interface OnboardingScreenProps {
-  onStart: (name: string) => void;
+  onStart: () => void;
 }
 
 const ConceptCard = ({ icon, name, className }: { icon: React.ReactNode, name: string, className: string }) => (
@@ -14,31 +13,6 @@ const ConceptCard = ({ icon, name, className }: { icon: React.ReactNode, name: s
 );
 
 const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const user = await authService.signInWithGoogle();
-
-      if (user) {
-        onStart(user.name);
-      } else {
-        setError('Failed to sign in with Google. Please try again.');
-      }
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'An unknown error occurred');
-      console.error('Error signing in with Google:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  
 
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4 overflow-hidden">
@@ -67,17 +41,11 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
                 <button
-                  onClick={handleGoogleSignIn}
-                  disabled={isLoading}
+                  onClick={onStart}
                   className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/20 sm:w-auto flex-shrink-0"
                 >
-                  {isLoading ? 'Loading...' : 'Get Started'}
+                  Get Started
                 </button>
-            </div>
-            <div className='flex'>
-              {error && (
-                <p className="text-red-500 mt-2">{error}</p>
-              )}
             </div>
         </div>
       </div>
