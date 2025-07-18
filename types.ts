@@ -3,6 +3,18 @@ export interface User {
   name: string;
   email: string;
   isLoggedIn: boolean;
+  isAdmin?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  userPersona?: string | null;
+  courseMode?: string | null;
+  userProfession?: string | null;
+  currentLevelIndex?: number;
+  totalPoints?: number;
+  achievedBadgeIds?: string[];
+  completedSteps?: Record<string, boolean>;
+  theme?: string;
+  analogyTheme?: string | null;
 }
 
 export interface Lesson {
@@ -42,7 +54,7 @@ export interface UserProgress {
   tutorialCompleted: boolean;
 }
 
-export type AppView = 'onboarding' | 'journey' | 'certificate' | 'tutorial';
+export type AppView = 'onboarding' | 'login' | 'journey' | 'certificate' | 'tutorial';
 
 export interface ChatHistoryItem {
   role: 'user' | 'model';
