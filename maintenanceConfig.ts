@@ -3,9 +3,7 @@
 // Use Vite env vars: set VITE_LOGIN_DISABLED="true" to block logins
 // Optionally set VITE_LOGIN_DISABLED_MESSAGE to customize the banner/error text
 
-export const LOGIN_BLOCKED: boolean =
-  (import.meta as any).env?.VITE_LOGIN_DISABLED === "true";
+export const LOGIN_BLOCKED: boolean = true;
 
 export const LOGIN_BLOCK_MESSAGE: string =
-  (import.meta as any).env?.VITE_LOGIN_DISABLED_MESSAGE ||
-  "Logins are temporarily disabled while we perform a scheduled upgrade. Please try again soon.";
+  "Logins are temporarily disabled while we perform a scheduled upgrade. Please try again soon.";;
