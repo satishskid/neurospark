@@ -4,13 +4,14 @@
 
 An interactive educational platform that transforms how students learn AI through engaging lessons, quizzes, and hands-on exercises. Built with React, TypeScript, and powered by Google's Gemini AI.
 
-*A product by greybrain.ai*
+_A product by greybrain.ai_
 
 ---
 
 ## 🚀 **DEVELOPER QUICK START**
 
 ### **Prerequisites**
+
 - Node.js 18+ installed
 - Git installed
 - GitHub account
@@ -20,6 +21,7 @@ An interactive educational platform that transforms how students learn AI throug
 ### **⚡ 5-Minute Deployment**
 
 #### **Step 1: Clone & Setup**
+
 ```bash
 # Navigate to your project directory
 cd Downloads/greybrain.ai
@@ -32,6 +34,7 @@ npm run build
 ```
 
 #### **Step 2: Push to GitHub**
+
 ```bash
 # Create a new repository on GitHub named "greywaken"
 # Then run these commands:
@@ -42,6 +45,7 @@ git push -u origin main
 ```
 
 #### **Step 3: Deploy to Netlify**
+
 1. **Go to [Netlify.com](https://netlify.com)**
 2. **Click "New site from Git"**
 3. **Connect GitHub** and select your `greywaken` repository
@@ -51,9 +55,11 @@ git push -u origin main
 5. **Click "Deploy site"**
 
 #### **Step 4: Configure Environment Variables**
+
 In Netlify Dashboard → Site Settings → Environment Variables:
 
 **Required:**
+
 ```
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
@@ -61,6 +67,7 @@ GEMINI_API_KEY=your_gemini_api_key_here
 Get your Gemini API key: [Google AI Studio](https://makersuite.google.com/app/apikey)
 
 #### **Step 5: Test Your Live Site**
+
 - **Main App**: `https://your-site.netlify.app`
 - **Admin Panel**: `https://your-site.netlify.app/?admin=true`
 - **Admin Login**: `admin@greywaken.ai` / `admin123`
@@ -72,6 +79,7 @@ Get your Gemini API key: [Google AI Studio](https://makersuite.google.com/app/ap
 ## ✨ **WHAT YOU'RE DEPLOYING**
 
 ### **🎓 Student Experience**
+
 - **Interactive AI Curriculum**: 5 comprehensive modules from basics to advanced
 - **Multiple Learning Formats**: Lessons, quizzes, hands-on coding exercises
 - **AI-Powered Feedback**: Real-time evaluation using Google Gemini AI
@@ -79,6 +87,7 @@ Get your Gemini API key: [Google AI Studio](https://makersuite.google.com/app/ap
 - **Mobile-First Design**: Beautiful, responsive interface
 
 ### **👨‍💼 Admin Dashboard**
+
 - **User Analytics**: Real-time metrics, growth tracking, engagement data
 - **API Health Monitoring**: Live status, response times, quota tracking
 - **Payment Management**: Freemium model with Pro ($19.99) & Enterprise ($99.99) tiers
@@ -86,6 +95,7 @@ Get your Gemini API key: [Google AI Studio](https://makersuite.google.com/app/ap
 - **Revenue Analytics**: MRR, conversion rates, churn analysis
 
 ### **🔧 Technical Features**
+
 - **Production-Ready**: Clerk auth & Stripe payment integration points
 - **Scalable Architecture**: Modular services, TypeScript safety
 - **Modern Stack**: React 19, Vite, Tailwind CSS
@@ -96,6 +106,7 @@ Get your Gemini API key: [Google AI Studio](https://makersuite.google.com/app/ap
 ## 📋 **DETAILED DEVELOPER GUIDE**
 
 ### **Prerequisites**
+
 - **Node.js** 18+ ([Download](https://nodejs.org/))
 - **Git** ([Download](https://git-scm.com/))
 - **GitHub Account** ([Sign up](https://github.com/))
@@ -105,6 +116,7 @@ Get your Gemini API key: [Google AI Studio](https://makersuite.google.com/app/ap
 ### **🔧 Local Development Setup**
 
 1. **Verify Prerequisites**
+
    ```bash
    node --version    # Should be 18+
    git --version     # Should be installed
@@ -112,12 +124,14 @@ Get your Gemini API key: [Google AI Studio](https://makersuite.google.com/app/ap
    ```
 
 2. **Install Dependencies**
+
    ```bash
    cd Downloads/greybrain.ai
    npm install
    ```
 
 3. **Configure Environment**
+
    ```bash
    # Copy environment template
    cp .env.example .env.local
@@ -127,9 +141,11 @@ Get your Gemini API key: [Google AI Studio](https://makersuite.google.com/app/ap
    ```
 
 4. **Test Local Development**
+
    ```bash
    npm run dev
    ```
+
    - **Main App**: `http://localhost:5393/`
    - **Admin Panel**: `http://localhost:5393/?admin=true`
 
@@ -171,6 +187,7 @@ greybrain.ai/
 ## 🧠 How It Works
 
 ### Learning Journey
+
 1. **Onboarding**: Enter your name to start your personalized journey
 2. **Tutorial**: Interactive walkthrough of the interface
 3. **Modules**: Progress through structured learning modules
@@ -178,6 +195,7 @@ greybrain.ai/
 5. **Progress Tracking**: Your progress is automatically saved
 
 ### AI Integration
+
 - **Exercise Evaluation**: Submit code/answers for AI-powered feedback
 - **Chatbot Tutor**: Ask questions about current module content
 - **Adaptive Learning**: Personalized feedback based on your responses
@@ -185,9 +203,11 @@ greybrain.ai/
 ## 🔧 Configuration
 
 ### Environment Variables
+
 - `GEMINI_API_KEY`: Your Google Gemini API key for AI features
 
 ### Customization
+
 - **Curriculum**: Edit `constants.tsx` to modify learning content
 - **Styling**: Update `index.css` or component styles
 - **AI Prompts**: Modify prompts in `services/geminiService.ts`
@@ -197,20 +217,24 @@ greybrain.ai/
 ### Common Issues
 
 **App won't start:**
+
 - Ensure Node.js is installed (`node --version`)
 - Run `npm install` to install dependencies
 - Check for port conflicts (default: 5393)
 
 **AI features not working:**
+
 - Verify your Gemini API key is correctly set in `.env.local`
 - Check browser console for API errors
 - Ensure you have API quota remaining
 
 **Tests failing:**
+
 - Run `npm install` to ensure all test dependencies are installed
 - Some tests may need API key configuration
 
 ### Development Tips
+
 - Use browser dev tools to inspect component state
 - Check the console for helpful error messages
 - The app gracefully handles API failures with fallback responses
@@ -218,12 +242,14 @@ greybrain.ai/
 ## 🧪 Testing
 
 The project includes comprehensive tests for:
+
 - Component rendering and interactions
 - API service integration
 - User journey flows
 - Error handling
 
 Run tests with:
+
 ```bash
 npm run test        # Run all tests
 npm run test:ui     # Interactive test UI
@@ -235,7 +261,9 @@ npm run test:coverage # Coverage report
 ### Quick Deploy to Netlify
 
 #### Option 1: Git-based Deployment (Recommended)
+
 1. **Push to Git repository**:
+
    ```bash
    git add .
    git commit -m "Initial commit: GreyWaken AI Learning Platform"
@@ -251,7 +279,9 @@ npm run test:coverage # Coverage report
    - Click "Deploy site"
 
 #### Option 2: Manual Deployment
+
 1. **Build the project**:
+
    ```bash
    npm run build
    ```
@@ -263,15 +293,31 @@ npm run test:coverage # Coverage report
 ### Environment Variables Setup
 
 #### For Netlify Dashboard:
+
 1. Go to Site Settings → Environment Variables
 2. Add the following variables:
 
 **Required for basic functionality:**
+
 ```
 GEMINI_API_KEY=your_gemini_api_key
 ```
 
+**Temporarily disable user logins (maintenance mode):**
+
+```
+VITE_LOGIN_DISABLED=true
+VITE_LOGIN_DISABLED_MESSAGE="Logins are temporarily disabled while we perform a scheduled upgrade. Please try again soon."
+```
+
+When `VITE_LOGIN_DISABLED` is `true`:
+
+- Sign-in via email or Google is blocked in `services/firebaseService.ts`
+- `components/LoginScreen.tsx` disables inputs/buttons and displays the message
+  Set `VITE_LOGIN_DISABLED=false` (or remove it) to re-enable logins and redeploy.
+
 **For production with authentication:**
+
 ```
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_...
 CLERK_SECRET_KEY=sk_live_...
@@ -281,17 +327,20 @@ DATABASE_URL=your_production_database_url
 ```
 
 #### Build Settings (Auto-configured via netlify.toml):
+
 - **Build command**: `npm run build`
 - **Publish directory**: `dist`
 - **Node version**: `18`
 
 ### Custom Domain Setup
+
 1. In Netlify dashboard: Site Settings → Domain Management
 2. Add your custom domain
 3. Configure DNS records as instructed
 4. SSL certificate is automatically provisioned
 
 ### Other Deployment Options
+
 - **Vercel**: Connect your repository for automatic deployments
 - **GitHub Pages**: Use GitHub Actions for automated deployment
 - **Railway**: Connect Git repository for full-stack deployment
@@ -304,6 +353,7 @@ This project is part of the greybrain.ai educational platform.
 ## 🤝 Contributing
 
 This is an educational project. Feel free to:
+
 - Report bugs or issues
 - Suggest improvements
 - Fork and experiment with the code
@@ -316,6 +366,7 @@ This is an educational project. Feel free to:
 This application is designed for easy integration with production services:
 
 ### 🚧 Current Status: Mock Data
+
 - **Authentication**: Mock admin login (replace with Clerk)
 - **Payments**: Mock subscription data (replace with Stripe)
 - **Database**: In-memory mock data (replace with PostgreSQL/MongoDB)
@@ -355,4 +406,4 @@ DATABASE_URL=your_database_connection_string
 
 **Happy Learning! 🧠✨**
 
-*GreyWaken - Awaken your AI learning journey*
+_GreyWaken - Awaken your AI learning journey_
