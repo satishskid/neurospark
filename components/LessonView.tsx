@@ -4,7 +4,7 @@ import { Lesson, Module, ChatHistoryItem } from '../types';
 import QuizView from './QuizView';
 import ExerciseView from './ExerciseView';
 import { TrophyIcon, ChatBubbleLeftRightIcon, XMarkIcon, LogoIcon } from './Icons';
-import { getChatbotResponse } from '../services/geminiService';
+import { getChatbotResponse } from '../services/aiService';
 import { CURRICULUM } from '../constants';
 
 const ChatbotModal = ({ module, onClose }: { module: Module | undefined, onClose: () => void }) => {

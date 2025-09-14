@@ -1,11 +1,10 @@
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
     return {
       server: {
-        port: 5393
+        port: 7773
       },
       build: {
         outDir: 'dist',
@@ -20,8 +19,6 @@ export default defineConfig(({ mode }) => {
         }
       },
       define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.NODE_ENV': JSON.stringify(mode),
         'process.env.VITE_APP_NAME': JSON.stringify('GreyWaken'),
         'process.env.VITE_COMPANY_NAME': JSON.stringify('greybrain.ai')

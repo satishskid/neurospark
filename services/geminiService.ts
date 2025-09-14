@@ -1,16 +1,49 @@
 import { GoogleGenAI } from "@google/genai";
 import { ChatHistoryItem, Module } from "../types";
 
-// Ensure the API key is available. In a real app, this would be handled by the environment.
-if (!process.env.API_KEY) {
-  // In a real scenario, you might have a fallback or error message.
-  // For this example, we'll log a warning.
-  console.warn("API_KEY environment variable not set. AI features will be disabled.");
+const model = "gemini-2.0-flash-exp";
+
+// Get user's API key from localStorage
+function getUserApiKey(): string | null {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('user_gemini_api_key');
+  }
+  return null;
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
-const model = "gemini-2.5-flash";
+// Create AI instance with user's key or fallback to environment
+function createAIInstance(): GoogleGenAI | null {
+  const userKey = getUserApiKey();
+  const apiKey = userKey || process.env.VITE_GEMINI_API_KEY || process.env.API_KEY;
+  
+  if (!apiKey) {
+    console.warn("No API key available. AI features will be disabled.");
+    return null;
+  }
+  
+  return new GoogleGenAI({ apiKey });
+}
 
+// Test if an API key is valid
+export async function testGeminiKey(apiKey: string): Promise<boolean> {
+  if (!apiKey || !apiKey.startsWith('AIza')) {
+    return false;
+  }
+
+  try {
+    const ai = new GoogleGenAI({ apiKey });
+    const response = await ai.models.generateContent({
+      model: model,
+      contents: "Say 'Hello' if you can hear me.",
+    });
+    
+    const text = response.text;
+    return !!(text && text.toLowerCase().includes('hello'));
+  } catch (error) {
+    console.error("API key validation failed:", error);
+    return false;
+  }
+}
 
 interface EvaluationResult {
   isCorrect: boolean;
@@ -18,10 +51,12 @@ interface EvaluationResult {
 }
 
 export async function evaluateExercise(exerciseGoal: string, userInput: string): Promise<EvaluationResult> {
-  if (!process.env.API_KEY) {
-     return {
+  const ai = createAIInstance();
+  
+  if (!ai) {
+    return {
       isCorrect: false,
-      feedback: "API Key is not configured. Cannot evaluate exercise.",
+      feedback: "API Key is not configured. Please add your Gemini API key to use AI features.",
     };
   }
 
@@ -88,8 +123,10 @@ export async function evaluateExercise(exerciseGoal: string, userInput: string):
 }
 
 export async function getChatbotResponse(module: Module, curriculumSummary: string, chatHistory: ChatHistoryItem[], newUserQuery: string): Promise<string> {
-    if (!process.env.API_KEY) {
-        return "Sorry, the AI Tutor is currently unavailable because the API Key is not configured.";
+    const ai = createAIInstance();
+    
+    if (!ai) {
+        return "Sorry, the AI Tutor is currently unavailable because no API Key is configured. Please add your Gemini API key in the settings to use this feature.";
     }
 
     const systemPrompt = `You are greybrain.ai, a friendly, patient, and brilliant AI Tutor. Your student is a complete beginner with zero programming background. Your tone is always encouraging and supportive.
@@ -143,4 +180,11 @@ export async function getChatbotResponse(module: Module, curriculumSummary: stri
         console.error("Error getting chatbot response from Gemini:", error);
         return "I'm sorry, I seem to be having a little trouble connecting. Please try asking again in a moment.";
     }
+}
+
+// Check if user has a valid API key configured
+export function hasValidApiKey(): boolean {
+  const userKey = getUserApiKey();
+  const envKey = process.env.VITE_GEMINI_API_KEY || process.env.API_KEY;
+  return !!(userKey || envKey);
 }

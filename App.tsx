@@ -7,12 +7,15 @@ import OnboardingScreen from './components/OnboardingScreen';
 import CurriculumView from './components/CurriculumView';
 import LessonView from './components/LessonView';
 import NextStepsView from './components/NextStepsView';
-import { LogoIcon, ArrowPathIcon } from './components/Icons';
+import { LogoIcon, ArrowPathIcon, Cog6ToothIcon } from './components/Icons';
 import CertificateView from './components/CertificateView';
 import { TutorialView } from './components/TutorialView';
 import AdminApp from './AdminApp';
 import { authService } from './services/firebaseService';
 import LoginScreen from './components/LoginScreen';
+import SettingsView from './components/SettingsView';
+import ApiKeyWarning from './components/ApiKeyWarning';
+import { hasValidApiKey } from './services/aiService';
 
 
 const APP_STORAGE_KEY = 'greybrain-ai-journey-progress';
@@ -26,7 +29,7 @@ const formatTime = (minutes: number) => {
   return `${hours}h ${remainingMinutes}m`;
 }
 
-const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void }) => {
+const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload, onOpenSettings }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void, onOpenSettings: () => void }) => {
   const progressPercentage = allLessonsCount > 0 ? (completedLessonsCount / allLessonsCount) * 100 : 0;
   
   return (
@@ -38,9 +41,18 @@ const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemaining
                     <ArrowPathIcon className="w-4 h-4 text-slate-400" />
                 </button>
             </h2>
-             <div className="text-right">
-                <p className="text-sm text-white font-bold">{formatTime(moduleRemainingTime)} <span className="text-slate-400 font-normal">in module</span></p>
-                <p className="text-xs text-slate-400">About {formatTime(totalRemainingTime)} total</p>
+            <div className="flex items-center gap-4">
+                <div className="text-right">
+                    <p className="text-sm text-white font-bold">{formatTime(moduleRemainingTime)} <span className="text-slate-400 font-normal">in module</span></p>
+                    <p className="text-xs text-slate-400">About {formatTime(totalRemainingTime)} total</p>
+                </div>
+                <button 
+                    onClick={onOpenSettings} 
+                    title="Settings" 
+                    className="p-2 rounded-full hover:bg-slate-700 transition-colors"
+                >
+                    <Cog6ToothIcon className="w-5 h-5 text-slate-400" />
+                </button>
             </div>
         </div>
       <div className="w-full bg-slate-700 rounded-full h-2.5">
@@ -57,6 +69,8 @@ const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemaining
 export default function App() {
   const [view, setView] = useState<AppView>('onboarding');
   const [isAdminMode, setIsAdminMode] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [hasApiKey, setHasApiKey] = useState(false);
 
   const [progress, setProgress] = useState<UserProgress>({ 
     completedLessons: new Set(), 
@@ -74,6 +88,9 @@ export default function App() {
       setIsAdminMode(true);
       return;
     }
+
+    // Check for API key
+    setHasApiKey(hasValidApiKey());
 
     try {
         const savedData = localStorage.getItem(APP_STORAGE_KEY);
@@ -188,6 +205,18 @@ export default function App() {
     authService.signOut();
     handleReset();
   }
+
+  const handleOpenSettings = () => {
+    setShowSettings(true);
+  }
+
+  const handleCloseSettings = () => {
+    setShowSettings(false);
+  }
+
+  const handleApiKeyChange = (keyExists: boolean) => {
+    setHasApiKey(keyExists);
+  }
   
   const JourneyView = (
      <div className="flex h-screen bg-slate-900 font-sans">
@@ -216,8 +245,12 @@ export default function App() {
             moduleRemainingTime={moduleRemainingTime}
             totalRemainingTime={remainingTime}
             onReload={() => window.location.reload()}
+            onOpenSettings={handleOpenSettings}
           />
          <div className="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12 relative">
+            {!hasApiKey && (
+              <ApiKeyWarning onOpenSettings={handleOpenSettings} />
+            )}
             {currentLesson ? (
               <LessonView
                 key={currentLesson.id}
@@ -267,9 +300,25 @@ export default function App() {
         <div className="relative">
             {JourneyView}
             <TutorialView onComplete={handleCompleteTutorial} />
+            {showSettings && (
+              <SettingsView 
+                onClose={handleCloseSettings}
+                onApiKeyChange={handleApiKeyChange}
+              />
+            )}
         </div>
     );
   }
 
-  return JourneyView;
+  return (
+    <>
+      {JourneyView}
+      {showSettings && (
+        <SettingsView 
+          onClose={handleCloseSettings}
+          onApiKeyChange={handleApiKeyChange}
+        />
+      )}
+    </>
+  );
 }
