@@ -142,6 +142,14 @@ export class ClerkService {
   }
 
   /**
+   * Check if user is the special demo admin (drsatish@skids.health)
+   * This user gets bypass privileges for conference demonstrations
+   */
+  async isDemoAdmin(email: string): Promise<boolean> {
+    return email === 'drsatish@skids.health';
+  }
+
+  /**
    * TODO: Replace with Clerk webhook handling
    */
   async handleClerkWebhook(event: any): Promise<void> {

@@ -26,5 +26,8 @@
     "paths": {
       "@/*" :  ["./*"]
     }
+    ,
+  "types": ["react", "react-dom"],
+    "typeRoots": ["./node_modules/@types"]
   }
 }

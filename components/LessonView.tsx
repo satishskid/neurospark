@@ -5,15 +5,26 @@ import QuizView from './QuizView';
 import ExerciseView from './ExerciseView';
 import { TrophyIcon, ChatBubbleLeftRightIcon, XMarkIcon, LogoIcon } from './Icons';
 import { getChatbotResponse } from '../services/aiService';
-import { CURRICULUM } from '../constants';
+import { CURRICULUM, CURRICULUM_MEDICAL } from '../constants';
 
-const ChatbotModal = ({ module, onClose }: { module: Module | undefined, onClose: () => void }) => {
+const ChatbotModal = ({ module, onClose, initialQuery }: { module: Module | undefined, onClose: () => void, initialQuery?: string }) => {
     const [history, setHistory] = useState<ChatHistoryItem[]>([]);
     const [userInput, setUserInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [hasSentInitial, setHasSentInitial] = useState(false);
 
     const curriculumSummary = useMemo(() => CURRICULUM.map(m => `Module ${m.id.split('-')[1]}: ${m.title}`).join('\n'), []);
+    const moduleReference = useMemo(() => {
+        if (!module) return '';
+        const lessons = module.lessons || [];
+        return lessons.map(l => {
+            const fr = (l.furtherReading || []).map(link => `- ${link.label}: ${link.url}`).join('\n');
+            const gl = (l.glossary || []).map(g => `- ${g.term}: ${g.definition}`).join('\n');
+            const ft = (l.footnotes || []).map(f => `- ${f}`).join('\n');
+            return `Lesson ${l.id}: ${l.title}\n${l.referenceText || ''}\n\nFurther Reading:\n${fr}\n\nGlossary:\n${gl}\n\nFootnotes:\n${ft}`;
+        }).join('\n\n');
+    }, [module]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -31,7 +42,7 @@ const ChatbotModal = ({ module, onClose }: { module: Module | undefined, onClose
         setIsLoading(true);
 
         try {
-            const response = await getChatbotResponse(module, curriculumSummary, newHistory, userInput);
+            const response = await getChatbotResponse(module, curriculumSummary, moduleReference, newHistory, userInput);
             setHistory(prev => [...prev, { role: 'model', content: response }]);
         } catch (error) {
             setHistory(prev => [...prev, { role: 'model', content: "I'm having a little trouble thinking right now. Please try again in a moment." }]);
@@ -39,6 +50,26 @@ const ChatbotModal = ({ module, onClose }: { module: Module | undefined, onClose
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        const sendInitial = async () => {
+            if (!initialQuery || hasSentInitial || isLoading || !module) return;
+            const newHistory: ChatHistoryItem[] = [...history, { role: 'user', content: initialQuery }];
+            setHistory(newHistory);
+            setIsLoading(true);
+            try {
+                const response = await getChatbotResponse(module, curriculumSummary, moduleReference, newHistory, initialQuery);
+                setHistory(prev => [...prev, { role: 'model', content: response }]);
+            } catch (error) {
+                setHistory(prev => [...prev, { role: 'model', content: "I'm having a little trouble thinking right now. Please try again in a moment." }]);
+            } finally {
+                setIsLoading(false);
+                setHasSentInitial(true);
+            }
+        };
+        sendInitial();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialQuery, module]);
     
     return (
         <div className="fixed inset-0 bg-black/60 z-40 flex justify-center items-center p-4 animate-fade-in-fast" onClick={onClose}>
@@ -94,7 +125,9 @@ interface LessonViewProps {
 
 const LessonView: React.FC<LessonViewProps> = ({ lesson, onComplete }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const currentModule = CURRICULUM.find(m => m.lessons.some(l => l.id === lesson.id));
+  const [initialChatQuery, setInitialChatQuery] = useState<string | null>(null);
+  const allModules = [...CURRICULUM, ...CURRICULUM_MEDICAL];
+  const currentModule = allModules.find(m => m.lessons.some(l => l.id === lesson.id));
 
   const renderContent = () => {
     switch(lesson.type) {
@@ -103,6 +136,26 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, onComplete }) => {
           <>
             <div className="prose prose-invert prose-lg max-w-none text-slate-300 prose-strong:text-cyan-400">
                 {lesson.content}
+            </div>
+            <div className="mt-8 p-4 bg-slate-800/50 rounded-lg border border-slate-700">
+              <h3 className="text-white font-semibold mb-3">Check Your Understanding</h3>
+              <div className="space-y-2">
+                {(lesson.checkPrompts && lesson.checkPrompts.length ? lesson.checkPrompts : [
+                  `Summarize "${lesson.title}" to a 10-year-old.`,
+                  `Predict where mistakes occur in this topic and how to avoid them.`,
+                  `Explain the key idea of "${lesson.title}" with a simple example.`,
+                  `What are the most important terms from "${lesson.title}" and what do they mean?`,
+                  `How would you apply "${lesson.title}" in a real scenario?`
+                ]).map((q, i) => (
+                  <div key={i} className="flex items-center justify-between gap-4">
+                    <p className="text-slate-300 text-sm flex-1">{q}</p>
+                    <button
+                      onClick={() => { setInitialChatQuery(q); setIsChatOpen(true); }}
+                      className="px-3 py-1 bg-cyan-600 hover:bg-cyan-700 text-white rounded text-sm"
+                    >Ask via Tutor</button>
+                  </div>
+                ))}
+              </div>
             </div>
              <div className="mt-12 text-center border-t border-slate-700/50 pt-8">
                 <button 
@@ -142,7 +195,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, onComplete }) => {
           <ChatBubbleLeftRightIcon className="w-8 h-8" />
       </button>
 
-      {isChatOpen && <ChatbotModal module={currentModule} onClose={() => setIsChatOpen(false)} />}
+      {isChatOpen && <ChatbotModal module={currentModule} onClose={() => setIsChatOpen(false)} initialQuery={initialChatQuery || undefined} />}
     </>
   );
 };

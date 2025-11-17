@@ -15,6 +15,14 @@ import { LOGIN_BLOCKED, LOGIN_BLOCK_MESSAGE } from "@/maintenanceConfig";
 const provider = new GoogleAuthProvider();
 
 export const authService = {
+  /**
+   * Check if user is the special demo admin for conference presentations
+   */
+  isDemoAdmin: (user: any): boolean => {
+    const demoEmails = ['drsatish@skids.health', 'satish@skids.health'];
+    return demoEmails.includes(user?.email);
+  },
+
   signInWithEmail: async (
     email: string,
     password: string
@@ -38,9 +46,10 @@ export const authService = {
 
       if (user) {
         if (user.isLoggedIn) {
-          throw new Error("User is already logged in.");
+          // Automatic session recovery: reset isLoggedIn and proceed
+          await dbService.updateUser(result.user.uid, { isLoggedIn: false });
+          // Optionally, you can log this event or show a warning to the user
         }
-
         await dbService.updateUser(result.user.uid, { isLoggedIn: true });
       } else {
         // If user is whitelisted but not in db means first login
@@ -77,10 +86,12 @@ export const authService = {
 
       // Only whitelisted users reach this part.
       let user = await dbService.findUser(result.user.uid);
+          let sessionRecovered = false;
 
       if (user) {
         if (user.isLoggedIn) {
           throw new Error("User is already logged in.");
+              sessionRecovered = true;
         }
 
         await dbService.updateUser(result.user.uid, { isLoggedIn: true });
@@ -94,6 +105,11 @@ export const authService = {
           isLoggedIn: true,
         });
       }
+          const finalUser = await dbService.findUser(result.user.uid);
+          if (finalUser) {
+            return { ...finalUser, sessionRecovered };
+          }
+          return null;
 
       return await dbService.findUser(result.user.uid);
     } catch (err) {

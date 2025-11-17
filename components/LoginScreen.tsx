@@ -86,6 +86,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onStart }) => {
       const user = await authService.signInWithEmail(email, password);
 
       if (user) {
+        // If the user was previously marked as logged in, show a warning
+        if (user.sessionRecovered) {
+          setError("Your previous session was not closed properly. We have reset your session and logged you in. If you see this often, please contact support.");
+        }
         onStart(user.name);
       } else {
         setError("Failed to sign in with email. Please try again.");
@@ -147,7 +151,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onStart }) => {
                 type="email"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
               />
               <input
                 disabled={LOGIN_BLOCKED}
@@ -155,7 +159,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onStart }) => {
                 type="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
               />
               <div className="flex flex-col gap-4">
                 <button

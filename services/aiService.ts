@@ -216,7 +216,7 @@ async function evaluateWithGroq(apiKey: string, prompt: string): Promise<Evaluat
 }
 
 // Get chatbot response using current AI provider
-export async function getChatbotResponse(module: Module, curriculumSummary: string, chatHistory: ChatHistoryItem[], newUserQuery: string): Promise<string> {
+export async function getChatbotResponse(module: Module, curriculumSummary: string, moduleReference: string, chatHistory: ChatHistoryItem[], newUserQuery: string): Promise<string> {
   const provider = getAIProvider();
   const apiKey = getUserApiKey(provider);
   
@@ -232,6 +232,9 @@ export async function getChatbotResponse(module: Module, curriculumSummary: stri
     - Module Title: "${module.title}"
     - Module Description: "${module.description}"
     - Lessons in this module: ${module.lessons.map(l => `"${l.title}"`).join(', ')}
+
+    **REFERENCE TEXTBOOK CONTENT FOR THIS MODULE:**
+    ${moduleReference}
 
     **FULL CURRICULUM OVERVIEW (FOR CONTEXT ONLY):**
     ${curriculumSummary}

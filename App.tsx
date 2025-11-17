@@ -1,7 +1,7 @@
 
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { CURRICULUM } from './constants';
+import { CURRICULUM, CURRICULUM_MEDICAL } from './constants';
 import { AppView, Lesson, Module, UserProgress } from './types';
 import OnboardingScreen from './components/OnboardingScreen';
 import CurriculumView from './components/CurriculumView';
@@ -16,6 +16,11 @@ import LoginScreen from './components/LoginScreen';
 import SettingsView from './components/SettingsView';
 import ApiKeyWarning from './components/ApiKeyWarning';
 import { hasValidApiKey } from './services/aiService';
+import SyllabusView from './components/SyllabusView';
+import GlossaryView from './components/GlossaryView';
+import CapstoneTracker from './components/CapstoneTracker';
+import CapstoneTutor from './components/CapstoneTutor';
+import SessionTracker from './components/SessionTracker';
 
 
 const APP_STORAGE_KEY = 'greybrain-ai-journey-progress';
@@ -29,7 +34,7 @@ const formatTime = (minutes: number) => {
   return `${hours}h ${remainingMinutes}m`;
 }
 
-const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload, onOpenSettings }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void, onOpenSettings: () => void }) => {
+const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload, onOpenSettings, onOpenSyllabus, onOpenGlossary, onOpenCapstone, onOpenSessions }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void, onOpenSettings: () => void, onOpenSyllabus: () => void, onOpenGlossary: () => void, onOpenCapstone: () => void, onOpenSessions: () => void }) => {
   const progressPercentage = allLessonsCount > 0 ? (completedLessonsCount / allLessonsCount) * 100 : 0;
   
   return (
@@ -46,6 +51,34 @@ const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemaining
                     <p className="text-sm text-white font-bold">{formatTime(moduleRemainingTime)} <span className="text-slate-400 font-normal">in module</span></p>
                     <p className="text-xs text-slate-400">About {formatTime(totalRemainingTime)} total</p>
                 </div>
+                <button 
+                    onClick={onOpenSyllabus} 
+                    title="Syllabus" 
+                    className="p-2 rounded-full hover:bg-slate-700 transition-colors"
+                >
+                    <span className="text-slate-400 text-sm">Syllabus</span>
+                </button>
+                <button 
+                    onClick={onOpenGlossary} 
+                    title="Glossary" 
+                    className="p-2 rounded-full hover:bg-slate-700 transition-colors"
+                >
+                    <span className="text-slate-400 text-sm">Glossary</span>
+                </button>
+                <button 
+                    onClick={onOpenCapstone} 
+                    title="Capstone" 
+                    className="p-2 rounded-full hover:bg-slate-700 transition-colors"
+                >
+                    <span className="text-slate-400 text-sm">Capstone</span>
+                </button>
+                <button 
+                    onClick={onOpenSessions} 
+                    title="Sessions" 
+                    className="p-2 rounded-full hover:bg-slate-700 transition-colors"
+                >
+                    <span className="text-slate-400 text-sm">Sessions</span>
+                </button>
                 <button 
                     onClick={onOpenSettings} 
                     title="Settings" 
@@ -69,8 +102,16 @@ const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemaining
 export default function App() {
   const [view, setView] = useState<AppView>('onboarding');
   const [isAdminMode, setIsAdminMode] = useState(false);
+  const [isDemoAdmin, setIsDemoAdmin] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [hasApiKey, setHasApiKey] = useState(false);
+  const [showGlossary, setShowGlossary] = useState(false);
+  const [showCapstone, setShowCapstone] = useState(false);
+  const [showCapstoneTutor, setShowCapstoneTutor] = useState(false);
+  const [capstoneInitialQuery, setCapstoneInitialQuery] = useState<string | undefined>(undefined);
+  const [showSessionTracker, setShowSessionTracker] = useState(false);
+  const [activeCourseLabel, setActiveCourseLabel] = useState<'General' | 'Medical'>('General');
+  const [activeCurriculum, setActiveCurriculum] = useState(CURRICULUM);
 
   const [progress, setProgress] = useState<UserProgress>({ 
     completedLessons: new Set(), 
@@ -89,6 +130,18 @@ export default function App() {
       return;
     }
 
+    const courseParam = urlParams.get('course');
+    const savedCourse = localStorage.getItem('active_course');
+    const chosen = courseParam || savedCourse || 'general';
+    if (chosen === 'medical') {
+      setActiveCurriculum(CURRICULUM_MEDICAL);
+      setActiveCourseLabel('Medical');
+    } else {
+      setActiveCurriculum(CURRICULUM);
+      setActiveCourseLabel('General');
+    }
+    localStorage.setItem('active_course', chosen);
+
     // Check for API key
     setHasApiKey(hasValidApiKey());
 
@@ -104,7 +157,7 @@ export default function App() {
             });
 
             // Ensure the saved lesson ID is valid
-            const lessonExists = CURRICULUM.flatMap(m => m.lessons).some(l => l.id === parsed.currentLessonId);
+            const lessonExists = activeCurriculum.flatMap(m => m.lessons).some(l => l.id === parsed.currentLessonId);
             if (lessonExists) {
                 setCurrentLessonId(parsed.currentLessonId);
             }
@@ -118,6 +171,13 @@ export default function App() {
         }
     } catch (e) { console.error("Failed to parse progress from localStorage", e); }
   }, []);
+
+  useEffect(() => {
+    const exists = activeCurriculum.flatMap(m => m.lessons).some(l => l.id === currentLessonId || currentLessonId === null);
+    if (!exists) {
+      setCurrentLessonId(activeCurriculum[0]?.lessons[0]?.id || null);
+    }
+  }, [activeCurriculum]);
 
 
   // Save to localStorage whenever progress changes
@@ -133,7 +193,7 @@ export default function App() {
     }
   }, [progress, currentLessonId]);
 
-  const allLessons = useMemo(() => CURRICULUM.flatMap(m => m.lessons), []);
+  const allLessons = useMemo(() => activeCurriculum.flatMap(m => m.lessons), [activeCurriculum]);
   const currentLessonIndex = useMemo(() => allLessons.findIndex(l => l.id === currentLessonId), [allLessons, currentLessonId]);
   const currentLesson = useMemo(() => allLessons[currentLessonIndex], [allLessons, currentLessonIndex]);
 
@@ -147,7 +207,7 @@ export default function App() {
   }, [allLessons, progress.completedLessons, totalTime]);
 
   const moduleRemainingTime = useMemo(() => {
-    const currentModule = CURRICULUM.find(m => m.lessons.some(l => l.id === currentLessonId));
+    const currentModule = activeCurriculum.find(m => m.lessons.some(l => l.id === currentLessonId));
     if (!currentModule) return 0;
 
     return currentModule.lessons
@@ -156,15 +216,22 @@ export default function App() {
   }, [currentLessonId, progress.completedLessons]);
 
   const isLessonUnlocked = useCallback((lessonId: string) => {
+    // Demo admin can access all lessons without prerequisites
+    console.log('Checking lesson unlock for:', lessonId, 'isDemoAdmin:', isDemoAdmin);
+    if (isDemoAdmin) {
+      console.log('Demo admin detected - lesson unlocked');
+      return true;
+    }
+    
     const lessonIndex = allLessons.findIndex(l => l.id === lessonId);
     if (lessonIndex === 0) return true;
     const previousLesson = allLessons[lessonIndex - 1];
     return progress.completedLessons.has(previousLesson.id);
-  }, [allLessons, progress.completedLessons]);
+  }, [allLessons, progress.completedLessons, isDemoAdmin]);
 
   const handleStartJourney = (name: string) => {
     setProgress({ completedLessons: new Set(), userName: name, tutorialCompleted: false });
-    setCurrentLessonId(CURRICULUM[0].lessons[0].id);
+    setCurrentLessonId(activeCurriculum[0].lessons[0].id);
     setView('tutorial');
   };
 
@@ -198,7 +265,7 @@ export default function App() {
     localStorage.removeItem(APP_STORAGE_KEY);
     setView('onboarding');
     setProgress({ completedLessons: new Set(), userName: null, tutorialCompleted: false });
-    setCurrentLessonId(CURRICULUM[0].lessons[0].id);
+    setCurrentLessonId(activeCurriculum[0].lessons[0].id);
   }
 
   const handleLogout = () => {
@@ -208,6 +275,22 @@ export default function App() {
 
   const handleOpenSettings = () => {
     setShowSettings(true);
+  }
+
+  const handleOpenSyllabus = () => {
+    setView('syllabus');
+  }
+
+  const handleOpenGlossary = () => {
+    setShowGlossary(true);
+  }
+
+  const handleOpenCapstone = () => {
+    setShowCapstone(true);
+  }
+
+  const handleOpenSessions = () => {
+    setShowSessionTracker(true);
   }
 
   const handleCloseSettings = () => {
@@ -226,7 +309,7 @@ export default function App() {
             <h1 className="text-2xl font-bold text-white tracking-tight">AI Journey</h1>
         </a>
         <CurriculumView
-          curriculum={CURRICULUM}
+          curriculum={activeCurriculum}
           progress={progress}
           currentLessonId={currentLessonId}
           onSelectLesson={handleSelectLesson}
@@ -246,6 +329,10 @@ export default function App() {
             totalRemainingTime={remainingTime}
             onReload={() => window.location.reload()}
             onOpenSettings={handleOpenSettings}
+            onOpenSyllabus={handleOpenSyllabus}
+            onOpenGlossary={handleOpenGlossary}
+            onOpenCapstone={handleOpenCapstone}
+            onOpenSessions={handleOpenSessions}
           />
          <div className="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12 relative">
             {!hasApiKey && (
@@ -275,10 +362,22 @@ export default function App() {
   // If so redirect to the appropriate screen
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
+      console.log('Auth state changed:', user);
       if (user && user.isLoggedIn) {
+        // Check if user is demo admin
+        console.log('User email:', user.email);
+        console.log('Is demo admin check:', authService.isDemoAdmin && authService.isDemoAdmin(user));
+        if (authService.isDemoAdmin && authService.isDemoAdmin(user)) {
+          console.log('Setting demo admin to true');
+          setIsDemoAdmin(true);
+        } else {
+          console.log('Setting demo admin to false');
+          setIsDemoAdmin(false);
+        }
         setView('journey');
       } else {
         setView('onboarding');
+        setIsDemoAdmin(false);
       }
     });
   }, []);
@@ -306,6 +405,9 @@ export default function App() {
                 onApiKeyChange={handleApiKeyChange}
               />
             )}
+            {view === 'syllabus' && (
+              <SyllabusView onClose={() => setView('journey')} />
+            )}
         </div>
     );
   }
@@ -318,6 +420,21 @@ export default function App() {
           onClose={handleCloseSettings}
           onApiKeyChange={handleApiKeyChange}
         />
+      )}
+      {showGlossary && (
+        <GlossaryView onClose={() => setShowGlossary(false)} />
+      )}
+      {showCapstone && (
+        <CapstoneTracker onClose={() => setShowCapstone(false)} onAskTutor={(prompt) => { setCapstoneInitialQuery(prompt); setShowCapstoneTutor(true); }} />
+      )}
+      {showCapstoneTutor && (
+        <CapstoneTutor onClose={() => setShowCapstoneTutor(false)} initialQuery={capstoneInitialQuery} />
+      )}
+      {view === 'syllabus' && (
+        <SyllabusView onClose={() => setView('journey')} onStartSession={(lessonId) => { setCurrentLessonId(lessonId); setView('journey'); }} activeCourseLabel={activeCourseLabel} />
+      )}
+      {showSessionTracker && (
+        <SessionTracker modules={activeCurriculum} onClose={() => setShowSessionTracker(false)} onStartSession={(lessonId) => { setCurrentLessonId(lessonId); setShowSessionTracker(false); }} />
       )}
     </>
   );

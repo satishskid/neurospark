@@ -3,6 +3,7 @@ export interface User {
   name: string;
   email: string;
   isLoggedIn: boolean;
+  sessionRecovered?: boolean;
   isAdmin?: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -15,6 +16,9 @@ export interface User {
   completedSteps?: Record<string, boolean>;
   theme?: string;
   analogyTheme?: string | null;
+  // Course access control fields
+  allowedCourses?: string[]; // ['masterchef', 'medical', 'both']
+  courseProgress?: Record<string, CourseProgress>; // Progress per course
 }
 
 export interface Lesson {
@@ -24,6 +28,12 @@ export interface Lesson {
   content?: React.ReactNode;
   quiz?: QuizData;
   exercise?: ExerciseData;
+  referenceText?: string;
+  furtherReading?: { label: string; url: string }[];
+  footnotes?: string[];
+  glossary?: { term: string; definition: string }[];
+  checkPrompts?: string[];
+  learningObjectives?: string[];
   estimatedTimeMinutes: number;
 }
 
@@ -34,11 +44,22 @@ export interface Module {
   lessons: Lesson[];
 }
 
+export interface CourseProgress {
+  completedLessons: string[];
+  currentModuleIndex: number;
+  totalScore: number;
+  lastAccessed: string;
+  certificateEarned?: boolean;
+}
+
 export interface QuizData {
   questions: {
     question: string;
     options: string[];
     correctAnswer: string;
+    explanation?: string; // For explanatory feedback
+    questionType?: 'mcq' | 'explanatory'; // New question types
+    maxAttempts?: number; // For 3-attempt system
   }[];
 }
 
@@ -54,7 +75,7 @@ export interface UserProgress {
   tutorialCompleted: boolean;
 }
 
-export type AppView = 'onboarding' | 'login' | 'journey' | 'certificate' | 'tutorial';
+export type AppView = 'onboarding' | 'login' | 'journey' | 'certificate' | 'tutorial' | 'syllabus';
 
 export interface ChatHistoryItem {
   role: 'user' | 'model';
