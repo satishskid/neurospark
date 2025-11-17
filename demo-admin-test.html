@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Admin Test Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        .log { font-family: monospace; background: #f8f9fa; padding: 10px; margin: 10px 0; max-height: 200px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>Demo Admin Functionality Test</h1>
+    
+    <div class="test-section info">
+        <h2>Test Instructions</h2>
+        <ol>
+            <li>Open the main application at <a href="http://localhost:4173" target="_blank">http://localhost:4173</a></li>
+            <li>Open browser developer tools (F12) to see console logs</li>
+            <li>Log in with the demo admin email: <strong>satish@skids.health</strong> or <strong>drsatish@skids.health</strong></li>
+            <li>Check the console for debug messages</li>
+            <li>Verify that all lessons are unlocked</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Manual Test Verification</h2>
+        <p>After logging in as satish@skids.health (or drsatish@skids.health), you should see these console messages:</p>
+        <div class="log">
+            Auth state changed: [user object]<br>
+            User email: drsatish@skids.health<br>
+            Is demo admin check: true<br>
+            Setting demo admin to true<br>
+            Checking lesson unlock for: [lesson-id] isDemoAdmin: true<br>
+            Demo admin detected - lesson unlocked
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Quick Function Test</h2>
+        <button onclick="testDemoAdminLogic()">Test Demo Admin Logic</button>
+        <button onclick="testLessonUnlock()">Test Lesson Unlock Logic</button>
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        function testDemoAdminLogic() {
+            const results = document.getElementById('test-results');
+            
+            // Test the isDemoAdmin function logic
+            function isDemoAdmin(user) {
+                return user?.email === 'drsatish@skids.health';
+            }
+            
+            const testCases = [
+                { user: { email: 'drsatish@skids.health' }, expected: true, desc: 'Demo admin user (drsatish)' },
+                { user: { email: 'satish@skids.health' }, expected: true, desc: 'Demo admin user (satish)' },
+                { user: { email: 'regular@user.com' }, expected: false, desc: 'Regular user' },
+                { user: null, expected: false, desc: 'Null user' },
+                { user: { email: undefined }, expected: false, desc: 'User without email' }
+            ];
+            
+            let html = '<h3>Demo Admin Logic Test Results:</h3>';
+            testCases.forEach(testCase => {
+                const result = isDemoAdmin(testCase.user);
+                const status = result === testCase.expected ? 'success' : 'error';
+                html += `<div class="${status}">${testCase.desc}: ${result ? '✅ TRUE' : '❌ FALSE'}</div>`;
+            });
+            
+            results.innerHTML = html;
+        }
+
+        function testLessonUnlock() {
+            const results = document.getElementById('test-results');
+            
+            function isLessonUnlocked(lessonId, isDemoAdmin, completedLessons) {
+                console.log('Checking lesson unlock for:', lessonId, 'isDemoAdmin:', isDemoAdmin);
+                if (isDemoAdmin) {
+                    console.log('Demo admin detected - lesson unlocked');
+                    return true;
+                }
+                return false; // Simplified for test
+            }
+            
+            const testCases = [
+                { lessonId: 'lesson-1', isDemoAdmin: true, expected: true, desc: 'Demo admin accessing lesson 1' },
+                { lessonId: 'lesson-5', isDemoAdmin: true, expected: true, desc: 'Demo admin accessing lesson 5' },
+                { lessonId: 'lesson-1', isDemoAdmin: false, expected: false, desc: 'Regular user accessing lesson 1' }
+            ];
+            
+            let html = '<h3>Lesson Unlock Logic Test Results:</h3>';
+            testCases.forEach(testCase => {
+                const result = isLessonUnlocked(testCase.lessonId, testCase.isDemoAdmin, new Set());
+                const status = result === testCase.expected ? 'success' : 'error';
+                html += `<div class="${status}">${testCase.desc}: ${result ? '✅ UNLOCKED' : '❌ LOCKED'}</div>`;
+            });
+            
+            results.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
