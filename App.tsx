@@ -363,7 +363,21 @@ export default function App() {
     </div>
   );
 
-  // Admin mode check
+  // Admin mode check - Check URL parameter OR admin email
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const adminParam = urlParams.get('admin');
+    
+    // Check if user is admin by email
+    authService.onAuthStateChanged((user) => {
+      if (user && authService.isAdmin && authService.isAdmin(user)) {
+        setIsAdminMode(true);
+      } else if (adminParam === 'true') {
+        setIsAdminMode(true);
+      }
+    });
+  }, []);
+
   if (isAdminMode) {
     return <AdminApp />;
   }

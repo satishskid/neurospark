@@ -23,6 +23,14 @@ export const authService = {
     return demoEmails.includes(user?.email);
   },
 
+  /**
+   * Check if user is an admin with full dashboard access
+   */
+  isAdmin: (user: any): boolean => {
+    const adminEmails = ['satish@skids.health', 'drsatish@skids.health', 'admin@skids.health'];
+    return adminEmails.includes(user?.email);
+  },
+
   signInWithEmail: async (
     email: string,
     password: string
