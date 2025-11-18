@@ -113,11 +113,8 @@ export default function App() {
   const [isDemoAdmin, setIsDemoAdmin] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [hasApiKey, setHasApiKey] = useState(false);
-  const [showGlossary, setShowGlossary] = useState(false);
-  const [showCapstone, setShowCapstone] = useState(false);
   const [showCapstoneTutor, setShowCapstoneTutor] = useState(false);
   const [capstoneInitialQuery, setCapstoneInitialQuery] = useState<string | undefined>(undefined);
-  const [showSessionTracker, setShowSessionTracker] = useState(false);
   const [activeCourseLabel, setActiveCourseLabel] = useState<'General' | 'Medical'>('Medical');
   const [activeCurriculum, setActiveCurriculum] = useState(CURRICULUM_MEDICAL);
 
@@ -295,15 +292,15 @@ export default function App() {
   }
 
   const handleOpenGlossary = () => {
-    setShowGlossary(true);
+    setView('glossary');
   }
 
   const handleOpenCapstone = () => {
-    setShowCapstone(true);
+    setView('capstone');
   }
 
   const handleOpenSessions = () => {
-    setShowSessionTracker(true);
+    setView('sessions');
   }
 
   const handleCloseSettings = () => {
@@ -438,6 +435,77 @@ export default function App() {
     );
   }
 
+  if (view === 'syllabus') {
+    return (
+      <>
+        <SyllabusView 
+          onClose={() => setView('journey')} 
+          onStartSession={(lessonId) => { setCurrentLessonId(lessonId); setView('journey'); }} 
+          activeCourseLabel={activeCourseLabel} 
+          activeCurriculum={activeCurriculum} 
+        />
+        {showSettings && (
+          <SettingsView 
+            onClose={handleCloseSettings}
+            onApiKeyChange={handleApiKeyChange}
+          />
+        )}
+      </>
+    );
+  }
+
+  if (view === 'glossary') {
+    return (
+      <>
+        <GlossaryView onClose={() => setView('journey')} />
+        {showSettings && (
+          <SettingsView 
+            onClose={handleCloseSettings}
+            onApiKeyChange={handleApiKeyChange}
+          />
+        )}
+      </>
+    );
+  }
+
+  if (view === 'capstone') {
+    return (
+      <>
+        <CapstoneTracker 
+          onClose={() => setView('journey')} 
+          onAskTutor={(prompt) => { setCapstoneInitialQuery(prompt); setShowCapstoneTutor(true); }} 
+        />
+        {showCapstoneTutor && (
+          <CapstoneTutor onClose={() => setShowCapstoneTutor(false)} initialQuery={capstoneInitialQuery} />
+        )}
+        {showSettings && (
+          <SettingsView 
+            onClose={handleCloseSettings}
+            onApiKeyChange={handleApiKeyChange}
+          />
+        )}
+      </>
+    );
+  }
+
+  if (view === 'sessions') {
+    return (
+      <>
+        <SessionTracker 
+          modules={activeCurriculum} 
+          onClose={() => setView('journey')} 
+          onStartSession={(lessonId) => { setCurrentLessonId(lessonId); setView('journey'); }} 
+        />
+        {showSettings && (
+          <SettingsView 
+            onClose={handleCloseSettings}
+            onApiKeyChange={handleApiKeyChange}
+          />
+        )}
+      </>
+    );
+  }
+
   return (
     <>
       {JourneyView}
@@ -446,21 +514,6 @@ export default function App() {
           onClose={handleCloseSettings}
           onApiKeyChange={handleApiKeyChange}
         />
-      )}
-      {showGlossary && (
-        <GlossaryView onClose={() => setShowGlossary(false)} />
-      )}
-      {showCapstone && (
-        <CapstoneTracker onClose={() => setShowCapstone(false)} onAskTutor={(prompt) => { setCapstoneInitialQuery(prompt); setShowCapstoneTutor(true); }} />
-      )}
-      {showCapstoneTutor && (
-        <CapstoneTutor onClose={() => setShowCapstoneTutor(false)} initialQuery={capstoneInitialQuery} />
-      )}
-      {view === 'syllabus' && (
-        <SyllabusView onClose={() => setView('journey')} onStartSession={(lessonId) => { setCurrentLessonId(lessonId); setView('journey'); }} activeCourseLabel={activeCourseLabel} activeCurriculum={activeCurriculum} />
-      )}
-      {showSessionTracker && (
-        <SessionTracker modules={activeCurriculum} onClose={() => setShowSessionTracker(false)} onStartSession={(lessonId) => { setCurrentLessonId(lessonId); setShowSessionTracker(false); }} />
       )}
     </>
   );
