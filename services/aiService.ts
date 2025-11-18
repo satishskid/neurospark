@@ -6,7 +6,7 @@ import { ChatHistoryItem, Module } from "../types";
 export type AIProvider = 'gemini' | 'groq';
 
 // Configuration for different AI providers
-const GEMINI_MODEL = "gemini-1.5-flash"; // Stable model with higher free tier limits
+const GEMINI_MODEL = "gemini-2.5-flash"; // Latest stable Gemini model
 const GROQ_MODEL = "llama-3.1-8b-instant"; // Updated to working model
 
 // Get the working Groq model (either from localStorage or default)
