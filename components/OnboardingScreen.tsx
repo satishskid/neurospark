@@ -117,15 +117,20 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
                   Begin Learning
                 </button>
                 <button
-                  onClick={() => alert('Coming Soon! Next batch starts January 2025.\n\nFor early access, contact: devadmin@skids.health')}
+                  onClick={() => window.open('https://t.me/greybrainsoai', '_blank')}
                   className="bg-slate-800 hover:bg-slate-700 border-2 border-cyan-400 text-cyan-400 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 sm:w-auto flex-shrink-0"
                 >
-                  Register Interest
+                  Join AI School
                 </button>
             </div>
-            <div className="text-sm text-slate-400 mt-4 text-center lg:text-left">
-              <span className="block sm:inline">Adaptive • Interactive • </span>
-              <span className="text-cyan-400 font-semibold">Personalized</span>
+            <div className="text-sm text-slate-400 mt-4 text-center lg:text-left space-y-2">
+              <div>
+                <span className="block sm:inline">Adaptive • Interactive • </span>
+                <span className="text-cyan-400 font-semibold">Personalized</span>
+              </div>
+              <p className="text-xs text-slate-500">
+                📱 Join our <span className="text-cyan-400">AI School</span> Telegram channel for updates, tips, and early access
+              </p>
             </div>
             <p className="text-xs text-slate-500 mt-6 italic max-w-lg mx-auto lg:mx-0">
               "This isn&apos;t just learning about AI. It&apos;s learning WITH AI - your personal tutor adapts to your pace, 
