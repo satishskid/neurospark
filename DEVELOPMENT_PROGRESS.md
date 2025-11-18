@@ -55,30 +55,39 @@
 
 ## Phase 2: UX Overhaul (Week 3-4)
 
-### ⏳ Pending Tasks
+### ✅ Completed Tasks
 
 #### 2.1 Dashboard Home Screen
-- [ ] Create `DashboardView.tsx` component
-- [ ] Implement visual journey map
-- [ ] Add progress overview cards
-- [ ] Add quick access buttons
-- [ ] Add recent activity feed
+- [x] Create `DashboardView.tsx` component
+- [x] Implement visual journey map
+- [x] Add progress overview cards
+- [x] Add quick access buttons
+- [x] Add recent activity feed
+- [x] Integrate into App.tsx with navigation
+
+**Commit:** `d241534` - Phase 2: Add Dashboard home screen with visual journey map
+
+---
+
+### ⏳ Pending Tasks
 
 #### 2.2 Sidebar Redesign
-- [ ] Update `CurriculumView.tsx`:
+- [x] Update `CurriculumView.tsx`:
   - Collapsible modules
   - Visual indicators (✅ 📍 🔒)
   - Progress per module
 - [ ] Move AI Tutor to sidebar (always visible)
 - [ ] Update `ChatbotModal` → `ChatbotSidebar`
 
+**Commit:** `8c6a2c9` - Phase 2: Enhanced sidebar with collapsible modules
+
 #### 2.3 Header Navigation
-- [ ] Create header component
-- [ ] Add Syllabus modal trigger
-- [ ] Add Glossary modal trigger (✅ Already enhanced)
-- [ ] Add Capstone modal trigger
-- [ ] Add Settings
-- [ ] Add User menu
+- [x] Dashboard button added
+- [x] Syllabus modal trigger
+- [x] Glossary modal trigger (✅ Enhanced)
+- [x] Capstone modal trigger
+- [x] Settings button
+- [ ] User menu dropdown (future enhancement)
 
 #### 2.4 Lesson Content Redesign
 - [ ] Update `LessonView.tsx`:
@@ -88,17 +97,23 @@
   - Add visual breaks
 
 #### 2.5 Quiz Enhancements
-- [ ] Update `QuizView.tsx`:
+- [x] Update `QuizView.tsx`:
   - Add Study Mode / Test Mode toggle
   - Implement 3-tier adaptive hints
   - Show answers after completion
   - Add retry logic
+  - Answer review system
+
+**Commit:** `230df5c` - Phase 2: Enhanced quiz with Study/Test mode and adaptive hints
 
 #### 2.6 Exercise Improvements
-- [ ] Update `ExerciseView.tsx`:
+- [x] Update `ExerciseView.tsx`:
   - Implement 3-attempt system
   - Show example solution after 3 attempts
   - Add "Ask Tutor" button
+  - Attempt history tracking
+
+**Commit:** `031379b` - Phase 2: Enhanced exercises with 3-attempt system
 
 ---
 
@@ -143,5 +158,18 @@ Testing, optimization, and deployment.
 ---
 
 **Last Updated:** November 18, 2024  
-**Current Phase:** Phase 1 (Foundation)  
-**Progress:** 15% complete
+**Current Phase:** Phase 2 (UX Overhaul)  
+**Progress:** 40% complete
+
+**Recent Achievements:**
+- ✅ Enhanced type system with performance tracking
+- ✅ Technical glossary with 20 terms and medical analogies
+- ✅ Enhanced Glossary UI with search and filtering
+- ✅ Dashboard home screen with visual journey map
+- ✅ Collapsible sidebar with module status indicators
+- ✅ Quiz Study/Test mode with adaptive hints
+- ✅ Exercise 3-attempt system with example solutions
+
+**Commits Today:** 6 major feature commits
+**Lines of Code Added:** ~2000+ lines
+**Components Enhanced:** 5 (Dashboard, Curriculum, Glossary, Quiz, Exercise)
