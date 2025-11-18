@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { LogoIcon, BrainIcon, CodeBracketSquareIcon, CubeTransparentIcon } from './Icons';
+import PromotionalBanner from './PromotionalBanner';
+import { db } from '../services/firebaseService';
+import { doc, getDoc } from 'firebase/firestore';
 
 interface OnboardingScreenProps {
   onStart: () => void;
+}
+
+interface PromotionalContent {
+  message: string;
+  type: 'info' | 'success' | 'warning';
+  visible: boolean;
 }
 
 const ConceptCard = ({ icon, name, className }: { icon: React.ReactNode, name: string, className: string }) => (
@@ -13,6 +22,24 @@ const ConceptCard = ({ icon, name, className }: { icon: React.ReactNode, name: s
 );
 
 const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
+  const [promoContent, setPromoContent] = useState<PromotionalContent | null>(null);
+
+  useEffect(() => {
+    const loadPromoContent = async () => {
+      try {
+        const docRef = doc(db, 'settings', 'promotional');
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+          setPromoContent(docSnap.data() as PromotionalContent);
+        }
+      } catch (error) {
+        console.error('Error loading promotional content:', error);
+      }
+    };
+
+    loadPromoContent();
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4 overflow-hidden">
@@ -21,7 +48,17 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
             <div className="absolute h-64 w-64 bg-blue-500 rounded-full -bottom-10 -right-20 mix-blend-lighten filter blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
              <div className="absolute h-64 w-64 bg-purple-500 rounded-full top-20 right-40 mix-blend-lighten filter blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
         </div>
-      <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center max-w-6xl mx-auto flex-grow justify-center">
+      <div className="relative z-10 w-full max-w-6xl mx-auto flex-grow flex flex-col justify-center">
+        {/* Promotional Banner */}
+        {promoContent && promoContent.visible && (
+          <PromotionalBanner 
+            message={promoContent.message}
+            type={promoContent.type}
+            visible={promoContent.visible}
+          />
+        )}
+        
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
         <div className="relative h-96 hidden lg:flex items-center justify-center">
              {/* AI Models */}
              <ConceptCard icon={<BrainIcon className="w-6 h-6 text-cyan-400" />} name="ChatGPT" className="absolute top-8 left-5 animate-float text-sm" />
@@ -79,15 +116,22 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
                 >
                   Begin Learning
                 </button>
-                <div className="text-sm text-slate-400">
-                  <span className="block sm:inline">Adaptive • Interactive • </span>
-                  <span className="text-cyan-400 font-semibold">Personalized</span>
-                </div>
+                <button
+                  onClick={() => alert('Coming Soon! Next batch starts January 2025.\n\nFor early access, contact: devadmin@skids.health')}
+                  className="bg-slate-800 hover:bg-slate-700 border-2 border-cyan-400 text-cyan-400 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 sm:w-auto flex-shrink-0"
+                >
+                  Register Interest
+                </button>
+            </div>
+            <div className="text-sm text-slate-400 mt-4 text-center lg:text-left">
+              <span className="block sm:inline">Adaptive • Interactive • </span>
+              <span className="text-cyan-400 font-semibold">Personalized</span>
             </div>
             <p className="text-xs text-slate-500 mt-6 italic max-w-lg mx-auto lg:mx-0">
               "This isn&apos;t just learning about AI. It&apos;s learning WITH AI - your personal tutor adapts to your pace, 
               answers your questions, and ensures you truly understand."
             </p>
+        </div>
         </div>
       </div>
       <footer className="w-full text-center text-xs text-slate-600 py-4 mt-auto flex-shrink-0">
