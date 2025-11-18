@@ -434,9 +434,6 @@ export default function App() {
                 onApiKeyChange={handleApiKeyChange}
               />
             )}
-            {view === 'syllabus' && (
-              <SyllabusView onClose={() => setView('journey')} />
-            )}
         </div>
     );
   }
@@ -460,7 +457,7 @@ export default function App() {
         <CapstoneTutor onClose={() => setShowCapstoneTutor(false)} initialQuery={capstoneInitialQuery} />
       )}
       {view === 'syllabus' && (
-        <SyllabusView onClose={() => setView('journey')} onStartSession={(lessonId) => { setCurrentLessonId(lessonId); setView('journey'); }} activeCourseLabel={activeCourseLabel} />
+        <SyllabusView onClose={() => setView('journey')} onStartSession={(lessonId) => { setCurrentLessonId(lessonId); setView('journey'); }} activeCourseLabel={activeCourseLabel} activeCurriculum={activeCurriculum} />
       )}
       {showSessionTracker && (
         <SessionTracker modules={activeCurriculum} onClose={() => setShowSessionTracker(false)} onStartSession={(lessonId) => { setCurrentLessonId(lessonId); setShowSessionTracker(false); }} />
