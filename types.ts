@@ -75,9 +75,76 @@ export interface UserProgress {
   tutorialCompleted: boolean;
 }
 
-export type AppView = 'onboarding' | 'login' | 'journey' | 'certificate' | 'tutorial' | 'syllabus';
+export type AppView = 'onboarding' | 'login' | 'journey' | 'certificate' | 'tutorial' | 'syllabus' | 'dashboard';
 
 export interface ChatHistoryItem {
   role: 'user' | 'model';
   content: string;
+}
+
+// Performance tracking for adaptive learning
+export interface PerformanceMetrics {
+  userId: string;
+  quizScores: Record<string, number>; // moduleId -> score percentage
+  exerciseAttempts: Record<string, number>; // lessonId -> number of attempts
+  tutorInteractions: number;
+  timeSpentPerLesson: Record<string, number>; // lessonId -> minutes
+  strugglingConcepts: string[]; // topics with low scores
+  completionDate?: string;
+  certificateEarned?: boolean;
+  lastUpdated: string;
+}
+
+// Technical glossary terms
+export interface TechTerm {
+  term: string;
+  definition: string;
+  analogy: string; // Medical analogy
+  whyItMatters: string;
+  relatedTerms: string[];
+  usedInModules: string[]; // Module IDs where this term appears
+}
+
+// Admin dashboard - Whitelisted users
+export interface WhitelistedUser {
+  email: string;
+  name: string;
+  role: 'Physician' | 'Resident' | 'Nurse' | 'NursePractitioner' | 'Admin' | 'Other';
+  institution: string;
+  addedDate: string;
+  status: 'active' | 'pending' | 'inactive';
+  addedBy: string; // admin email
+}
+
+// Admin dashboard - System logs
+export interface SystemLog {
+  id: string;
+  timestamp: string;
+  severity: 'error' | 'warning' | 'info';
+  component: string;
+  message: string;
+  userId?: string;
+  metadata?: any;
+}
+
+// Admin dashboard - Curriculum version
+export interface CurriculumVersion {
+  version: number;
+  publishedAt: string;
+  publishedBy: string;
+  curriculum: Module[];
+  changeLog: string;
+}
+
+// Quiz mode
+export type QuizMode = 'study' | 'test';
+
+// Exercise attempt tracking
+export interface ExerciseAttempt {
+  lessonId: string;
+  attemptNumber: number;
+  userInput: string;
+  feedback: string;
+  isCorrect: boolean;
+  timestamp: string;
 }
