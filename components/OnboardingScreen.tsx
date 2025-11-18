@@ -23,10 +23,23 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
         </div>
       <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center max-w-6xl mx-auto flex-grow justify-center">
         <div className="relative h-96 hidden lg:flex items-center justify-center">
-             <ConceptCard icon={<BrainIcon className="w-7 h-7 text-cyan-400" />} name="AI Models" className="absolute top-10 left-0 animate-float" />
-             <ConceptCard icon={<CodeBracketSquareIcon className="w-7 h-7 text-green-400" />} name="JSON Data" className="absolute top-32 right-0 animate-float animation-delay-1000" />
-             <ConceptCard icon={<CubeTransparentIcon className="w-7 h-7 text-yellow-400" />} name="Frontend/Backend" className="absolute bottom-20 left-10 animate-float animation-delay-2000" />
-             <LogoIcon className="w-40 h-40 text-slate-500" />
+             {/* AI Models */}
+             <ConceptCard icon={<BrainIcon className="w-6 h-6 text-cyan-400" />} name="ChatGPT" className="absolute top-8 left-5 animate-float text-sm" />
+             <ConceptCard icon={<BrainIcon className="w-6 h-6 text-blue-400" />} name="Gemini" className="absolute top-24 left-0 animate-float animation-delay-1000 text-sm" />
+             <ConceptCard icon={<BrainIcon className="w-6 h-6 text-purple-400" />} name="Claude" className="absolute top-40 left-8 animate-float animation-delay-2000 text-sm" />
+             
+             {/* Medical AI */}
+             <ConceptCard icon={<BrainIcon className="w-6 h-6 text-green-400" />} name="Med-PaLM" className="absolute top-12 right-2 animate-float animation-delay-500 text-sm" />
+             <ConceptCard icon={<BrainIcon className="w-6 h-6 text-emerald-400" />} name="BioGPT" className="absolute top-36 right-0 animate-float animation-delay-1500 text-sm" />
+             
+             {/* AI Jargon */}
+             <ConceptCard icon={<CodeBracketSquareIcon className="w-6 h-6 text-yellow-400" />} name="Tokens" className="absolute bottom-32 left-2 animate-float animation-delay-3000 text-sm" />
+             <ConceptCard icon={<CodeBracketSquareIcon className="w-6 h-6 text-orange-400" />} name="Context Window" className="absolute bottom-16 left-12 animate-float animation-delay-3500 text-sm" />
+             <ConceptCard icon={<CubeTransparentIcon className="w-6 h-6 text-pink-400" />} name="Parameters" className="absolute bottom-24 right-8 animate-float animation-delay-2500 text-sm" />
+             <ConceptCard icon={<CubeTransparentIcon className="w-6 h-6 text-rose-400" />} name="Fine-tuning" className="absolute bottom-8 right-0 animate-float animation-delay-4000 text-sm" />
+             
+             {/* Center Logo */}
+             <LogoIcon className="w-32 h-32 text-slate-500" />
         </div>
         <div className="text-center lg:text-left">
             <div className="inline-block lg:hidden p-4 bg-slate-800 rounded-full mb-6">
