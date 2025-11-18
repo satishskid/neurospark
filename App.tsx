@@ -118,8 +118,8 @@ export default function App() {
   const [showCapstoneTutor, setShowCapstoneTutor] = useState(false);
   const [capstoneInitialQuery, setCapstoneInitialQuery] = useState<string | undefined>(undefined);
   const [showSessionTracker, setShowSessionTracker] = useState(false);
-  const [activeCourseLabel, setActiveCourseLabel] = useState<'General' | 'Medical'>('General');
-  const [activeCurriculum, setActiveCurriculum] = useState(CURRICULUM);
+  const [activeCourseLabel, setActiveCourseLabel] = useState<'General' | 'Medical'>('Medical');
+  const [activeCurriculum, setActiveCurriculum] = useState(CURRICULUM_MEDICAL);
 
   const [progress, setProgress] = useState<UserProgress>({ 
     completedLessons: new Set(), 
@@ -127,7 +127,7 @@ export default function App() {
     tutorialCompleted: false
   });
 
-  const [currentLessonId, setCurrentLessonId] = useState<string | null>(CURRICULUM[0].lessons[0].id);
+  const [currentLessonId, setCurrentLessonId] = useState<string | null>(CURRICULUM_MEDICAL[0].lessons[0].id);
 
   // Load from localStorage on initial mount
   useEffect(() => {
@@ -140,13 +140,13 @@ export default function App() {
 
     const courseParam = urlParams.get('course');
     const savedCourse = localStorage.getItem('active_course');
-    const chosen = courseParam || savedCourse || 'general';
-    if (chosen === 'medical') {
-      setActiveCurriculum(CURRICULUM_MEDICAL);
-      setActiveCourseLabel('Medical');
-    } else {
+    const chosen = courseParam || savedCourse || 'medical'; // Default to medical
+    if (chosen === 'general') {
       setActiveCurriculum(CURRICULUM);
       setActiveCourseLabel('General');
+    } else {
+      setActiveCurriculum(CURRICULUM_MEDICAL);
+      setActiveCourseLabel('Medical');
     }
     localStorage.setItem('active_course', chosen);
 
