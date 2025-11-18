@@ -33,26 +33,30 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
               <LogoIcon className="w-16 h-16 text-cyan-400" />
             </div>
             <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight tracking-tighter">
-              Master AI.<br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Transform Healthcare.</span>
+              From AI Curious to<br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">AI Confident</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-300 mb-6 max-w-lg mx-auto lg:mx-0">
-              You save lives. Now, let AI save you <span className="text-cyan-400 font-semibold">15+ hours every week</span>.
+              The <span className="text-cyan-400 font-semibold">only AI course</span> designed by clinical AI scientists, 
+              personalized to <span className="text-white font-medium">your level</span>, with an AI tutor by your side.
             </p>
             <p className="text-base md:text-lg text-slate-400 mb-8 max-w-lg mx-auto lg:mx-0">
-              This isn&apos;t another tech course. It&apos;s your pathway from <span className="text-white font-medium">overwhelmed clinician to AI-empowered healer</span>. 
-              Learn AI through medical analogies you already know. Master HIPAA-compliant workflows. 
-              Build your personal AI toolkit in just <span className="text-cyan-400 font-semibold">6 hours</span>.
+              Whether you&apos;re a complete beginner or tech-savvy professional, this course adapts to you. 
+              Learn through <span className="text-cyan-400">real medical scenarios</span>, get instant feedback, 
+              and master AI in <span className="text-white font-medium">6 personalized hours</span>.
             </p>
             <div className="bg-slate-800/50 border border-cyan-500/30 rounded-lg p-4 mb-8 max-w-lg mx-auto lg:mx-0">
               <p className="text-sm text-slate-300 mb-2">
-                <span className="text-cyan-400 font-bold">✓</span> Designed by doctors, for doctors
+                <span className="text-cyan-400 font-bold">🧬</span> Created by Clinical AI Scientists
               </p>
               <p className="text-sm text-slate-300 mb-2">
-                <span className="text-cyan-400 font-bold">✓</span> No coding required
+                <span className="text-cyan-400 font-bold">🎯</span> Personalized to Your Level
+              </p>
+              <p className="text-sm text-slate-300 mb-2">
+                <span className="text-cyan-400 font-bold">🤖</span> AI Tutor Guides You 24/7
               </p>
               <p className="text-sm text-slate-300">
-                <span className="text-cyan-400 font-bold">✓</span> IIHMRB Certified • HIPAA-focused • Immediately applicable
+                <span className="text-cyan-400 font-bold">💼</span> Real Medical Use Cases • IIHMRB Certified
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
@@ -60,15 +64,16 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
                   onClick={onStart}
                   className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/20 sm:w-auto flex-shrink-0"
                 >
-                  Start Your Journey
+                  Begin Learning
                 </button>
                 <div className="text-sm text-slate-400">
-                  <span className="block sm:inline">6 hours • 7 modules • </span>
-                  <span className="text-cyan-400 font-semibold">Lifetime impact</span>
+                  <span className="block sm:inline">Adaptive • Interactive • </span>
+                  <span className="text-cyan-400 font-semibold">Personalized</span>
                 </div>
             </div>
             <p className="text-xs text-slate-500 mt-6 italic max-w-lg mx-auto lg:mx-0">
-              "The future of medicine isn&apos;t AI replacing doctors. It&apos;s doctors empowered by AI, delivering care that&apos;s faster, safer, and more human."
+              "This isn&apos;t just learning about AI. It&apos;s learning WITH AI - your personal tutor adapts to your pace, 
+              answers your questions, and ensures you truly understand."
             </p>
         </div>
       </div>

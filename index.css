@@ -1,3 +1,8 @@
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Global styles for greybrain.ai */
 
 /* Reset and base styles */
