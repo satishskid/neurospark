@@ -4,6 +4,7 @@ import AdminDashboard from './components/AdminDashboard';
 import APIHealthPanel from './components/APIHealthPanel';
 import PaymentPlansPanel from './components/PaymentPlansPanel';
 import UserManagementPanel from './components/UserManagementPanel';
+import CurriculumManagementPanel from './components/CurriculumManagementPanel';
 import { AdminService } from './services/adminService';
 import { 
   ChartBarIcon, 
@@ -11,10 +12,11 @@ import {
   CpuChipIcon, 
   CurrencyDollarIcon,
   Cog6ToothIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  BookOpenIcon
 } from './components/Icons';
 
-type AdminTab = 'overview' | 'users' | 'api' | 'payments' | 'settings';
+type AdminTab = 'overview' | 'users' | 'api' | 'payments' | 'curriculum' | 'settings';
 
 const AdminApp: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -68,6 +70,7 @@ const AdminApp: React.FC = () => {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: ChartBarIcon, component: AdminDashboard },
     { id: 'users', label: 'Users', icon: UsersIcon, component: UserManagementPanel },
+    { id: 'curriculum', label: 'Curriculum', icon: BookOpenIcon, component: CurriculumManagementPanel },
     { id: 'api', label: 'API Health', icon: CpuChipIcon, component: APIHealthPanel },
     { id: 'payments', label: 'Payments', icon: CurrencyDollarIcon, component: PaymentPlansPanel },
   ];
@@ -150,6 +153,7 @@ const AdminApp: React.FC = () => {
               <p className="text-slate-400">
                 {activeTab === 'overview' && 'System overview and key metrics'}
                 {activeTab === 'users' && 'Manage user accounts and analytics'}
+                {activeTab === 'curriculum' && 'View and manage course content'}
                 {activeTab === 'api' && 'Monitor API health and configuration'}
                 {activeTab === 'payments' && 'Manage subscription plans and billing'}
                 {activeTab === 'settings' && 'System configuration and preferences'}
@@ -173,6 +177,7 @@ const AdminApp: React.FC = () => {
         <main className="flex-1 p-6 overflow-y-auto">
           {activeTab === 'overview' && <AdminDashboard onLogout={handleLogout} />}
           {activeTab === 'users' && <UserManagementPanel />}
+          {activeTab === 'curriculum' && <CurriculumManagementPanel />}
           {activeTab === 'api' && <APIHealthPanel />}
           {activeTab === 'payments' && <PaymentPlansPanel />}
           {activeTab === 'settings' && (

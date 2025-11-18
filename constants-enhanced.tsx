@@ -264,14 +264,6 @@ export const CURRICULUM_ENHANCED: Module[] = [
               <li><strong className="text-purple-400">Edge Computing:</strong> APIs distributed globally for millisecond response times</li>
               <li><strong className="text-blue-400">Rate Limiting 2.0:</strong> Intelligent throttling based on user behavior and system load</li>
             </ul>
-                 <p className="font-semibold text-white">2024 API Innovations:</p>
-                 <ul className="mt-2 space-y-3 text-sm">
-                    <li><strong className="text-cyan-400">Streaming APIs:</strong> Real-time responses as they're generated, not waiting for completion</li>
-                    <li><strong className="text-yellow-400">Function Calling:</strong> APIs that can execute specific functions and return structured data</li>
-                    <li><strong className="text-green-400">Multimodal APIs:</strong> Single endpoints handling text, images, audio, and video</li>
-                    <li><strong className="text-purple-400">Edge Computing:</strong> APIs distributed globally for millisecond response times</li>
-                    <li><strong className="text-blue-400">Rate Limiting 2.0:</strong> Intelligent throttling based on user behavior and system load</li>
-                 </ul>
             </Callout>
         <Callout icon={<GlobeAltIcon className="w-8 h-8" />}>
             <p className="font-semibold text-white">The Modern Delivery Network</p>
@@ -282,14 +274,6 @@ export const CURRICULUM_ENHANCED: Module[] = [
               <li><strong className="text-green-400">Caching Layers:</strong> Redis and similar for lightning-fast responses</li>
               <li><strong className="text-purple-400">API Gateways:</strong> Centralized management, authentication, and monitoring</li>
             </ul>
-                 <p className="font-semibold text-white">The Modern Delivery Network</p>
-                 <p>Today's API infrastructure includes:</p>
-                 <ul className="mt-2 space-y-2 text-sm">
-                    <li><strong className="text-yellow-400">CDN Integration:</strong> Content delivery networks for global reach</li>
-                    <li><strong className="text-cyan-400">Load Balancing:</strong> Distributing requests across multiple servers</li>
-                    <li><strong className="text-green-400">Caching Layers:</strong> Redis and similar for lightning-fast responses</li>
-                    <li><strong className="text-purple-400">API Gateways:</strong> Centralized management, authentication, and monitoring</li>
-                 </ul>
             </Callout>
             <p>Understanding modern API architecture is crucial for building responsive, scalable AI applications in 2024!</p>
           </div>
@@ -326,3 +310,4 @@ export const CURRICULUM_ENHANCED: Module[] = [
     ]
   }
 ];
+// This is a test comment to see if writing to the file unblocks it.
