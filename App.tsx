@@ -139,8 +139,9 @@ export default function App() {
     }
 
     const courseParam = urlParams.get('course');
-    const savedCourse = localStorage.getItem('active_course');
-    const chosen = courseParam || savedCourse || 'medical'; // Default to medical
+    // Force medical curriculum (ignore old localStorage)
+    const chosen = courseParam === 'general' ? 'general' : 'medical';
+    
     if (chosen === 'general') {
       setActiveCurriculum(CURRICULUM);
       setActiveCourseLabel('General');
