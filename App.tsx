@@ -21,6 +21,7 @@ import GlossaryView from './components/GlossaryView';
 import CapstoneTracker from './components/CapstoneTracker';
 import CapstoneTutor from './components/CapstoneTutor';
 import SessionTracker from './components/SessionTracker';
+import DashboardView from './components/DashboardView';
 
 
 const APP_STORAGE_KEY = 'greybrain-ai-journey-progress';
@@ -34,7 +35,7 @@ const formatTime = (minutes: number) => {
   return `${hours}h ${remainingMinutes}m`;
 }
 
-const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload, onOpenSettings, onOpenSyllabus, onOpenGlossary, onOpenCapstone, onOpenSessions }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void, onOpenSettings: () => void, onOpenSyllabus: () => void, onOpenGlossary: () => void, onOpenCapstone: () => void, onOpenSessions: () => void }) => {
+const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload, onOpenSettings, onOpenSyllabus, onOpenGlossary, onOpenCapstone, onOpenSessions, onOpenDashboard }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void, onOpenSettings: () => void, onOpenSyllabus: () => void, onOpenGlossary: () => void, onOpenCapstone: () => void, onOpenSessions: () => void, onOpenDashboard: () => void }) => {
   const progressPercentage = allLessonsCount > 0 ? (completedLessonsCount / allLessonsCount) * 100 : 0;
   
   return (
@@ -51,6 +52,13 @@ const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemaining
                     <p className="text-sm text-white font-bold">{formatTime(moduleRemainingTime)} <span className="text-slate-400 font-normal">in module</span></p>
                     <p className="text-xs text-slate-400">About {formatTime(totalRemainingTime)} total</p>
                 </div>
+                <button 
+                    onClick={onOpenDashboard} 
+                    title="Dashboard" 
+                    className="p-2 rounded-full hover:bg-slate-700 transition-colors"
+                >
+                    <span className="text-slate-400 text-sm">Dashboard</span>
+                </button>
                 <button 
                     onClick={onOpenSyllabus} 
                     title="Syllabus" 
@@ -277,6 +285,10 @@ export default function App() {
     setShowSettings(true);
   }
 
+  const handleOpenDashboard = () => {
+    setView('dashboard');
+  }
+
   const handleOpenSyllabus = () => {
     setView('syllabus');
   }
@@ -333,6 +345,7 @@ export default function App() {
             onOpenGlossary={handleOpenGlossary}
             onOpenCapstone={handleOpenCapstone}
             onOpenSessions={handleOpenSessions}
+            onOpenDashboard={handleOpenDashboard}
           />
          <div className="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12 relative">
             {!hasApiKey && (
@@ -388,6 +401,21 @@ export default function App() {
 
   if (view === 'login') {
     return <LoginScreen onStart={handleStartJourney} />;
+  }
+
+  if (view === 'dashboard') {
+    return (
+      <DashboardView
+        userName={progress.userName || "Learner"}
+        progress={progress}
+        modules={activeCurriculum}
+        currentLessonId={currentLessonId}
+        onContinueLearning={() => setView('journey')}
+        onOpenSyllabus={handleOpenSyllabus}
+        onOpenGlossary={handleOpenGlossary}
+        onOpenCapstone={handleOpenCapstone}
+      />
+    );
   }
   
   if (view === 'certificate') {
