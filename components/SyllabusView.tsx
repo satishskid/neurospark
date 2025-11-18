@@ -74,98 +74,273 @@ const SyllabusView: React.FC<SyllabusViewProps> = ({ onClose, onStartSession, ac
       </aside>
 
       {/* Main Content Panel */}
-      <main className="flex-1 overflow-y-auto bg-slate-900 p-8">
+      <main className="flex-1 overflow-y-auto bg-white p-8">
+        <style>{`
+          @media print {
+            .no-print { display: none !important; }
+            .print-page-break { page-break-after: always; }
+          }
+          
+          /* Professional typography */
+          .syllabus-content {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.8;
+            color: #1a1a1a;
+          }
+          
+          .syllabus-content h1 {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+          }
+          
+          .syllabus-content h2, .syllabus-content h3 {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: 600;
+          }
+          
+          /* Pull quote styling */
+          .pull-quote {
+            border-left: 4px solid #0891b2;
+            padding-left: 1.5rem;
+            font-style: italic;
+            font-size: 1.125rem;
+            color: #374151;
+            margin: 2rem 0;
+          }
+          
+          /* Key takeaway box */
+          .key-takeaway {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #0891b2;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+          }
+          
+          /* Case study box */
+          .case-study {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin: 2rem 0;
+          }
+          
+          /* Figure caption */
+          .figure-caption {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-style: italic;
+            text-align: center;
+            margin-top: 0.5rem;
+          }
+          
+          /* Two-column layout for dense content */
+          .two-column {
+            column-count: 2;
+            column-gap: 2rem;
+            column-rule: 1px solid #e5e7eb;
+          }
+          
+          @media (max-width: 1024px) {
+            .two-column {
+              column-count: 1;
+            }
+          }
+        `}</style>
         {selectedModuleId === 'rubrics' ? (
-          <section className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
-            <h2 className="text-2xl font-bold text-white mb-2">Mastery Rubrics</h2>
-            <p className="text-slate-400 mb-6">Criteria for assessing core skills</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {Object.entries(MASTERY_RUBRICS).map(([key, rubric]) => (
-                <div key={key} className="p-5 bg-slate-700/30 rounded-lg border border-slate-600/30">
-                  <h3 className="text-white font-semibold text-lg mb-3">{rubric.title}</h3>
-                  <ul className="text-slate-300 text-sm space-y-2">
-                    {rubric.criteria.map((c: string, idx: number) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-cyan-400 mt-1">•</span>
-                        <span>{c}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+          <article className="syllabus-content max-w-5xl mx-auto">
+            <header className="mb-12 pb-8 border-b-2 border-gray-300">
+              <h1 className="text-4xl font-bold text-gray-900 mb-3">Mastery Rubrics</h1>
+              <p className="text-xl text-gray-600 leading-relaxed">Assessment Framework for Core Competencies</p>
+            </header>
+            
+            <div className="prose prose-lg max-w-none">
+              <p className="text-lg leading-relaxed mb-8">
+                These rubrics provide a structured framework for evaluating proficiency across key dimensions of AI literacy 
+                in healthcare. Each criterion reflects industry standards and best practices established by leading medical 
+                institutions and technology organizations.
+              </p>
             </div>
-          </section>
-        ) : selectedModule ? (
-          <section className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
-            <h2 className="text-2xl font-bold text-white mb-2">{selectedModule.title}</h2>
-            <p className="text-slate-400 mb-6">{selectedModule.description}</p>
-            <div className="space-y-8">
-              {selectedModule.lessons.map((lesson) => (
-                <div key={lesson.id} className="border-t border-slate-700/50 pt-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-semibold text-white">{lesson.title}</h3>
-                    <span className="text-sm text-slate-400 bg-slate-700/50 px-3 py-1 rounded-full">
-                      ⏱️ {lesson.estimatedTimeMinutes} min
-                    </span>
+
+            <section className="mb-12">
+              <div className="space-y-10">
+                {Object.entries(MASTERY_RUBRICS).map(([key, rubric], idx) => (
+                  <div key={key} className="bg-white border-2 border-gray-200 rounded-lg p-8 shadow-sm">
+                    <div className="flex items-start gap-4 mb-6">
+                      <div className="flex-shrink-0 w-12 h-12 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                        {idx + 1}
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-semibold text-gray-900 mb-2">{rubric.title}</h3>
+                        <p className="text-gray-600 italic">Core competency assessment criteria</p>
+                      </div>
+                    </div>
+                    
+                    <div className="pl-16">
+                      <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-4">Evaluation Criteria</h4>
+                      <ul className="space-y-3">
+                        {rubric.criteria.map((c: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-3 text-gray-800 leading-relaxed">
+                            <span className="flex-shrink-0 w-6 h-6 bg-cyan-100 text-cyan-700 rounded-full flex items-center justify-center text-xs font-semibold mt-0.5">
+                              {idx + 1}
+                            </span>
+                            <span>{c}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
+                ))}
+              </div>
+            </section>
+          </article>
+        ) : selectedModule ? (
+          <article className="syllabus-content max-w-5xl mx-auto">
+            {/* Module Header - Publication Style */}
+            <header className="mb-12 pb-8 border-b-2 border-gray-300">
+              <div className="flex items-center gap-3 text-sm text-gray-500 mb-4">
+                <span className="px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full font-semibold">
+                  Module {curriculum.findIndex(m => m.id === selectedModule.id) + 1}
+                </span>
+                <span>•</span>
+                <span>{selectedModule.lessons.length} Lessons</span>
+                <span>•</span>
+                <span>{selectedModule.lessons.reduce((sum, l) => sum + l.estimatedTimeMinutes, 0)} minutes</span>
+              </div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-tight">{selectedModule.title}</h1>
+              <p className="text-xl text-gray-600 leading-relaxed">{selectedModule.description}</p>
+            </header>
+
+            {/* Module Overview */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6 pb-3 border-b border-gray-200">Module Overview</h2>
+              <div className="key-takeaway">
+                <h3 className="text-lg font-semibold text-cyan-900 mb-3">📚 What You'll Learn</h3>
+                <ul className="space-y-2 text-gray-800">
+                  {selectedModule.lessons.slice(0, 5).map((lesson, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-cyan-600 font-bold">→</span>
+                      <span>{lesson.title}</span>
+                    </li>
+                  ))}
+                  {selectedModule.lessons.length > 5 && (
+                    <li className="text-gray-600 italic">...and {selectedModule.lessons.length - 5} more topics</li>
+                  )}
+                </ul>
+              </div>
+            </section>
+            {/* Lessons - Academic Paper Style */}
+            <section className="space-y-12">
+              {selectedModule.lessons.map((lesson, lessonIdx) => (
+                <article key={lesson.id} className="print-page-break">
+                  {/* Lesson Header */}
+                  <header className="mb-6">
+                    <div className="flex items-center gap-3 text-sm text-gray-500 mb-3">
+                      <span className="font-semibold text-cyan-700">Lesson {lessonIdx + 1}</span>
+                      <span>•</span>
+                      <span>{lesson.estimatedTimeMinutes} minutes</span>
+                      <span>•</span>
+                      <span className="capitalize">{lesson.type}</span>
+                    </div>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">{lesson.title}</h2>
+                  </header>
+
+                  {/* Main Content */}
                   {lesson.referenceText && (
-                    <div className="text-slate-300 text-base whitespace-pre-line mb-4 leading-relaxed">
-                      {lesson.referenceText}
+                    <div className="prose prose-lg max-w-none mb-8">
+                      <div className="text-gray-800 leading-relaxed whitespace-pre-line text-justify">
+                        {lesson.referenceText}
+                      </div>
                     </div>
                   )}
+                  {/* Learning Objectives - Sidebar Style */}
                   {lesson.learningObjectives && lesson.learningObjectives.length > 0 && (
-                    <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-                      <h4 className="text-white font-semibold text-base mb-2">🎯 Learning Objectives</h4>
-                      <ul className="text-slate-300 space-y-2">
+                    <aside className="my-8 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-l-4 border-blue-600 rounded-r-lg">
+                      <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center gap-2">
+                        <span className="text-2xl">🎯</span>
+                        Learning Objectives
+                      </h3>
+                      <ul className="space-y-3">
                         {lesson.learningObjectives.map((obj, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <span className="text-blue-400 mt-1">•</span>
-                            <span>{obj}</span>
+                          <li key={i} className="flex items-start gap-3 text-gray-800">
+                            <span className="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
+                              {i + 1}
+                            </span>
+                            <span className="leading-relaxed">{obj}</span>
                           </li>
                         ))}
                       </ul>
-                    </div>
+                    </aside>
                   )}
+
+                  {/* Key Terms - Definition List Style */}
                   {lesson.glossary && lesson.glossary.length > 0 && (
-                    <div className="mt-4 p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
-                      <h4 className="text-white font-semibold text-base mb-2">📖 Key Terms</h4>
-                      <ul className="text-slate-300 space-y-2">
+                    <aside className="my-8 p-6 bg-amber-50 border-l-4 border-amber-600 rounded-r-lg">
+                      <h3 className="text-lg font-semibold text-amber-900 mb-4 flex items-center gap-2">
+                        <span className="text-2xl">📖</span>
+                        Key Terminology
+                      </h3>
+                      <dl className="space-y-4">
                         {lesson.glossary.map((g, i) => (
-                          <li key={i}>
-                            <span className="font-semibold text-cyan-400">{g.term}:</span> {g.definition}
-                          </li>
+                          <div key={i} className="border-b border-amber-200 pb-3 last:border-0">
+                            <dt className="font-bold text-amber-900 mb-1">{g.term}</dt>
+                            <dd className="text-gray-700 leading-relaxed pl-4">{g.definition}</dd>
+                          </div>
                         ))}
-                      </ul>
-                    </div>
+                      </dl>
+                    </aside>
                   )}
+
+                  {/* Further Reading - Citation Style */}
                   {lesson.furtherReading && lesson.furtherReading.length > 0 && (
-                    <div className="mt-4 p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-                      <h4 className="text-white font-semibold text-base mb-2">📚 Further Reading</h4>
-                      <ul className="text-slate-300 space-y-2">
+                    <aside className="my-8 p-6 bg-purple-50 border-l-4 border-purple-600 rounded-r-lg">
+                      <h3 className="text-lg font-semibold text-purple-900 mb-4 flex items-center gap-2">
+                        <span className="text-2xl">📚</span>
+                        References & Further Reading
+                      </h3>
+                      <ol className="space-y-3 list-decimal list-inside">
                         {lesson.furtherReading.map((l, i) => (
-                          <li key={i}>
-                            <a href={l.url} target="_blank" rel="noreferrer" className="text-purple-400 hover:text-purple-300 underline">
-                              {l.label} →
+                          <li key={i} className="text-gray-700 leading-relaxed">
+                            <a 
+                              href={l.url} 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="text-purple-700 hover:text-purple-900 underline font-medium"
+                            >
+                              {l.label}
                             </a>
                           </li>
                         ))}
-                      </ul>
-                    </div>
+                      </ol>
+                    </aside>
                   )}
+
+                  {/* Footnotes - Academic Style */}
                   {lesson.footnotes && lesson.footnotes.length > 0 && (
-                    <div className="mt-4 p-4 bg-slate-700/30 border border-slate-600/30 rounded-lg">
-                      <h4 className="text-white font-semibold text-sm mb-2">📝 Footnotes</h4>
-                      <ul className="text-slate-400 text-xs space-y-1">
+                    <footer className="mt-8 pt-6 border-t border-gray-300">
+                      <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Notes</h4>
+                      <ol className="space-y-2 text-sm text-gray-600 leading-relaxed">
                         {lesson.footnotes.map((f, i) => (
-                          <li key={i}>[{i + 1}] {f}</li>
+                          <li key={i} className="flex gap-2">
+                            <span className="font-semibold">[{i + 1}]</span>
+                            <span>{f}</span>
+                          </li>
                         ))}
-                      </ul>
-                    </div>
+                      </ol>
+                    </footer>
                   )}
-                </div>
+                </article>
               ))}
-              <div className="mt-8 p-5 bg-slate-700/30 rounded-lg border border-slate-600/30">
-                <h4 className="text-white font-semibold text-lg mb-4">📅 Suggested 30-Minute Sessions</h4>
+            </section>
+
+            {/* Session Planning - Instructor Guide Style */}
+            <section className="mt-16 p-8 bg-gradient-to-br from-gray-50 to-slate-50 border-2 border-gray-300 rounded-xl">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-2 flex items-center gap-3">
+                  <span className="text-3xl">📅</span>
+                  Instructional Sessions
+                </h3>
+                <p className="text-gray-600 mb-6 italic">Structured 30-minute learning modules for optimal knowledge retention</p>
                 {(() => {
                   const sessions: { lessons: typeof selectedModule.lessons }[] = [];
                   let current: typeof selectedModule.lessons = [];
@@ -181,51 +356,68 @@ const SyllabusView: React.FC<SyllabusViewProps> = ({ onClose, onStartSession, ac
                   });
                   if (current.length) sessions.push({ lessons: current });
                   return (
-                    <div className="space-y-4">
-                      {sessions.map((s, i) => {
-                        const warmup = s.lessons[0]?.title;
-                        const cumulative = s.lessons[s.lessons.length - 1]?.type === 'quiz' ? s.lessons[s.lessons.length - 1]?.title : null;
-                        const core = s.lessons.slice(1, cumulative ? s.lessons.length - 1 : undefined).map(x => x.title).join(', ');
-                        const total = s.lessons.reduce((acc, x) => acc + x.estimatedTimeMinutes, 0);
-                        return (
-                          <div key={i} className="p-4 bg-slate-800/50 rounded-lg border border-slate-600/30">
-                            <div className="flex items-center justify-between mb-3">
-                              <span className="text-white font-semibold text-base">Session {i + 1} • ~{total} min</span>
-                              <div className="flex items-center gap-2">
-                                {onStartSession && (
-                                  <button
-                                    onClick={() => {
-                                      const firstId = s.lessons[0]?.id;
-                                      if (firstId) onStartSession(firstId);
-                                    }}
-                                    className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-colors"
-                                  >▶️ Start Session</button>
-                                )}
-                                <button
-                                  onClick={() => {
-                                    const html = `<!DOCTYPE html><html><head><title>Session ${i + 1}</title></head><body><h1>Session ${i + 1} (~${total} min)</h1><p><strong>Warmup:</strong> ${warmup || '—'}</p><p><strong>Core:</strong> ${core || '—'}</p><p><strong>Review:</strong> Use Check Your Understanding prompts</p><p><strong>Cumulative Check:</strong> ${cumulative || '—'}</p></body></html>`;
-                                    const w = window.open('', '_blank');
-                                    if (w) { w.document.write(html); w.document.close(); w.print(); }
-                                  }}
-                                  className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm font-medium transition-colors"
-                                >🖨️ Print</button>
-                              </div>
-                            </div>
-                            <div className="text-slate-300 space-y-1 text-sm">
-                              <div><span className="font-semibold text-slate-200">Warmup:</span> {warmup || '—'}</div>
-                              <div><span className="font-semibold text-slate-200">Core:</span> {core || '—'}</div>
-                              <div><span className="font-semibold text-slate-200">Review:</span> Use Check Your Understanding prompts</div>
-                              <div><span className="font-semibold text-slate-200">Cumulative Check:</span> {cumulative || '—'}</div>
-                            </div>
+                    <div className="space-y-6">
+                  {sessions.map((s, i) => {
+                    const warmup = s.lessons[0]?.title;
+                    const cumulative = s.lessons[s.lessons.length - 1]?.type === 'quiz' ? s.lessons[s.lessons.length - 1]?.title : null;
+                    const core = s.lessons.slice(1, cumulative ? s.lessons.length - 1 : undefined).map(x => x.title).join(', ');
+                    const total = s.lessons.reduce((acc, x) => acc + x.estimatedTimeMinutes, 0);
+                    return (
+                      <div key={i} className="bg-white border-2 border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h4 className="text-xl font-bold text-gray-900 mb-1">Session {i + 1}</h4>
+                            <p className="text-sm text-gray-600">Duration: ~{total} minutes</p>
                           </div>
-                        );
-                      })}
+                          <div className="flex items-center gap-2 no-print">
+                            {onStartSession && (
+                              <button
+                                onClick={() => {
+                                  const firstId = s.lessons[0]?.id;
+                                  if (firstId) onStartSession(firstId);
+                                }}
+                                className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-colors"
+                              >▶️ Start</button>
+                            )}
+                            <button
+                              onClick={() => {
+                                const html = `<!DOCTYPE html><html><head><title>Session ${i + 1}</title><style>body{font-family:Georgia,serif;max-width:800px;margin:40px auto;line-height:1.6}</style></head><body><h1>Session ${i + 1} (~${total} min)</h1><p><strong>Warmup:</strong> ${warmup || '—'}</p><p><strong>Core Content:</strong> ${core || '—'}</p><p><strong>Review:</strong> Use Check Your Understanding prompts</p><p><strong>Assessment:</strong> ${cumulative || '—'}</p></body></html>`;
+                                const w = window.open('', '_blank');
+                                if (w) { w.document.write(html); w.document.close(); w.print(); }
+                              }}
+                              className="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg text-sm font-medium transition-colors"
+                            >🖨️ Print</button>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-3 text-gray-800">
+                          <div className="flex gap-3">
+                            <span className="font-semibold text-blue-700 min-w-[140px]">Warmup (5 min):</span>
+                            <span>{warmup || '—'}</span>
+                          </div>
+                          <div className="flex gap-3">
+                            <span className="font-semibold text-cyan-700 min-w-[140px]">Core Content (15 min):</span>
+                            <span>{core || '—'}</span>
+                          </div>
+                          <div className="flex gap-3">
+                            <span className="font-semibold text-purple-700 min-w-[140px]">Review (5 min):</span>
+                            <span>Interactive discussion using Check Your Understanding prompts</span>
+                          </div>
+                          {cumulative && (
+                            <div className="flex gap-3">
+                              <span className="font-semibold text-green-700 min-w-[140px]">Assessment (5 min):</span>
+                              <span>{cumulative}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                     </div>
                   );
                 })()}
-              </div>
-            </div>
-          </section>
+              </section>
+            </article>
         ) : null}
       </main>
     </div>
