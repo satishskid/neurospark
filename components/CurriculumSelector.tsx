@@ -43,9 +43,9 @@ const curricula: CurriculumOption[] = [
   },
   {
     id: 'general',
-    title: 'Engineering AI',
-    subtitle: 'For Engineers & Developers',
-    description: 'Master AI fundamentals with technical depth and practical applications. Perfect for software engineers, developers, and technical professionals building AI-powered solutions.',
+    title: 'Basics of AI',
+    subtitle: 'For All Professionals',
+    description: 'Master AI fundamentals with broad applications across industries. Perfect for business professionals, educators, engineers, and anyone wanting to understand and leverage AI effectively.',
     icon: <AcademicCapIcon className="w-16 h-16" />,
     features: [
       'Comprehensive AI fundamentals',
@@ -55,7 +55,7 @@ const curricula: CurriculumOption[] = [
       'Advanced techniques',
       'Tool ecosystem overview',
       'Hands-on projects',
-      'Technical implementation'
+      'Industry-agnostic examples'
     ],
     duration: '12-15 hours',
     modules: 8,

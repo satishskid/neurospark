@@ -6,11 +6,11 @@ import { ENRICHED_LESSONS } from '../enrichedContent';
 interface SyllabusViewProps {
   onClose: () => void;
   onStartSession?: (lessonId: string) => void;
-  activeCourseLabel?: 'Engineering' | 'Medical';
+  activeCourseLabel?: 'Basics' | 'Medical';
   activeCurriculum?: Module[];
 }
 
-const SyllabusView: React.FC<SyllabusViewProps> = ({ onClose, onStartSession, activeCourseLabel = 'Engineering', activeCurriculum }) => {
+const SyllabusView: React.FC<SyllabusViewProps> = ({ onClose, onStartSession, activeCourseLabel = 'Basics', activeCurriculum }) => {
   const curriculum = activeCurriculum || CURRICULUM;
   const [selectedModuleId, setSelectedModuleId] = useState<string>(curriculum[0]?.id || '');
   const selectedModule = curriculum.find(m => m.id === selectedModuleId);

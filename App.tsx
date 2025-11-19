@@ -39,6 +39,8 @@ const formatTime = (minutes: number) => {
 const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload, onOpenSettings, onOpenSyllabus, onOpenGlossary, onOpenCapstone, onOpenSessions, onOpenDashboard, onOpenAdminDashboard, isUserAdmin }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void, onOpenSettings: () => void, onOpenSyllabus: () => void, onOpenGlossary: () => void, onOpenCapstone: () => void, onOpenSessions: () => void, onOpenDashboard: () => void, onOpenAdminDashboard?: () => void, isUserAdmin?: boolean }) => {
   const progressPercentage = allLessonsCount > 0 ? (completedLessonsCount / allLessonsCount) * 100 : 0;
   
+  console.log('🎯 JourneyHeader render - isUserAdmin:', isUserAdmin, 'onOpenAdminDashboard:', !!onOpenAdminDashboard);
+  
   return (
     <div className="p-4 md:p-6 border-b border-slate-700/50">
         <div className="flex justify-between items-center mb-2">
@@ -126,7 +128,7 @@ export default function App() {
   const [hasApiKey, setHasApiKey] = useState(false);
   const [showCapstoneTutor, setShowCapstoneTutor] = useState(false);
   const [capstoneInitialQuery, setCapstoneInitialQuery] = useState<string | undefined>(undefined);
-  const [activeCourseLabel, setActiveCourseLabel] = useState<'Engineering' | 'Medical'>('Medical');
+  const [activeCourseLabel, setActiveCourseLabel] = useState<'Basics' | 'Medical'>('Medical');
   const [activeCurriculum, setActiveCurriculum] = useState(CURRICULUM_MEDICAL);
 
   const [progress, setProgress] = useState<UserProgress>({ 
@@ -152,7 +154,7 @@ export default function App() {
     
     if (chosen === 'general') {
       setActiveCurriculum(CURRICULUM);
-      setActiveCourseLabel('Engineering');
+      setActiveCourseLabel('Basics');
     } else {
       setActiveCurriculum(CURRICULUM_MEDICAL);
       setActiveCourseLabel('Medical');
@@ -390,9 +392,10 @@ export default function App() {
       if (user && user.isLoggedIn) {
         // Check if user is admin
         if (authService.isAdmin && authService.isAdmin(user)) {
-          console.log('User is admin');
+          console.log('✅ User is admin - setting isUserAdmin to true');
           setIsUserAdmin(true);
         } else {
+          console.log('❌ User is NOT admin');
           setIsUserAdmin(false);
         }
         
@@ -441,7 +444,7 @@ export default function App() {
             setActiveCourseLabel('Medical');
           } else {
             setActiveCurriculum(CURRICULUM);
-            setActiveCourseLabel('Engineering');
+            setActiveCourseLabel('Basics');
           }
           localStorage.setItem('selected_curriculum', curriculum);
           setView('login');
