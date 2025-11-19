@@ -36,7 +36,7 @@ const formatTime = (minutes: number) => {
   return `${hours}h ${remainingMinutes}m`;
 }
 
-const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload, onOpenSettings, onOpenSyllabus, onOpenGlossary, onOpenCapstone, onOpenSessions, onOpenDashboard }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void, onOpenSettings: () => void, onOpenSyllabus: () => void, onOpenGlossary: () => void, onOpenCapstone: () => void, onOpenSessions: () => void, onOpenDashboard: () => void }) => {
+const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload, onOpenSettings, onOpenSyllabus, onOpenGlossary, onOpenCapstone, onOpenSessions, onOpenDashboard, onOpenAdminDashboard, isUserAdmin }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void, onOpenSettings: () => void, onOpenSyllabus: () => void, onOpenGlossary: () => void, onOpenCapstone: () => void, onOpenSessions: () => void, onOpenDashboard: () => void, onOpenAdminDashboard?: () => void, isUserAdmin?: boolean }) => {
   const progressPercentage = allLessonsCount > 0 ? (completedLessonsCount / allLessonsCount) * 100 : 0;
   
   return (
@@ -67,6 +67,15 @@ const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemaining
                 >
                     <span className="text-slate-400 text-sm">Syllabus</span>
                 </button>
+                {isUserAdmin && onOpenAdminDashboard && (
+                    <button 
+                        onClick={onOpenAdminDashboard} 
+                        title="Admin Dashboard" 
+                        className="p-2 px-3 rounded-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 transition-colors"
+                    >
+                        <span className="text-white text-sm font-semibold">Admin Dashboard</span>
+                    </button>
+                )}
                 <button 
                     onClick={onOpenGlossary} 
                     title="Glossary" 
@@ -304,6 +313,10 @@ export default function App() {
     setView('sessions');
   }
 
+  const handleOpenAdminDashboard = () => {
+    setIsAdminMode(true);
+  }
+
   const handleCloseSettings = () => {
     setShowSettings(false);
   }
@@ -345,6 +358,8 @@ export default function App() {
             onOpenCapstone={handleOpenCapstone}
             onOpenSessions={handleOpenSessions}
             onOpenDashboard={handleOpenDashboard}
+            onOpenAdminDashboard={handleOpenAdminDashboard}
+            isUserAdmin={isUserAdmin}
           />
          <div className="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12 relative">
             {!hasApiKey && (
@@ -364,40 +379,25 @@ export default function App() {
     </div>
   );
 
+  // Track if current user is admin
+  const [isUserAdmin, setIsUserAdmin] = useState(false);
+
   // Combined auth and admin check - single useEffect to prevent state conflicts
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const adminParam = urlParams.get('admin');
-    
-    // If admin param is present, store it for the session
-    if (adminParam === 'true') {
-      sessionStorage.setItem('adminMode', 'true');
-    }
-    
-    const isAdminSession = sessionStorage.getItem('adminMode') === 'true';
-    
     // Set up auth listener
     const unsubscribe = authService.onAuthStateChanged((user) => {
-      console.log('Auth state changed:', user, 'isAdminSession:', isAdminSession);
+      console.log('Auth state changed:', user);
       
-      // Check if this is an admin session
-      if (isAdminSession) {
-        // Admin mode requested
-        if (!user || !user.isLoggedIn) {
-          // Not logged in - show onboarding
-          setView('onboarding');
-        } else if (authService.isAdmin && authService.isAdmin(user)) {
-          // Logged in and is admin - show admin dashboard
-          setIsAdminMode(true);
-        } else {
-          // Logged in but not admin - show admin login view
-          setView('admin-login');
-        }
-        return;
-      }
-      
-      // Handle regular user flow
+      // Handle user flow
       if (user && user.isLoggedIn) {
+        // Check if user is admin
+        if (authService.isAdmin && authService.isAdmin(user)) {
+          console.log('User is admin');
+          setIsUserAdmin(true);
+        } else {
+          setIsUserAdmin(false);
+        }
+        
         // Check if user is demo admin
         if (authService.isDemoAdmin && authService.isDemoAdmin(user)) {
           console.log('Setting demo admin to true');
@@ -405,10 +405,12 @@ export default function App() {
         } else {
           setIsDemoAdmin(false);
         }
+        
         setView('journey');
       } else {
         setView('onboarding');
         setIsDemoAdmin(false);
+        setIsUserAdmin(false);
       }
     });
     
@@ -420,14 +422,13 @@ export default function App() {
   if (isAdminMode) {
     return (
       <div className="min-h-screen bg-slate-900">
-        <AdminApp />
+        <AdminApp onBackToJourney={() => setIsAdminMode(false)} />
       </div>
     );
   }
 
   if (view === 'onboarding') {
-    const isAdminSession = sessionStorage.getItem('adminMode') === 'true';
-    return <OnboardingScreen onStart={() => setView(isAdminSession ? 'admin-login' : 'curriculum-select')} />;
+    return <OnboardingScreen onStart={() => setView('curriculum-select')} />;
   }
 
   if (view === 'curriculum-select') {
@@ -450,14 +451,6 @@ export default function App() {
 
   if (view === 'login') {
     return <LoginScreen onStart={handleStartJourney} />;
-  }
-
-  if (view === 'admin-login') {
-    return (
-      <div className="min-h-screen bg-slate-900">
-        <AdminApp />
-      </div>
-    );
   }
 
   if (view === 'dashboard') {

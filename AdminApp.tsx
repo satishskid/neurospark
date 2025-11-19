@@ -20,7 +20,11 @@ import {
 
 type AdminTab = 'overview' | 'users' | 'api' | 'payments' | 'curriculum' | 'promotional' | 'settings';
 
-const AdminApp: React.FC = () => {
+interface AdminAppProps {
+  onBackToJourney?: () => void;
+}
+
+const AdminApp: React.FC<AdminAppProps> = ({ onBackToJourney }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const [loading, setLoading] = useState(true);
@@ -102,6 +106,14 @@ const AdminApp: React.FC = () => {
               <p className="text-slate-400 text-xs">Admin Portal</p>
             </div>
           </div>
+          {onBackToJourney && (
+            <button
+              onClick={onBackToJourney}
+              className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors text-sm"
+            >
+              <span>← Back to Learning</span>
+            </button>
+          )}
         </div>
 
         {/* Navigation */}
