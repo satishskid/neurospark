@@ -71,9 +71,9 @@ const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemaining
                     <button 
                         onClick={onOpenAdminDashboard} 
                         title="Admin Dashboard" 
-                        className="p-2 px-3 rounded-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 transition-colors"
+                        className="p-2 rounded-full hover:bg-slate-700 transition-colors"
                     >
-                        <span className="text-white text-sm font-semibold">Admin Dashboard</span>
+                        <span className="text-slate-400 text-sm">Admin</span>
                     </button>
                 )}
                 <button 

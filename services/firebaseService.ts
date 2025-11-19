@@ -20,15 +20,20 @@ export const authService = {
    */
   isDemoAdmin: (user: any): boolean => {
     const demoEmails = ['drsatish@skids.health', 'satish@skids.health'];
-    return demoEmails.includes(user?.email);
+    const userEmail = user?.email?.toLowerCase();
+    return demoEmails.includes(userEmail);
   },
 
   /**
    * Check if user is an admin with full dashboard access
    */
   isAdmin: (user: any): boolean => {
-    const adminEmails = ['satish@skids.health', 'drsatish@skids.health', 'admin@skids.health'];
-    return adminEmails.includes(user?.email);
+    const adminEmails = ['satish@skids.health', 'drsatish@skids.health', 'admin@skids.health', 'admin@greywaken.ai'];
+    const userEmail = user?.email?.toLowerCase();
+    console.log('Checking admin status for:', userEmail, 'Admin emails:', adminEmails);
+    const isAdminUser = adminEmails.includes(userEmail);
+    console.log('Is admin?', isAdminUser);
+    return isAdminUser;
   },
 
   signInWithEmail: async (
