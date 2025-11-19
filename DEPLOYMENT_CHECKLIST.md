@@ -1,181 +1,304 @@
-# 🚀 GreyWaken Deployment Checklist
+# Deployment Checklist - Hybrid Approach
 
-## ✅ **Pre-Deployment Checklist**
+## ✅ PRE-DEPLOYMENT VERIFICATION
 
-### **📋 Prerequisites Verified**
-- [ ] Node.js 18+ installed
-- [ ] Git installed and configured
-- [ ] GitHub account created
-- [ ] Netlify account created
-- [ ] Gemini API key obtained from [Google AI Studio](https://makersuite.google.com/app/apikey)
+### Code Quality
+- [x] All TypeScript errors resolved
+- [x] No console errors in browser
+- [x] All components render correctly
+- [x] Curriculum selector works
+- [x] Admin dashboard accessible
+- [x] Quiz system functional
+- [x] Visual elements display
 
-### **🔧 Local Testing Complete**
-- [ ] `npm install` completed successfully
-- [ ] `npm run build` builds without errors
-- [ ] `npm run dev` starts local server
-- [ ] Main app loads at `http://localhost:5393/`
-- [ ] Admin panel loads at `http://localhost:5393/?admin=true`
-- [ ] Admin login works with `admin@greywaken.ai` / `admin123`
+### Content Status
+- [x] 1 lesson fully enriched (med-1-1)
+- [x] 43 lessons with existing content
+- [x] 35 quiz questions ready
+- [x] 21 visual elements ready
+- [x] Templates for all lessons created
+
+### Features Working
+- [x] User authentication (Firebase)
+- [x] Curriculum selection
+- [x] Progress tracking
+- [x] Syllabus view
+- [x] Glossary
+- [x] Capstone tracker
+- [x] Session tracker
+- [x] Dashboard
+- [x] Admin panel
 
 ---
 
-## 🚀 **Deployment Steps**
+## 🚀 DEPLOYMENT STEPS
 
-### **Step 1: Push to GitHub**
+### Step 1: Final Build Test
 ```bash
-# Create repository on GitHub named "greywaken"
-# Then run:
-git remote add origin https://github.com/YOUR_USERNAME/greywaken.git
-git branch -M main
-git push -u origin main
+cd neurospark
+npm run build
+# Verify no errors
 ```
 
-**Verification:**
-- [ ] Repository created on GitHub
-- [ ] All files pushed successfully
-- [ ] Repository is public or accessible to Netlify
-
-### **Step 2: Deploy to Netlify**
-1. **Go to [Netlify.com](https://netlify.com)**
-2. **Click "New site from Git"**
-3. **Connect GitHub account**
-4. **Select your `greywaken` repository**
-5. **Verify build settings** (auto-detected):
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-6. **Click "Deploy site"**
-
-**Verification:**
-- [ ] Site deploys successfully
-- [ ] Build logs show no errors
-- [ ] Site URL is generated (e.g., `https://amazing-name-123456.netlify.app`)
-
-### **Step 3: Configure Environment Variables**
-**In Netlify Dashboard → Site Settings → Environment Variables:**
-
-**Add this variable:**
-```
-GEMINI_API_KEY=your_actual_gemini_api_key_here
+### Step 2: Environment Variables
+Ensure these are set in production:
+```env
+VITE_FIREBASE_API_KEY=your_key
+VITE_FIREBASE_AUTH_DOMAIN=your_domain
+VITE_FIREBASE_PROJECT_ID=your_project
+VITE_FIREBASE_STORAGE_BUCKET=your_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_id
+VITE_FIREBASE_APP_ID=your_app_id
 ```
 
-**Verification:**
-- [ ] Environment variable added
-- [ ] Site redeployed after adding variable
-- [ ] No build errors in deployment logs
+### Step 3: Deploy to Vercel
+```bash
+# Install Vercel CLI if needed
+npm i -g vercel
 
-### **Step 4: Test Live Site**
-**Test these URLs:**
-- [ ] **Main App**: `https://your-site.netlify.app` loads correctly
-- [ ] **Admin Panel**: `https://your-site.netlify.app/?admin=true` loads
-- [ ] **Admin Login**: Can login with `admin@greywaken.ai` / `admin123`
-- [ ] **AI Features**: Exercise evaluation works (requires Gemini API key)
-- [ ] **Mobile**: Site is responsive on mobile devices
+# Deploy
+vercel --prod
 
----
+# Note the deployment URL
+```
 
-## 🎯 **Post-Deployment Verification**
+### Step 4: Verify Deployment
+- [ ] Visit production URL
+- [ ] Test curriculum selector
+- [ ] Test admin access (satish@skids.health + ?admin=true)
+- [ ] Complete one lesson
+- [ ] Check progress tracking
+- [ ] Test all navigation
 
-### **🔍 Functionality Tests**
-- [ ] **Onboarding**: Name input and start button work
-- [ ] **Navigation**: Can navigate between modules and lessons
-- [ ] **Quizzes**: Questions load and answers can be submitted
-- [ ] **Exercises**: Code exercises load and can be evaluated
-- [ ] **Progress**: Progress is saved and restored
-- [ ] **Admin Dashboard**: All panels load without errors
-
-### **📊 Admin Panel Tests**
-- [ ] **User Analytics**: Metrics display correctly
-- [ ] **API Health**: Status indicators show green
-- [ ] **Payment Plans**: Subscription tiers display
-- [ ] **User Management**: User list loads and search works
-- [ ] **Navigation**: All admin sections accessible
-
-### **🔧 Technical Verification**
-- [ ] **HTTPS**: Site loads with SSL certificate
-- [ ] **Performance**: Site loads quickly (< 3 seconds)
-- [ ] **Console**: No JavaScript errors in browser console
-- [ ] **Mobile**: Responsive design works on phones/tablets
-- [ ] **SEO**: Page titles and meta tags are correct
+### Step 5: DNS & Custom Domain (Optional)
+```bash
+# Add custom domain in Vercel dashboard
+# Update DNS records
+# Enable SSL
+```
 
 ---
 
-## 🎉 **Success! Your Site is Live**
+## 📄 PDF GENERATION (Parallel Task)
 
-### **📝 Important URLs to Save**
-- **Live Site**: `https://your-site.netlify.app`
-- **Admin Panel**: `https://your-site.netlify.app/?admin=true`
-- **Netlify Dashboard**: `https://app.netlify.com/sites/your-site-name`
-- **GitHub Repository**: `https://github.com/YOUR_USERNAME/greywaken`
+### Setup PDF Generator
+```bash
+npm install @react-pdf/renderer
+npm install jspdf jspdf-autotable
+```
 
-### **🔑 Important Credentials**
-- **Admin Login**: `admin@greywaken.ai` / `admin123`
-- **Gemini API Key**: Stored in Netlify environment variables
+### Create PDF Generation Script
+File: `scripts/generateCurriculumPDF.js`
 
----
+### Generate Initial PDF
+```bash
+node scripts/generateCurriculumPDF.js
+# Output: medical-ai-curriculum-v1.0.pdf
+```
 
-## 🚀 **Next Steps (Optional)**
-
-### **🌐 Custom Domain (Optional)**
-- [ ] Purchase domain name
-- [ ] Configure DNS in Netlify
-- [ ] Update environment variables with new domain
-
-### **🔐 Production Authentication (Future)**
-- [ ] Set up Clerk authentication
-- [ ] Configure Stripe payments
-- [ ] Add database integration
-- [ ] Follow `INTEGRATION_GUIDE.md`
-
-### **📈 Analytics & Monitoring**
-- [ ] Add Google Analytics
-- [ ] Set up error monitoring (Sentry)
-- [ ] Configure uptime monitoring
+### Add Download Button to App
+- Add to SyllabusView
+- Add to Dashboard
+- Add to landing page
 
 ---
 
-## 🆘 **Troubleshooting**
+## 🔄 AUTO-UPDATE CONFIGURATION
 
-### **Common Issues & Solutions**
+### GitHub Actions (if not using Vercel auto-deploy)
+File: `.github/workflows/deploy.yml`
 
-**❌ Build Fails**
-- Check Node.js version (must be 18+)
-- Verify all dependencies in `package.json`
-- Check build logs for specific errors
+### Vercel Auto-Deploy (Recommended)
+- Already configured
+- Every push to main triggers deployment
+- No additional setup needed
 
-**❌ Environment Variables Not Working**
-- Ensure variable name is exactly `GEMINI_API_KEY`
-- Redeploy site after adding variables
-- Check Netlify environment variables section
-
-**❌ Admin Panel Not Loading**
-- Verify URL includes `?admin=true`
-- Check browser console for JavaScript errors
-- Ensure `public/_redirects` file is present
-
-**❌ AI Features Not Working**
-- Verify Gemini API key is valid
-- Check API key has proper permissions
-- Monitor API usage quotas
+### Content Update Workflow
+1. Add enriched content to `enrichedContent.tsx`
+2. Commit to GitHub
+3. Auto-deploy triggers
+4. Users see update in ~2 minutes
 
 ---
 
-## 📞 **Support Resources**
+## 📊 MONITORING & ANALYTICS
 
-- **Netlify Documentation**: [docs.netlify.com](https://docs.netlify.com)
-- **GitHub Help**: [docs.github.com](https://docs.github.com)
-- **Gemini AI**: [ai.google.dev](https://ai.google.dev)
-- **Project Documentation**: See `README.md` and `INTEGRATION_GUIDE.md`
+### Setup Analytics
+- [ ] Google Analytics configured
+- [ ] User tracking enabled
+- [ ] Error monitoring (Sentry)
+- [ ] Performance monitoring
+
+### Key Metrics to Track
+- Daily active users
+- Lesson completion rates
+- Quiz scores
+- Time spent per lesson
+- Curriculum selection (Medical vs General)
+- Admin dashboard usage
 
 ---
 
-## 🎯 **Deployment Complete!**
+## 🎯 POST-DEPLOYMENT TASKS
 
-**Congratulations! Your GreyWaken AI Learning Platform is now live and ready for students!**
+### Immediate (Day 1)
+- [ ] Announce launch
+- [ ] Share on social media
+- [ ] Email existing users
+- [ ] Monitor for errors
+- [ ] Gather initial feedback
 
-**Share your success:**
-- [ ] Test with a few students
-- [ ] Share the `STUDENT_TEASER.md` for marketing
-- [ ] Monitor usage and performance
-- [ ] Plan for scaling and additional features
+### Week 1
+- [ ] Add 10-15 enriched lessons
+- [ ] Generate PDF v1.1
+- [ ] Analyze user behavior
+- [ ] Fix any bugs
+- [ ] Optimize performance
 
-**🧠 GreyWaken - Awakening AI Learning Journeys Worldwide! 🚀**
+### Week 2
+- [ ] Add remaining enriched lessons
+- [ ] Generate PDF v2.0
+- [ ] Implement user feedback
+- [ ] Marketing push
+- [ ] Case studies from users
+
+---
+
+## 🔧 TROUBLESHOOTING
+
+### Common Issues
+
+**Build Fails:**
+```bash
+# Clear cache
+rm -rf node_modules .next
+npm install
+npm run build
+```
+
+**Firebase Auth Issues:**
+- Verify environment variables
+- Check Firebase console settings
+- Ensure domain is whitelisted
+
+**Deployment Fails:**
+- Check Vercel logs
+- Verify build command
+- Check file size limits
+
+---
+
+## 📱 MARKETING LAUNCH
+
+### Launch Announcement
+**Subject**: "Medical AI Curriculum - Now Live!"
+
+**Message**:
+> We're excited to announce the launch of our comprehensive Medical AI Curriculum!
+> 
+> ✅ Interactive lessons with quizzes
+> ✅ Real-world case studies
+> ✅ Progress tracking & certificates
+> ✅ Continuously updated content
+> ✅ Downloadable PDF textbook (coming soon)
+> 
+> Start learning: [URL]
+
+### Social Media Posts
+- LinkedIn: Professional announcement
+- Twitter: Quick highlights
+- Medical forums: Detailed post
+- Email list: Comprehensive update
+
+---
+
+## ✅ DEPLOYMENT COMPLETE CHECKLIST
+
+### Production Verification
+- [ ] App loads correctly
+- [ ] All features functional
+- [ ] No console errors
+- [ ] Mobile responsive
+- [ ] Fast load times (<3s)
+- [ ] SSL certificate active
+- [ ] Analytics tracking
+- [ ] Error monitoring active
+
+### Content Verification
+- [ ] Curriculum selector works
+- [ ] Lessons display correctly
+- [ ] Quizzes functional
+- [ ] Progress saves correctly
+- [ ] Certificates generate
+- [ ] Admin dashboard accessible
+
+### User Experience
+- [ ] Smooth onboarding
+- [ ] Clear navigation
+- [ ] Helpful error messages
+- [ ] Good performance
+- [ ] Accessible design
+- [ ] Print-friendly syllabus
+
+---
+
+## 🎉 SUCCESS CRITERIA
+
+### Launch Day Goals
+- [ ] 0 critical bugs
+- [ ] >90% uptime
+- [ ] <3s page load
+- [ ] 10+ user signups
+- [ ] Positive feedback
+
+### Week 1 Goals
+- [ ] 50+ active users
+- [ ] 100+ lessons completed
+- [ ] 10+ enriched lessons added
+- [ ] PDF v1.1 generated
+- [ ] 5+ testimonials
+
+### Month 1 Goals
+- [ ] 200+ active users
+- [ ] All 44 lessons enriched
+- [ ] PDF v2.0 complete
+- [ ] 50+ certificates awarded
+- [ ] Featured in medical publication
+
+---
+
+## 📞 SUPPORT & MAINTENANCE
+
+### User Support
+- Email: support@yourdomain.com
+- Documentation: /docs
+- FAQ: /faq
+- Community: Telegram/Discord
+
+### Maintenance Schedule
+- **Daily**: Monitor errors
+- **Weekly**: Content updates
+- **Monthly**: PDF regeneration
+- **Quarterly**: Major updates
+
+---
+
+## 🚀 READY TO DEPLOY!
+
+**Current Status**: ✅ Production Ready
+
+**Next Action**: Run deployment command
+
+```bash
+# Final commit
+git add -A
+git commit -m "feat: production ready - hybrid deployment"
+git push origin main
+
+# Deploy
+vercel --prod
+```
+
+**Estimated Time to Live**: 5-10 minutes
+
+**Post-Deployment**: Monitor, gather feedback, continue enrichment in parallel
