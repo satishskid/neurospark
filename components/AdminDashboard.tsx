@@ -48,29 +48,35 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'api' | 'payments'>('overview');
 
-  // Mock data - in real app, this would come from API
+  // Fetch real data from Firebase
   useEffect(() => {
-    const mockData: AdminDashboardData = {
-      userAnalytics: {
-        totalUsers: 12847,
-        activeUsers: 3421,
-        newUsersToday: 156,
-        completionRate: 68.5,
-        averageSessionTime: 24.3,
-        topModules: [
-          { moduleId: 'module-1', moduleName: 'AI Fundamentals', completions: 8934, averageTime: 18.5, dropoffRate: 12.3 },
-          { moduleId: 'module-2', moduleName: 'Machine Learning', completions: 6721, averageTime: 32.1, dropoffRate: 18.7 },
-          { moduleId: 'module-3', moduleName: 'Neural Networks', completions: 4532, averageTime: 45.2, dropoffRate: 25.4 }
-        ],
-        userGrowth: [],
-        engagementMetrics: {
-          dailyActiveUsers: 3421,
-          weeklyActiveUsers: 8934,
-          monthlyActiveUsers: 12847,
-          averageSessionsPerUser: 4.2,
-          bounceRate: 23.1
-        }
-      },
+    const fetchDashboardData = async () => {
+      try {
+        // Import dbService dynamically to avoid circular dependencies
+        const { dbService } = await import('../services/dbService');
+        const analytics = await dbService.getUserAnalytics();
+        
+        const mockData: AdminDashboardData = {
+          userAnalytics: {
+            totalUsers: analytics.totalUsers,
+            activeUsers: analytics.activeUsers,
+            newUsersToday: analytics.newUsersToday,
+            completionRate: analytics.completionRate,
+            averageSessionTime: 24.3, // TODO: Calculate from actual session data
+            topModules: [
+              { moduleId: 'module-1', moduleName: 'AI in Practice', completions: 0, averageTime: 18.5, dropoffRate: 12.3 },
+              { moduleId: 'module-2', moduleName: 'How AI Thinks', completions: 0, averageTime: 32.1, dropoffRate: 18.7 },
+              { moduleId: 'module-3', moduleName: 'Privacy & Ethics', completions: 0, averageTime: 45.2, dropoffRate: 25.4 }
+            ],
+            userGrowth: [],
+            engagementMetrics: {
+              dailyActiveUsers: analytics.dailyActiveUsers,
+              weeklyActiveUsers: analytics.weeklyActiveUsers,
+              monthlyActiveUsers: analytics.monthlyActiveUsers,
+              averageSessionsPerUser: 4.2, // TODO: Calculate from actual data
+              bounceRate: 23.1 // TODO: Calculate from actual data
+            }
+          },
       apiHealth: {
         geminiAPI: {
           status: 'healthy',
@@ -122,10 +128,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       }
     };
 
-    setTimeout(() => {
-      setDashboardData(mockData);
-      setLoading(false);
-    }, 1000);
+        setDashboardData(mockData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
   }, []);
 
   if (loading) {

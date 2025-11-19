@@ -51,5 +51,63 @@ export const dbService = {
     updateUser: async (uid: string, user: any): Promise<void> => {
         const docRef = doc(db, USERS_COLLECTION, uid);
         await updateDoc(docRef, user);
+    },
+
+    // Admin functions
+    getAllUsers: async (): Promise<User[]> => {
+        const usersRef = collection(db, USERS_COLLECTION);
+        const querySnapshot = await getDocs(usersRef);
+        return querySnapshot.docs.map(doc => doc.data() as User);
+    },
+
+    getUserAnalytics: async () => {
+        const users = await dbService.getAllUsers();
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+        const totalUsers = users.length;
+        const activeUsers = users.filter(u => u.isLoggedIn).length;
+        const newUsersToday = users.filter(u => {
+            const createdAt = new Date(u.createdAt || '');
+            return createdAt >= today;
+        }).length;
+
+        const usersWithProgress = users.filter(u => u.courseProgress && Object.keys(u.courseProgress).length > 0);
+        const completionRate = totalUsers > 0 
+            ? (usersWithProgress.filter(u => {
+                const progress = Object.values(u.courseProgress || {});
+                return progress.some(p => p.certificateEarned);
+            }).length / totalUsers) * 100 
+            : 0;
+
+        return {
+            totalUsers,
+            activeUsers,
+            newUsersToday,
+            completionRate: Math.round(completionRate * 10) / 10,
+            dailyActiveUsers: users.filter(u => {
+                const lastAccess = u.courseProgress ? 
+                    Math.max(...Object.values(u.courseProgress).map(p => new Date(p.lastAccessed).getTime())) : 0;
+                return lastAccess >= today.getTime();
+            }).length,
+            weeklyActiveUsers: users.filter(u => {
+                const lastAccess = u.courseProgress ? 
+                    Math.max(...Object.values(u.courseProgress).map(p => new Date(p.lastAccessed).getTime())) : 0;
+                return lastAccess >= weekAgo.getTime();
+            }).length,
+            monthlyActiveUsers: users.filter(u => {
+                const lastAccess = u.courseProgress ? 
+                    Math.max(...Object.values(u.courseProgress).map(p => new Date(p.lastAccessed).getTime())) : 0;
+                return lastAccess >= monthAgo.getTime();
+            }).length,
+        };
+    },
+
+    getWhitelistedUsers: async () => {
+        const whitelistRef = collection(db, WHITELIST_COLLECTION);
+        const querySnapshot = await getDocs(whitelistRef);
+        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     }
 };
