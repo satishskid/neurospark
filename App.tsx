@@ -420,7 +420,10 @@ export default function App() {
   if (isAdminMode) {
     return (
       <div className="min-h-screen bg-slate-900">
-        <AdminApp onBackToJourney={() => setIsAdminMode(false)} />
+        <AdminApp 
+          onBackToJourney={() => setIsAdminMode(false)} 
+          isAlreadyAuthenticated={isUserAdmin}
+        />
       </div>
     );
   }

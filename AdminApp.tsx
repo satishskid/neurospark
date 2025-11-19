@@ -22,23 +22,31 @@ type AdminTab = 'overview' | 'users' | 'api' | 'payments' | 'curriculum' | 'prom
 
 interface AdminAppProps {
   onBackToJourney?: () => void;
+  isAlreadyAuthenticated?: boolean;
 }
 
-const AdminApp: React.FC<AdminAppProps> = ({ onBackToJourney }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const AdminApp: React.FC<AdminAppProps> = ({ onBackToJourney, isAlreadyAuthenticated = false }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(isAlreadyAuthenticated);
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const [loading, setLoading] = useState(true);
 
   const adminService = AdminService.getInstance();
 
   useEffect(() => {
+    // If already authenticated from main app, skip token check
+    if (isAlreadyAuthenticated) {
+      setIsAuthenticated(true);
+      setLoading(false);
+      return;
+    }
+    
     // Check if admin is already logged in (in real app, check JWT token)
     const adminToken = localStorage.getItem('adminToken');
     if (adminToken) {
       setIsAuthenticated(true);
     }
     setLoading(false);
-  }, []);
+  }, [isAlreadyAuthenticated]);
 
   const handleLogin = async (credentials: { email: string; password: string }) => {
     try {
