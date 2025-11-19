@@ -7,6 +7,7 @@ import OnboardingScreen from './components/OnboardingScreen';
 import CurriculumView from './components/CurriculumView';
 import LessonView from './components/LessonView';
 import NextStepsView from './components/NextStepsView';
+import CurriculumSelector from './components/CurriculumSelector';
 import { LogoIcon, ArrowPathIcon, Cog6ToothIcon } from './components/Icons';
 import CertificateView from './components/CertificateView';
 import { TutorialView } from './components/TutorialView';
@@ -408,7 +409,25 @@ export default function App() {
   }, []);
 
   if (view === 'onboarding') {
-    return <OnboardingScreen onStart={() => setView('login')} />;
+    return <OnboardingScreen onStart={() => setView('curriculum-select')} />;
+  }
+
+  if (view === 'curriculum-select') {
+    return (
+      <CurriculumSelector 
+        onSelect={(curriculum) => {
+          if (curriculum === 'medical') {
+            setActiveCurriculum(CURRICULUM_MEDICAL);
+            setActiveCourseLabel('Medical');
+          } else {
+            setActiveCurriculum(CURRICULUM);
+            setActiveCourseLabel('General');
+          }
+          localStorage.setItem('selected_curriculum', curriculum);
+          setView('login');
+        }}
+      />
+    );
   }
 
   if (view === 'login') {
