@@ -369,20 +369,29 @@ export default function App() {
     const urlParams = new URLSearchParams(window.location.search);
     const adminParam = urlParams.get('admin');
     
+    // If admin param is present, store it for the session
+    if (adminParam === 'true') {
+      sessionStorage.setItem('adminMode', 'true');
+    }
+    
+    const isAdminSession = sessionStorage.getItem('adminMode') === 'true';
+    
     // Set up auth listener
     const unsubscribe = authService.onAuthStateChanged((user) => {
-      console.log('Auth state changed:', user);
+      console.log('Auth state changed:', user, 'isAdminSession:', isAdminSession);
       
-      // Check admin mode first - but don't bypass the flow
-      if (adminParam === 'true') {
-        // Admin mode requested - show onboarding first, then admin login
+      // Check if this is an admin session
+      if (isAdminSession) {
+        // Admin mode requested
         if (!user || !user.isLoggedIn) {
+          // Not logged in - show onboarding
           setView('onboarding');
         } else if (authService.isAdmin && authService.isAdmin(user)) {
+          // Logged in and is admin - show admin dashboard
           setIsAdminMode(true);
         } else {
-          // User logged in but not admin - show admin login
-          setView('onboarding');
+          // Logged in but not admin - show admin login view
+          setView('admin-login');
         }
         return;
       }
@@ -417,7 +426,8 @@ export default function App() {
   }
 
   if (view === 'onboarding') {
-    return <OnboardingScreen onStart={() => setView('curriculum-select')} />;
+    const isAdminSession = sessionStorage.getItem('adminMode') === 'true';
+    return <OnboardingScreen onStart={() => setView(isAdminSession ? 'admin-login' : 'curriculum-select')} />;
   }
 
   if (view === 'curriculum-select') {
@@ -440,6 +450,14 @@ export default function App() {
 
   if (view === 'login') {
     return <LoginScreen onStart={handleStartJourney} />;
+  }
+
+  if (view === 'admin-login') {
+    return (
+      <div className="min-h-screen bg-slate-900">
+        <AdminApp />
+      </div>
+    );
   }
 
   if (view === 'dashboard') {

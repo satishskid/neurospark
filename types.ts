@@ -75,7 +75,7 @@ export interface UserProgress {
   tutorialCompleted: boolean;
 }
 
-export type AppView = 'onboarding' | 'curriculum-select' | 'login' | 'journey' | 'certificate' | 'tutorial' | 'syllabus' | 'dashboard' | 'glossary' | 'capstone' | 'sessions';
+export type AppView = 'onboarding' | 'curriculum-select' | 'login' | 'journey' | 'certificate' | 'tutorial' | 'syllabus' | 'dashboard' | 'glossary' | 'capstone' | 'sessions' | 'admin-login';
 
 export interface ChatHistoryItem {
   role: 'user' | 'model';
