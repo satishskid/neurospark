@@ -273,3 +273,332 @@ The patient has:
 };
 
 export default MEDICAL_QUIZZES;
+
+  // MODULE 4: Advanced Prompt Engineering
+  'med-4': {
+    moduleTitle: 'Advanced Prompt Engineering',
+    questions: [
+      {
+        id: 'med-4-q1',
+        question: 'What is the most effective way to prompt AI for clinical documentation?',
+        options: [
+          'Use vague, general instructions',
+          'Provide specific context, format, and constraints',
+          'Copy-paste entire patient charts',
+          'Use medical jargon without explanation'
+        ],
+        correctAnswer: 1,
+        explanation: 'Effective clinical prompts include specific context (patient demographics, chief complaint), desired format (SOAP note, discharge summary), and constraints (length, focus areas). This helps AI generate relevant, structured output.',
+        category: 'Prompt Engineering'
+      },
+      {
+        id: 'med-4-q2',
+        question: 'When using AI for differential diagnosis support, you should:',
+        options: [
+          'Accept the first diagnosis AI suggests',
+          'Provide symptoms and ask AI to consider multiple possibilities',
+          'Only use AI for common conditions',
+          'Never use AI for diagnosis'
+        ],
+        correctAnswer: 1,
+        explanation: 'AI works best for differential diagnosis when you provide comprehensive symptoms and explicitly ask it to consider multiple possibilities with reasoning. This helps you think through cases systematically while maintaining clinical judgment.',
+        category: 'Clinical Applications'
+      },
+      {
+        id: 'med-4-q3',
+        question: 'What is "chain-of-thought" prompting in medical AI?',
+        options: [
+          'Asking AI to show its reasoning step-by-step',
+          'Linking multiple AI systems together',
+          'Using AI to track patient care chains',
+          'Prompting AI multiple times in sequence'
+        ],
+        correctAnswer: 0,
+        explanation: 'Chain-of-thought prompting asks AI to explain its reasoning process step-by-step, similar to clinical reasoning. This helps verify the logic, catch errors, and understand how AI reached its conclusion.',
+        category: 'Advanced Techniques'
+      },
+      {
+        id: 'med-4-q4',
+        question: 'For patient education materials, the best prompt includes:',
+        options: [
+          'Just the medical condition name',
+          'Reading level, language, cultural considerations, and key points',
+          'Complex medical terminology to sound professional',
+          'Generic information from textbooks'
+        ],
+        correctAnswer: 1,
+        explanation: 'Effective patient education prompts specify reading level (e.g., 6th grade), language, cultural considerations, and key teaching points. This ensures materials are accessible and appropriate for your patient population.',
+        category: 'Patient Communication'
+      },
+      {
+        id: 'med-4-q5',
+        question: 'When should you use "few-shot" prompting in clinical AI?',
+        options: [
+          'When you want quick, short answers',
+          'When you provide examples of desired output format',
+          'When using AI for the first time',
+          'When you have limited time'
+        ],
+        correctAnswer: 1,
+        explanation: 'Few-shot prompting provides 2-3 examples of the desired output format, helping AI understand exactly what you want. This is especially useful for specialized clinical documentation or unique formatting requirements.',
+        category: 'Prompt Techniques'
+      }
+    ],
+    scenarios: [
+      {
+        id: 'med-4-s1',
+        scenario: `You need to create patient education materials about diabetes management for a diverse patient population in your clinic. Your patients range from highly educated professionals to those with limited health literacy.`,
+        question: 'Which prompt would generate the most appropriate materials?',
+        options: [
+          '"Write about diabetes management"',
+          '"Create diabetes education at 6th grade reading level, include diet, exercise, medication adherence, and blood sugar monitoring. Use simple language, avoid jargon, include practical examples."',
+          '"Explain diabetes complications in medical terms"',
+          '"Copy standard diabetes handout from medical textbook"'
+        ],
+        correctAnswer: 1,
+        explanation: 'The detailed prompt specifies reading level, key topics, language simplicity, and practical focus - all essential for effective patient education. This ensures materials are accessible to your entire patient population.',
+        clinicalPearl: 'Always specify reading level (typically 6th-8th grade for general population), key teaching points, and request practical examples. Consider creating versions in multiple languages for diverse populations.'
+      }
+    ]
+  },
+
+  // MODULE 5: AI Safety & Bias
+  'med-5': {
+    moduleTitle: 'AI Safety & Bias',
+    questions: [
+      {
+        id: 'med-5-q1',
+        question: 'What is algorithmic bias in medical AI?',
+        options: [
+          'When AI prefers certain medical specialties',
+          'When AI performs differently across patient populations',
+          'When AI is biased toward newer treatments',
+          'When AI disagrees with physician decisions'
+        ],
+        correctAnswer: 1,
+        explanation: 'Algorithmic bias occurs when AI performs differently (usually worse) for certain patient populations due to underrepresentation in training data, biased historical data, or inappropriate model design.',
+        category: 'Bias & Fairness'
+      },
+      {
+        id: 'med-5-q2',
+        question: 'A pulse oximeter AI shows lower accuracy for patients with darker skin tones. This is an example of:',
+        options: [
+          'Acceptable variation in medical devices',
+          'Health equity issue requiring correction',
+          'User error in device application',
+          'Normal device limitations'
+        ],
+        correctAnswer: 1,
+        explanation: 'This is a documented health equity issue. Pulse oximeters and related AI can show reduced accuracy for darker skin tones, potentially leading to delayed treatment. This requires device improvement and clinical awareness.',
+        category: 'Health Equity'
+      },
+      {
+        id: 'med-5-q3',
+        question: 'What should you do if you suspect an AI system is showing biased results?',
+        options: [
+          'Ignore it - all AI has some bias',
+          'Stop using AI completely',
+          'Document observations and report to appropriate channels',
+          'Only use AI for certain patient populations'
+        ],
+        correctAnswer: 2,
+        explanation: 'Document specific observations of bias (which populations, what outcomes), report to your institution\'s AI governance committee or vendor, and continue monitoring. This helps improve AI systems and protect patients.',
+        category: 'Safety Monitoring'
+      },
+      {
+        id: 'med-5-q4',
+        question: 'What is "model drift" in medical AI?',
+        options: [
+          'When AI slowly moves across the screen',
+          'When AI performance degrades over time',
+          'When AI learns new medical knowledge',
+          'When AI updates automatically'
+        ],
+        correctAnswer: 1,
+        explanation: 'Model drift occurs when AI performance degrades over time as patient populations, clinical practices, or data patterns change. Regular monitoring and retraining are essential to maintain accuracy.',
+        category: 'AI Maintenance'
+      },
+      {
+        id: 'med-5-q5',
+        question: 'An AI system recommends a treatment that contradicts current guidelines. You should:',
+        options: [
+          'Follow the AI recommendation - it knows best',
+          'Apply clinical judgment and follow evidence-based guidelines',
+          'Disable the AI system immediately',
+          'Ask the patient to decide'
+        ],
+        correctAnswer: 1,
+        explanation: 'Always apply clinical judgment and follow evidence-based guidelines. AI can make errors, use outdated information, or not account for individual patient factors. You are responsible for final clinical decisions.',
+        category: 'Clinical Decision Making'
+      }
+    ],
+    scenarios: []
+  },
+
+  // MODULE 6: Building Workflows
+  'med-6': {
+    moduleTitle: 'Building Workflows',
+    questions: [
+      {
+        id: 'med-6-q1',
+        question: 'When integrating AI into clinical workflows, the first step should be:',
+        options: [
+          'Buy the most expensive AI system',
+          'Identify a specific problem AI can help solve',
+          'Replace all existing systems with AI',
+          'Train all staff on AI immediately'
+        ],
+        correctAnswer: 1,
+        explanation: 'Start by identifying a specific, measurable problem (e.g., delayed sepsis recognition, documentation burden). This ensures AI implementation addresses real needs and allows you to measure success.',
+        category: 'Implementation Strategy'
+      },
+      {
+        id: 'med-6-q2',
+        question: 'What is the most important factor for successful AI adoption?',
+        options: [
+          'Having the latest AI technology',
+          'Physician and staff buy-in and training',
+          'Spending the most money',
+          'Implementing AI in all departments simultaneously'
+        ],
+        correctAnswer: 1,
+        explanation: 'User buy-in and proper training are critical for success. Even the best AI fails if clinicians don\'t trust it, understand it, or know how to use it effectively. Start with champions and expand gradually.',
+        category: 'Change Management'
+      },
+      {
+        id: 'med-6-q3',
+        question: 'How should AI alerts be integrated into EHR workflows?',
+        options: [
+          'Pop-up alerts for every AI recommendation',
+          'Contextual, actionable alerts at point of decision',
+          'Daily email summaries of all AI findings',
+          'Separate AI dashboard requiring extra clicks'
+        ],
+        correctAnswer: 1,
+        explanation: 'AI alerts should be contextual (right time, right place), actionable (clear next steps), and integrated into existing workflow. Too many alerts cause fatigue; too few reduce effectiveness.',
+        category: 'Workflow Integration'
+      },
+      {
+        id: 'med-6-q4',
+        question: 'What metric is most important for measuring AI impact?',
+        options: [
+          'Number of AI recommendations generated',
+          'Clinical outcomes and workflow efficiency',
+          'Cost of the AI system',
+          'Number of users trained'
+        ],
+        correctAnswer: 1,
+        explanation: 'Focus on clinical outcomes (mortality, complications, time-to-treatment) and workflow efficiency (time saved, documentation quality). These demonstrate real value and justify continued investment.',
+        category: 'Measuring Success'
+      },
+      {
+        id: 'med-6-q5',
+        question: 'When should you pilot an AI system before full deployment?',
+        options: [
+          'Never - deploy immediately to all users',
+          'Always - start with one unit/department',
+          'Only if the AI is experimental',
+          'Only if required by administration'
+        ],
+        correctAnswer: 1,
+        explanation: 'Always pilot AI systems with a small group first. This allows you to identify workflow issues, refine alert thresholds, train super-users, and demonstrate value before organization-wide rollout.',
+        category: 'Implementation Best Practices'
+      }
+    ],
+    scenarios: []
+  },
+
+  // MODULE 7: Capstone Project
+  'med-7': {
+    moduleTitle: 'Capstone Project',
+    questions: [
+      {
+        id: 'med-7-q1',
+        question: 'When identifying a clinical problem for AI solution, you should prioritize:',
+        options: [
+          'The most technologically advanced solution',
+          'Problems with measurable impact and clear success metrics',
+          'Whatever AI vendors are selling',
+          'The most expensive solution'
+        ],
+        correctAnswer: 1,
+        explanation: 'Choose problems where you can measure impact (e.g., reduce door-to-needle time by 15 minutes) and define clear success metrics. This ensures your project demonstrates value and justifies resources.',
+        category: 'Project Planning'
+      },
+      {
+        id: 'med-7-q2',
+        question: 'A successful AI implementation plan should include:',
+        options: [
+          'Only technical specifications',
+          'Stakeholder engagement, training, workflow integration, and evaluation metrics',
+          'Just the budget and timeline',
+          'Only physician input'
+        ],
+        correctAnswer: 1,
+        explanation: 'Comprehensive plans include stakeholder engagement (physicians, nurses, IT, administration), training programs, workflow integration strategy, and clear evaluation metrics. Success requires buy-in from all affected parties.',
+        category: 'Implementation Planning'
+      },
+      {
+        id: 'med-7-q3',
+        question: 'How should you evaluate an AI solution after implementation?',
+        options: [
+          'Ask if people like it',
+          'Measure clinical outcomes, workflow efficiency, and user satisfaction',
+          'Count how many times it was used',
+          'Wait for complaints'
+        ],
+        correctAnswer: 1,
+        explanation: 'Comprehensive evaluation includes clinical outcomes (patient safety, quality metrics), workflow efficiency (time saved, documentation quality), and user satisfaction. Use both quantitative data and qualitative feedback.',
+        category: 'Evaluation Framework'
+      },
+      {
+        id: 'med-7-q4',
+        question: 'When presenting your AI project to stakeholders, emphasize:',
+        options: [
+          'Technical details and algorithms',
+          'Clinical impact, workflow benefits, and ROI',
+          'How much the AI cost',
+          'Comparison to competitors'
+        ],
+        correctAnswer: 1,
+        explanation: 'Stakeholders care about clinical impact (better outcomes), workflow benefits (time saved, reduced burden), and return on investment. Lead with results and value, not technical details.',
+        category: 'Communication'
+      },
+      {
+        id: 'med-7-q5',
+        question: 'After successful AI implementation, the next step is:',
+        options: [
+          'Move on to the next project immediately',
+          'Monitor performance, gather feedback, and iterate',
+          'Stop all AI-related activities',
+          'Implement AI everywhere without evaluation'
+        ],
+        correctAnswer: 1,
+        explanation: 'Continuous monitoring, user feedback, and iterative improvement are essential. AI systems need ongoing refinement based on real-world performance and changing clinical needs.',
+        category: 'Continuous Improvement'
+      }
+    ],
+    scenarios: [
+      {
+        id: 'med-7-s1',
+        scenario: `You've identified that your ED has a problem with delayed sepsis recognition, leading to increased mortality. You want to implement an AI-powered early warning system.
+
+Current state:
+- Average time to sepsis recognition: 4.2 hours
+- Sepsis mortality rate: 18%
+- 50 sepsis cases per month
+- Limited nursing staff for continuous monitoring`,
+        question: 'What should be your primary success metric?',
+        options: [
+          'Number of AI alerts generated',
+          'Reduction in time-to-sepsis recognition and mortality rate',
+          'Cost savings from AI system',
+          'Staff satisfaction with AI'
+        ],
+        correctAnswer: 1,
+        explanation: 'Focus on clinical outcomes: reduce time-to-recognition (target: <2 hours) and mortality rate (target: <15%). These demonstrate real patient benefit and justify the investment. Track secondary metrics like alert accuracy and staff satisfaction.',
+        clinicalPearl: 'Always define success metrics before implementation. For sepsis AI: time-to-antibiotics, mortality rate, ICU length of stay, and cost per case. Aim for 30-50% improvement in primary metrics to demonstrate clear value.'
+      }
+    ]
+  }
+};
