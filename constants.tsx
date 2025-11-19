@@ -146,7 +146,7 @@ export const CURRICULUM: Module[] = [
   },
   {
     id: 'module-6',
-    title: 'Module 6: Anatomy of an App',
+    title: 'Module 2: Anatomy of an App',
     description: 'See how real apps are built, from Instagram to your own ideas.',
     lessons: [
       {
@@ -361,7 +361,7 @@ export const CURRICULUM: Module[] = [
   },
   {
     id: 'module-7',
-    title: 'Module 7: From Code to the World',
+    title: 'Module 3: From Code to the World',
     description: 'Learn how a finished app gets online and stays safe.',
     lessons: [
       {
@@ -467,7 +467,7 @@ export const CURRICULUM: Module[] = [
   },
   {
     id: 'module-8',
-    title: 'Module 8: The Developer\'s Toolbox',
+    title: 'Module 4: The Developer\'s Toolbox',
     description: 'A peek inside the tools that bring apps to life.',
     lessons: [
       {
@@ -555,7 +555,7 @@ export const CURRICULUM: Module[] = [
   },
   {
     id: 'module-9',
-    title: 'Module 9: How AI Thinks & Remembers',
+    title: 'Module 5: How AI Thinks & Remembers',
     description: 'Learn the core vocabulary of AI interaction.',
     lessons: [
       {
@@ -687,7 +687,7 @@ export const CURRICULUM: Module[] = [
   },
   {
     id: 'module-10',
-    title: 'Module 10: The AI\'s Workshop',
+    title: 'Module 6: The AI\'s Workshop',
     description: 'Understand the hardware and rules that power your AI tools.',
     lessons: [
       {
@@ -808,7 +808,7 @@ export const CURRICULUM: Module[] = [
   },
   {
     id: 'module-11',
-    title: 'Module 11: Becoming an AI Curator',
+    title: 'Module 7: Becoming an AI Curator',
     description: 'Find, test, and fine-tune models to create your own specialized AI.',
     lessons: [
       {
@@ -896,7 +896,7 @@ export const CURRICULUM: Module[] = [
   },
   {
     id: 'module-12',
-    title: 'Module 12: Your Personal AI Workshop',
+    title: 'Module 8: Your Personal AI Workshop',
     description: 'Bring the power of AI home. Learn to run models directly on your own computer.',
     lessons: [
       {
