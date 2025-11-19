@@ -373,9 +373,17 @@ export default function App() {
     const unsubscribe = authService.onAuthStateChanged((user) => {
       console.log('Auth state changed:', user);
       
-      // Check admin mode first
-      if (adminParam === 'true' || (user && authService.isAdmin && authService.isAdmin(user))) {
-        setIsAdminMode(true);
+      // Check admin mode first - but don't bypass the flow
+      if (adminParam === 'true') {
+        // Admin mode requested - show onboarding first, then admin login
+        if (!user || !user.isLoggedIn) {
+          setView('onboarding');
+        } else if (authService.isAdmin && authService.isAdmin(user)) {
+          setIsAdminMode(true);
+        } else {
+          // User logged in but not admin - show admin login
+          setView('onboarding');
+        }
         return;
       }
       
@@ -399,8 +407,13 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+  // Wrap AdminApp in the main app container for consistent styling
   if (isAdminMode) {
-    return <AdminApp />;
+    return (
+      <div className="min-h-screen bg-slate-900">
+        <AdminApp />
+      </div>
+    );
   }
 
   if (view === 'onboarding') {

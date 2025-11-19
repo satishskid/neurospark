@@ -60,13 +60,20 @@ const AdminApp: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
+          <p className="text-slate-400">Loading admin portal...</p>
+        </div>
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return <AdminLogin onLogin={handleLogin} />;
+    return (
+      <div className="min-h-screen bg-slate-900">
+        <AdminLogin onLogin={handleLogin} />
+      </div>
+    );
   }
 
   const tabs = [
@@ -81,17 +88,17 @@ const AdminApp: React.FC = () => {
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || AdminDashboard;
 
   return (
-    <div className="min-h-screen bg-slate-900 flex">
+    <div className="min-h-screen bg-slate-900 flex font-sans">
       {/* Sidebar */}
-      <div className="w-64 bg-slate-800/50 border-r border-slate-700/50 flex flex-col">
+      <div className="w-64 bg-slate-800/30 border-r border-slate-700/50 flex flex-col">
         {/* Logo */}
         <div className="p-6 border-b border-slate-700/50">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">GB</span>
+            <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/20">
+              <span className="text-white font-bold">GW</span>
             </div>
             <div>
-              <h1 className="text-white font-bold">GreyWaken</h1>
+              <h1 className="text-white font-bold text-lg">GreyWaken</h1>
               <p className="text-slate-400 text-xs">Admin Portal</p>
             </div>
           </div>
@@ -145,9 +152,9 @@ const AdminApp: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-slate-800/20">
         {/* Header */}
-        <header className="bg-slate-800/30 border-b border-slate-700/50 px-6 py-4">
+        <header className="bg-slate-800/30 backdrop-blur-sm border-b border-slate-700/50 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-white capitalize">
