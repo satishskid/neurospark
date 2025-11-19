@@ -121,6 +121,7 @@ export default function App() {
   const [view, setView] = useState<AppView>('onboarding');
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [isDemoAdmin, setIsDemoAdmin] = useState(false);
+  const [isUserAdmin, setIsUserAdmin] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [hasApiKey, setHasApiKey] = useState(false);
   const [showCapstoneTutor, setShowCapstoneTutor] = useState(false);
@@ -378,9 +379,6 @@ export default function App() {
       </main>
     </div>
   );
-
-  // Track if current user is admin
-  const [isUserAdmin, setIsUserAdmin] = useState(false);
 
   // Combined auth and admin check - single useEffect to prevent state conflicts
   useEffect(() => {
