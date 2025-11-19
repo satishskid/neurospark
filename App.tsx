@@ -364,40 +364,28 @@ export default function App() {
     </div>
   );
 
-  // Admin mode check - Check URL parameter OR admin email
+  // Combined auth and admin check - single useEffect to prevent state conflicts
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const adminParam = urlParams.get('admin');
     
-    // Check if user is admin by email
-    authService.onAuthStateChanged((user) => {
-      if (user && authService.isAdmin && authService.isAdmin(user)) {
-        setIsAdminMode(true);
-      } else if (adminParam === 'true') {
-        setIsAdminMode(true);
-      }
-    });
-  }, []);
-
-  if (isAdminMode) {
-    return <AdminApp />;
-  }
-
-  // When the browser is restarted we need to restore to previous state
-  // So it checks if the user is logged into firebase
-  // If so redirect to the appropriate screen
-  useEffect(() => {
-    authService.onAuthStateChanged((user) => {
+    // Set up auth listener
+    const unsubscribe = authService.onAuthStateChanged((user) => {
       console.log('Auth state changed:', user);
+      
+      // Check admin mode first
+      if (adminParam === 'true' || (user && authService.isAdmin && authService.isAdmin(user))) {
+        setIsAdminMode(true);
+        return;
+      }
+      
+      // Handle regular user flow
       if (user && user.isLoggedIn) {
         // Check if user is demo admin
-        console.log('User email:', user.email);
-        console.log('Is demo admin check:', authService.isDemoAdmin && authService.isDemoAdmin(user));
         if (authService.isDemoAdmin && authService.isDemoAdmin(user)) {
           console.log('Setting demo admin to true');
           setIsDemoAdmin(true);
         } else {
-          console.log('Setting demo admin to false');
           setIsDemoAdmin(false);
         }
         setView('journey');
@@ -406,7 +394,14 @@ export default function App() {
         setIsDemoAdmin(false);
       }
     });
+    
+    // Cleanup subscription
+    return () => unsubscribe();
   }, []);
+
+  if (isAdminMode) {
+    return <AdminApp />;
+  }
 
   if (view === 'onboarding') {
     return <OnboardingScreen onStart={() => setView('curriculum-select')} />;
