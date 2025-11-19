@@ -126,7 +126,7 @@ export default function App() {
   const [hasApiKey, setHasApiKey] = useState(false);
   const [showCapstoneTutor, setShowCapstoneTutor] = useState(false);
   const [capstoneInitialQuery, setCapstoneInitialQuery] = useState<string | undefined>(undefined);
-  const [activeCourseLabel, setActiveCourseLabel] = useState<'General' | 'Medical'>('Medical');
+  const [activeCourseLabel, setActiveCourseLabel] = useState<'Engineering' | 'Medical'>('Medical');
   const [activeCurriculum, setActiveCurriculum] = useState(CURRICULUM_MEDICAL);
 
   const [progress, setProgress] = useState<UserProgress>({ 
@@ -152,7 +152,7 @@ export default function App() {
     
     if (chosen === 'general') {
       setActiveCurriculum(CURRICULUM);
-      setActiveCourseLabel('General');
+      setActiveCourseLabel('Engineering');
     } else {
       setActiveCurriculum(CURRICULUM_MEDICAL);
       setActiveCourseLabel('Medical');
@@ -441,7 +441,7 @@ export default function App() {
             setActiveCourseLabel('Medical');
           } else {
             setActiveCurriculum(CURRICULUM);
-            setActiveCourseLabel('General');
+            setActiveCourseLabel('Engineering');
           }
           localStorage.setItem('selected_curriculum', curriculum);
           setView('login');

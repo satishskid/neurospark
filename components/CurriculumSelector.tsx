@@ -7,7 +7,7 @@ import React from 'react';
 import { AcademicCapIcon, HeartIcon } from './Icons';
 
 interface CurriculumOption {
-  id: 'foundational' | 'medical';
+  id: 'general' | 'medical';
   title: string;
   subtitle: string;
   description: string;
@@ -20,27 +20,6 @@ interface CurriculumOption {
 }
 
 const curricula: CurriculumOption[] = [
-  {
-    id: 'foundational',
-    title: 'Foundational AI',
-    subtitle: 'For All Professionals',
-    description: 'Master AI fundamentals with broad applications across industries. Perfect for business professionals, educators, and anyone wanting to understand and leverage AI effectively.',
-    icon: <AcademicCapIcon className="w-16 h-16" />,
-    features: [
-      'Comprehensive AI fundamentals',
-      'Practical prompt engineering',
-      'Real-world applications',
-      'Ethics & responsible AI',
-      'Advanced techniques',
-      'Tool ecosystem overview',
-      'Hands-on projects',
-      'Industry-agnostic examples'
-    ],
-    duration: '12-15 hours',
-    modules: 10,
-    lessons: 44,
-    color: 'blue'
-  },
   {
     id: 'medical',
     title: 'Medical AI',
@@ -61,11 +40,32 @@ const curricula: CurriculumOption[] = [
     modules: 7,
     lessons: 44,
     color: 'cyan'
+  },
+  {
+    id: 'general',
+    title: 'Engineering AI',
+    subtitle: 'For Engineers & Developers',
+    description: 'Master AI fundamentals with technical depth and practical applications. Perfect for software engineers, developers, and technical professionals building AI-powered solutions.',
+    icon: <AcademicCapIcon className="w-16 h-16" />,
+    features: [
+      'Comprehensive AI fundamentals',
+      'Practical prompt engineering',
+      'Real-world applications',
+      'Ethics & responsible AI',
+      'Advanced techniques',
+      'Tool ecosystem overview',
+      'Hands-on projects',
+      'Technical implementation'
+    ],
+    duration: '12-15 hours',
+    modules: 8,
+    lessons: 44,
+    color: 'blue'
   }
 ];
 
 export const CurriculumSelector = ({ onSelect }: {
-  onSelect: (curriculum: 'foundational' | 'medical') => void;
+  onSelect: (curriculum: 'general' | 'medical') => void;
 }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
