@@ -389,8 +389,8 @@ export default function App() {
       console.log('Auth state changed:', user);
       
       // Handle user flow
-      if (user && user.isLoggedIn) {
-        // Check if user is admin
+      if (user) {
+        // Check if user is admin (regardless of isLoggedIn status)
         if (authService.isAdmin && authService.isAdmin(user)) {
           console.log('✅ User is admin - setting isUserAdmin to true');
           setIsUserAdmin(true);
@@ -407,7 +407,12 @@ export default function App() {
           setIsDemoAdmin(false);
         }
         
-        setView('journey');
+        // Only proceed to journey if actually logged in
+        if (user.isLoggedIn) {
+          setView('journey');
+        } else {
+          setView('onboarding');
+        }
       } else {
         setView('onboarding');
         setIsDemoAdmin(false);
