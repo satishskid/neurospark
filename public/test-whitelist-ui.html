@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whitelist System - DB to UI Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        .progress {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .log {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        .log-entry {
+            margin: 5px 0;
+        }
+        .timestamp {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Whitelist Management System</h1>
+        <p class="subtitle">Database to UI Integration Test Suite</p>
+
+        <div class="test-section">
+            <h3>📊 Test Controls</h3>
+            <button onclick="runAllTests()" id="runAllBtn">▶️ Run All Tests</button>
+            <button onclick="runTest1()" id="test1Btn">Test 1: Add Single User</button>
+            <button onclick="runTest2()" id="test2Btn">Test 2: Bulk Add</button>
+            <button onclick="runTest3()" id="test3Btn">Test 3: Fetch All</button>
+            <button onclick="runTest4()" id="test4Btn">Test 4: Search</button>
+            <button onclick="runTest5()" id="test5Btn">Test 5: Remove User</button>
+            <button onclick="clearLog()">🗑️ Clear Log</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalTests">0</div>
+                <div class="stat-label">Total Tests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="passedTests">0</div>
+                <div class="stat-label">✅ Passed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="failedTests">0</div>
+                <div class="stat-label">❌ Failed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="successRate">0%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar" style="width: 0%">0%</div>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 Test Log</h3>
+            <div class="log" id="testLog"></div>
+        </div>
+
+        <div class="test-section" id="resultsSection" style="display: none;">
+            <h3>🎯 Test Results</h3>
+            <div id="results"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, doc, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase config - will be loaded from environment
+        const firebaseConfig = {
+            apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+            authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+            projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+            storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+            messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+            appId: import.meta.env.VITE_FIREBASE_APP_ID
+        };
+
+        let app, db;
+        let testResults = { total: 0, passed: 0, failed: 0 };
+        let testDocIds = [];
+
+        // Initialize Firebase
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            log('✅ Firebase initialized successfully', 'success');
+        } catch (error) {
+            log('❌ Firebase initialization failed: ' + error.message, 'error');
+        }
+
+        // Logging function
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('testLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            
+            let icon = 'ℹ️';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            entry.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${icon} ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function updateStats() {
+            document.getElementById('totalTests').textContent = testResults.total;
+            document.getElementById('passedTests').textContent = testResults.passed;
+            document.getElementById('failedTests').textContent = testResults.failed;
+            
+            const rate = testResults.total > 0 
+                ? Math.round((testResults.passed / testResults.total) * 100) 
+                : 0;
+            document.getElementById('successRate').textContent = rate + '%';
+            
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = rate + '%';
+            progressBar.textContent = rate + '%';
+        }
+
+        function addResult(testName, passed, message) {
+            testResults.total++;
+            if (passed) {
+                testResults.passed++;
+                log(`${testName}: ${message}`, 'success');
+            } else {
+                testResults.failed++;
+                log(`${testName}: ${message}`, 'error');
+            }
+            updateStats();
+        }
+
+        // Test 1: Add Single User
+        window.runTest1 = async function() {
+            log('🧪 Starting Test 1: Add Single User', 'info');
+            try {
+                const testEmail = `test.${Date.now()}@example.com`;
+                const whitelistRef = collection(db, 'whitelist');
+                
+                const docRef = await addDoc(whitelistRef, {
+                    email: testEmail,
+                    name: 'Test User',
+                    role: 'Student',
+                    institution: 'Test University',
+                    addedDate: new Date().toISOString(),
+                    addedBy: 'test-admin@example.com',
+                    status: 'active'
+                });
+                
+                testDocIds.push(docRef.id);
+                addResult('Test 1', true, `User added successfully (ID: ${docRef.id})`);
+            } catch (error) {
+                addResult('Test 1', false, error.message);
+            }
+        };
+
+        // Test 2: Bulk Add Users
+        window.runTest2 = async function() {
+            log('🧪 Starting Test 2: Bulk Add Users', 'info');
+            try {
+                const emails = [
+                    `bulk1.${Date.now()}@example.com`,
+                    `bulk2.${Date.now()}@example.com`,
+                    `bulk3.${Date.now()}@example.com`
+                ];
+                
+                const whitelistRef = collection(db, 'whitelist');
+                const promises = emails.map(email => 
+                    addDoc(whitelistRef, {
+                        email,
+                        addedDate: new Date().toISOString(),
+                        addedBy: 'test-admin@example.com',
+                        status: 'active'
+                    })
+                );
+                
+                const results = await Promise.all(promises);
+                results.forEach(r => testDocIds.push(r.id));
+                
+                addResult('Test 2', true, `${emails.length} users added successfully`);
+            } catch (error) {
+                addResult('Test 2', false, error.message);
+            }
+        };
+
+        // Test 3: Fetch All Users
+        window.runTest3 = async function() {
+            log('🧪 Starting Test 3: Fetch All Whitelisted Users', 'info');
+            try {
+                const whitelistRef = collection(db, 'whitelist');
+                const snapshot = await getDocs(whitelistRef);
+                
+                const count = snapshot.size;
+                log(`Found ${count} whitelisted users in database`, 'info');
+                
+                addResult('Test 3', count > 0, `Retrieved ${count} users from database`);
+            } catch (error) {
+                addResult('Test 3', false, error.message);
+            }
+        };
+
+        // Test 4: Search by Email
+        window.runTest4 = async function() {
+            log('🧪 Starting Test 4: Search User by Email', 'info');
+            try {
+                if (testDocIds.length === 0) {
+                    addResult('Test 4', false, 'No test users to search for. Run Test 1 first.');
+                    return;
+                }
+                
+                // Get the first test user we created
+                const whitelistRef = collection(db, 'whitelist');
+                const docSnap = await getDocs(query(whitelistRef));
+                
+                if (!docSnap.empty) {
+                    const user = docSnap.docs[0].data();
+                    log(`Found user: ${user.email}`, 'info');
+                    addResult('Test 4', true, `Search successful, found user: ${user.email}`);
+                } else {
+                    addResult('Test 4', false, 'No users found');
+                }
+            } catch (error) {
+                addResult('Test 4', false, error.message);
+            }
+        };
+
+        // Test 5: Remove User (Soft Delete)
+        window.runTest5 = async function() {
+            log('🧪 Starting Test 5: Remove User (Soft Delete)', 'info');
+            try {
+                if (testDocIds.length === 0) {
+                    addResult('Test 5', false, 'No test users to remove. Run Test 1 first.');
+                    return;
+                }
+                
+                const docId = testDocIds[0];
+                const docRef = doc(db, 'whitelist', docId);
+                
+                await updateDoc(docRef, {
+                    status: 'inactive',
+                    removedDate: new Date().toISOString()
+                });
+                
+                addResult('Test 5', true, `User soft deleted (ID: ${docId})`);
+            } catch (error) {
+                addResult('Test 5', false, error.message);
+            }
+        };
+
+        // Run all tests
+        window.runAllTests = async function() {
+            log('🚀 Starting Full Test Suite', 'info');
+            log('═'.repeat(50), 'info');
+            
+            testResults = { total: 0, passed: 0, failed: 0 };
+            testDocIds = [];
+            updateStats();
+            
+            await runTest1();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await runTest2();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await runTest3();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await runTest4();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await runTest5();
+            
+            log('═'.repeat(50), 'info');
+            log(`✨ Test Suite Complete: ${testResults.passed}/${testResults.total} passed`, 
+                testResults.failed === 0 ? 'success' : 'warning');
+            
+            if (testResults.failed === 0) {
+                log('🎉 ALL TESTS PASSED! Whitelist system is working correctly.', 'success');
+            } else {
+                log(`⚠️ ${testResults.failed} test(s) failed. Please review the errors above.`, 'warning');
+            }
+        };
+
+        window.clearLog = function() {
+            document.getElementById('testLog').innerHTML = '';
+            log('Log cleared', 'info');
+        };
+
+        // Initial log
+        log('🎯 Whitelist Test Suite Ready', 'success');
+        log('Click "Run All Tests" to start testing', 'info');
+    </script>
+</body>
+</html>

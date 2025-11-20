@@ -111,6 +111,47 @@ export const dbService = {
         return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     },
 
+    // Whitelist management
+    addToWhitelist: async (data: {
+        email: string;
+        name?: string;
+        role?: string;
+        institution?: string;
+        addedBy: string;
+    }) => {
+        const whitelistRef = collection(db, WHITELIST_COLLECTION);
+        await setDoc(doc(whitelistRef), {
+            email: data.email.toLowerCase(),
+            name: data.name || '',
+            role: data.role || '',
+            institution: data.institution || '',
+            addedDate: new Date().toISOString(),
+            addedBy: data.addedBy,
+            status: 'active'
+        });
+    },
+
+    removeFromWhitelist: async (whitelistId: string) => {
+        const whitelistRef = doc(db, WHITELIST_COLLECTION, whitelistId);
+        await updateDoc(whitelistRef, {
+            status: 'inactive',
+            removedDate: new Date().toISOString()
+        });
+    },
+
+    bulkAddToWhitelist: async (emails: string[], addedBy: string) => {
+        const whitelistRef = collection(db, WHITELIST_COLLECTION);
+        const promises = emails.map(email => 
+            setDoc(doc(whitelistRef), {
+                email: email.toLowerCase().trim(),
+                addedDate: new Date().toISOString(),
+                addedBy,
+                status: 'active'
+            })
+        );
+        await Promise.all(promises);
+    },
+
     // Issue reporting
     reportIssue: async (issue: {
         userId: string;
