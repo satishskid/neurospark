@@ -109,5 +109,49 @@ export const dbService = {
         const whitelistRef = collection(db, WHITELIST_COLLECTION);
         const querySnapshot = await getDocs(whitelistRef);
         return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    },
+
+    // Issue reporting
+    reportIssue: async (issue: {
+        userId: string;
+        userEmail: string;
+        userName: string;
+        issueType: 'bug' | 'feature' | 'content' | 'technical' | 'other';
+        title: string;
+        description: string;
+        severity: 'low' | 'medium' | 'high' | 'critical';
+        currentPage?: string;
+        browserInfo?: string;
+    }) => {
+        const issuesRef = collection(db, 'issues');
+        await setDoc(doc(issuesRef), {
+            ...issue,
+            status: 'open',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            resolvedAt: null,
+            adminNotes: ''
+        });
+    },
+
+    getAllIssues: async () => {
+        const issuesRef = collection(db, 'issues');
+        const querySnapshot = await getDocs(issuesRef);
+        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    },
+
+    updateIssueStatus: async (issueId: string, status: 'open' | 'in-progress' | 'resolved' | 'closed', adminNotes?: string) => {
+        const issueRef = doc(db, 'issues', issueId);
+        const updateData: any = {
+            status,
+            updatedAt: new Date().toISOString()
+        };
+        if (status === 'resolved' || status === 'closed') {
+            updateData.resolvedAt = new Date().toISOString();
+        }
+        if (adminNotes) {
+            updateData.adminNotes = adminNotes;
+        }
+        await updateDoc(issueRef, updateData);
     }
 };

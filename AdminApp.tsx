@@ -6,12 +6,12 @@ import PaymentPlansPanel from './components/PaymentPlansPanel';
 import UserManagementPanel from './components/UserManagementPanel';
 import CurriculumManagementPanel from './components/CurriculumManagementPanel';
 import PromotionalContentPanel from './components/PromotionalContentPanel';
+import IssuesPanel from './components/IssuesPanel';
 import { AdminService } from './services/adminService';
 import { 
   ChartBarIcon, 
   UsersIcon, 
-  CpuChipIcon, 
-  CurrencyDollarIcon,
+  ExclamationTriangleIcon,
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   BookOpenIcon,
@@ -91,10 +91,9 @@ const AdminApp: React.FC<AdminAppProps> = ({ onBackToJourney, isAlreadyAuthentic
   const tabs = [
     { id: 'overview', label: 'Overview', icon: ChartBarIcon, component: AdminDashboard },
     { id: 'users', label: 'Users', icon: UsersIcon, component: UserManagementPanel },
+    { id: 'issues', label: 'Issues', icon: ExclamationTriangleIcon, component: IssuesPanel },
     { id: 'curriculum', label: 'Curriculum', icon: BookOpenIcon, component: CurriculumManagementPanel },
     { id: 'promotional', label: 'Promotional', icon: SparklesIcon, component: PromotionalContentPanel },
-    { id: 'api', label: 'API Health', icon: CpuChipIcon, component: APIHealthPanel },
-    { id: 'payments', label: 'Payments', icon: CurrencyDollarIcon, component: PaymentPlansPanel },
   ];
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || AdminDashboard;

@@ -23,6 +23,7 @@ import CapstoneTracker from './components/CapstoneTracker';
 import CapstoneTutor from './components/CapstoneTutor';
 import SessionTracker from './components/SessionTracker';
 import DashboardView from './components/DashboardView';
+import ReportIssueModal from './components/ReportIssueModal';
 
 
 const APP_STORAGE_KEY = 'greybrain-ai-journey-progress';
@@ -130,6 +131,7 @@ export default function App() {
   const [capstoneInitialQuery, setCapstoneInitialQuery] = useState<string | undefined>(undefined);
   const [activeCourseLabel, setActiveCourseLabel] = useState<'Basics' | 'Medical'>('Medical');
   const [activeCurriculum, setActiveCurriculum] = useState(CURRICULUM_MEDICAL);
+  const [showReportIssue, setShowReportIssue] = useState(false);
 
   const [progress, setProgress] = useState<UserProgress>({ 
     completedLessons: new Set(), 
@@ -138,6 +140,13 @@ export default function App() {
   });
 
   const [currentLessonId, setCurrentLessonId] = useState<string | null>(CURRICULUM_MEDICAL[0].lessons[0].id);
+
+  // Listen for report issue event
+  useEffect(() => {
+    const handleOpenReportIssue = () => setShowReportIssue(true);
+    window.addEventListener('openReportIssue', handleOpenReportIssue);
+    return () => window.removeEventListener('openReportIssue', handleOpenReportIssue);
+  }, []);
 
   // Load from localStorage on initial mount
   useEffect(() => {
@@ -574,6 +583,14 @@ export default function App() {
         <SettingsView 
           onClose={handleCloseSettings}
           onApiKeyChange={handleApiKeyChange}
+        />
+      )}
+      {showReportIssue && progress.userName && (
+        <ReportIssueModal
+          onClose={() => setShowReportIssue(false)}
+          userEmail={authService.onAuthStateChanged ? "user@example.com" : ""}
+          userName={progress.userName}
+          userId="current-user-id"
         />
       )}
     </>

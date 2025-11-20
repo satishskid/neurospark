@@ -49,6 +49,23 @@ export default function SettingsView({ onClose, onApiKeyChange }: SettingsViewPr
             </div>
 
             <div className="border-t border-slate-700 pt-6">
+              <h3 className="text-lg font-semibold text-white mb-3">Report an Issue</h3>
+              <p className="text-slate-300 text-sm mb-4">
+                Experiencing a problem or have feedback? Let us know and we'll help resolve it.
+              </p>
+              <button
+                onClick={() => {
+                  // Open report issue modal
+                  const event = new CustomEvent('openReportIssue');
+                  window.dispatchEvent(event);
+                }}
+                className="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-3 px-6 rounded-lg transition-colors border border-slate-600"
+              >
+                Report a Problem
+              </button>
+            </div>
+
+            <div className="border-t border-slate-700 pt-6">
               <h3 className="text-lg font-semibold text-white mb-3">About API Keys</h3>
               <div className="space-y-3 text-sm text-slate-300">
                 <div className="bg-slate-800 rounded-lg p-4">

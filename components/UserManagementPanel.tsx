@@ -201,9 +201,37 @@ const UserManagementPanel: React.FC = () => {
   const loadUsers = async () => {
     setLoading(true);
     try {
-      const { users: userData, total } = await adminService.getUsers(currentPage, usersPerPage);
-      setUsers(userData);
-      setTotalUsers(total);
+      // Get real users from Firebase
+      const { dbService } = await import('../services/dbService');
+      const allUsers = await dbService.getAllUsers();
+      
+      // Convert to DetailedUser format
+      const detailedUsers: DetailedUser[] = allUsers.map(user => ({
+        id: user.uid,
+        name: user.name,
+        email: user.email,
+        joinDate: new Date(user.createdAt || Date.now()),
+        lastActive: new Date(user.updatedAt || Date.now()),
+        progress: {
+          completedLessons: user.courseProgress ? 
+            Object.values(user.courseProgress).flatMap(p => p.completedLessons) : [],
+          currentModule: user.courseProgress ? 
+            Object.keys(user.courseProgress)[0] || 'module-1' : 'module-1',
+          totalTimeSpent: 0, // TODO: Track this
+          streakDays: 0 // TODO: Calculate this
+        },
+        subscription: null, // No payment system
+        analytics: {
+          sessionsCount: 0, // TODO: Track this
+          averageSessionTime: 0,
+          quizzesCompleted: 0,
+          exercisesCompleted: 0,
+          aiQueriesUsed: 0
+        }
+      }));
+      
+      setUsers(detailedUsers);
+      setTotalUsers(detailedUsers.length);
     } catch (error) {
       console.error('Failed to load users:', error);
     } finally {
@@ -219,8 +247,41 @@ const UserManagementPanel: React.FC = () => {
     
     setLoading(true);
     try {
-      const searchResults = await adminService.searchUsers(searchQuery);
-      setUsers(searchResults);
+      const { dbService } = await import('../services/dbService');
+      const allUsers = await dbService.getAllUsers();
+      
+      // Filter users by search query
+      const filtered = allUsers.filter(user => 
+        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      
+      // Convert to DetailedUser format
+      const detailedUsers: DetailedUser[] = filtered.map(user => ({
+        id: user.uid,
+        name: user.name,
+        email: user.email,
+        joinDate: new Date(user.createdAt || Date.now()),
+        lastActive: new Date(user.updatedAt || Date.now()),
+        progress: {
+          completedLessons: user.courseProgress ? 
+            Object.values(user.courseProgress).flatMap(p => p.completedLessons) : [],
+          currentModule: user.courseProgress ? 
+            Object.keys(user.courseProgress)[0] || 'module-1' : 'module-1',
+          totalTimeSpent: 0,
+          streakDays: 0
+        },
+        subscription: null,
+        analytics: {
+          sessionsCount: 0,
+          averageSessionTime: 0,
+          quizzesCompleted: 0,
+          exercisesCompleted: 0,
+          aiQueriesUsed: 0
+        }
+      }));
+      
+      setUsers(detailedUsers);
     } catch (error) {
       console.error('Failed to search users:', error);
     } finally {
