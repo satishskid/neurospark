@@ -4,8 +4,7 @@ import {
   TrashIcon,
   MagnifyingGlassIcon,
   CheckCircleIcon,
-  XCircleIcon,
-  DocumentArrowUpIcon
+  XCircleIcon
 } from './Icons';
 
 interface WhitelistEntry {
@@ -90,7 +89,7 @@ const WhitelistManagementPanel: React.FC = () => {
             onClick={() => setShowBulkModal(true)}
             className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
           >
-            <DocumentArrowUpIcon className="w-5 h-5" />
+            <UserPlusIcon className="w-5 h-5" />
             Bulk Add
           </button>
           <button

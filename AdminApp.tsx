@@ -7,18 +7,22 @@ import UserManagementPanel from './components/UserManagementPanel';
 import CurriculumManagementPanel from './components/CurriculumManagementPanel';
 import PromotionalContentPanel from './components/PromotionalContentPanel';
 import IssuesPanel from './components/IssuesPanel';
+import WhitelistManagementPanel from './components/WhitelistManagementPanel';
+import HelpPanel from './components/HelpPanel';
 import { AdminService } from './services/adminService';
 import { 
   ChartBarIcon, 
   UsersIcon, 
   ExclamationTriangleIcon,
+  UserPlusIcon,
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   BookOpenIcon,
-  SparklesIcon
+  SparklesIcon,
+  QuestionMarkCircleIcon
 } from './components/Icons';
 
-type AdminTab = 'overview' | 'users' | 'api' | 'payments' | 'curriculum' | 'promotional' | 'settings';
+type AdminTab = 'overview' | 'users' | 'whitelist' | 'issues' | 'curriculum' | 'promotional' | 'help' | 'settings';
 
 interface AdminAppProps {
   onBackToJourney?: () => void;
@@ -91,6 +95,7 @@ const AdminApp: React.FC<AdminAppProps> = ({ onBackToJourney, isAlreadyAuthentic
   const tabs = [
     { id: 'overview', label: 'Overview', icon: ChartBarIcon, component: AdminDashboard },
     { id: 'users', label: 'Users', icon: UsersIcon, component: UserManagementPanel },
+    { id: 'whitelist', label: 'Whitelist', icon: UserPlusIcon, component: WhitelistManagementPanel },
     { id: 'issues', label: 'Issues', icon: ExclamationTriangleIcon, component: IssuesPanel },
     { id: 'curriculum', label: 'Curriculum', icon: BookOpenIcon, component: CurriculumManagementPanel },
     { id: 'promotional', label: 'Promotional', icon: SparklesIcon, component: PromotionalContentPanel },
@@ -149,6 +154,18 @@ const AdminApp: React.FC<AdminAppProps> = ({ onBackToJourney, isAlreadyAuthentic
         {/* Settings & Logout */}
         <div className="p-4 border-t border-slate-700/50">
           <button
+            onClick={() => setActiveTab('help')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mb-2 ${
+              activeTab === 'help'
+                ? 'bg-cyan-600 text-white'
+                : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+            }`}
+          >
+            <QuestionMarkCircleIcon className="w-5 h-5" />
+            Help & Manuals
+          </button>
+          
+          <button
             onClick={() => setActiveTab('settings')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mb-2 ${
               activeTab === 'settings'
@@ -182,9 +199,11 @@ const AdminApp: React.FC<AdminAppProps> = ({ onBackToJourney, isAlreadyAuthentic
               <p className="text-slate-400">
                 {activeTab === 'overview' && 'System overview and key metrics'}
                 {activeTab === 'users' && 'Manage user accounts and analytics'}
+                {activeTab === 'whitelist' && 'Manage whitelisted users for registration'}
+                {activeTab === 'issues' && 'View and manage reported issues'}
                 {activeTab === 'curriculum' && 'View and manage course content'}
-                {activeTab === 'api' && 'Monitor API health and configuration'}
-                {activeTab === 'payments' && 'Manage subscription plans and billing'}
+                {activeTab === 'promotional' && 'Manage promotional content and banners'}
+                {activeTab === 'help' && 'User manuals and documentation'}
                 {activeTab === 'settings' && 'System configuration and preferences'}
               </p>
             </div>
@@ -206,9 +225,11 @@ const AdminApp: React.FC<AdminAppProps> = ({ onBackToJourney, isAlreadyAuthentic
         <main className="flex-1 p-6 overflow-y-auto">
           {activeTab === 'overview' && <AdminDashboard onLogout={handleLogout} />}
           {activeTab === 'users' && <UserManagementPanel />}
+          {activeTab === 'whitelist' && <WhitelistManagementPanel />}
+          {activeTab === 'issues' && <IssuesPanel />}
           {activeTab === 'curriculum' && <CurriculumManagementPanel />}
-          {activeTab === 'api' && <APIHealthPanel />}
-          {activeTab === 'payments' && <PaymentPlansPanel />}
+          {activeTab === 'promotional' && <PromotionalContentPanel />}
+          {activeTab === 'help' && <HelpPanel />}
           {activeTab === 'settings' && (
             <div className="text-center py-12">
               <Cog6ToothIcon className="w-16 h-16 text-slate-600 mx-auto mb-4" />
