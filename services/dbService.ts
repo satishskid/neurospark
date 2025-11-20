@@ -124,7 +124,8 @@ export const dbService = {
         browserInfo?: string;
     }) => {
         const issuesRef = collection(db, 'issues');
-        await setDoc(doc(issuesRef), {
+        const newIssueRef = doc(issuesRef); // Auto-generate ID
+        await setDoc(newIssueRef, {
             ...issue,
             status: 'open',
             createdAt: new Date().toISOString(),
