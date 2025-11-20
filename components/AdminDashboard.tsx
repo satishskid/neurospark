@@ -80,51 +80,34 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       apiHealth: {
         geminiAPI: {
           status: 'healthy',
-          responseTime: 245,
-          errorRate: 0.8,
+          responseTime: 0,
+          errorRate: 0,
           lastCheck: new Date(),
-          quotaUsed: 75432,
-          quotaLimit: 100000
+          quotaUsed: 0,
+          quotaLimit: 0
         },
         fallbackAPI: {
           status: 'healthy',
-          responseTime: 189,
-          errorRate: 0.3,
+          responseTime: 0,
+          errorRate: 0,
           lastCheck: new Date()
         },
         database: {
           status: 'healthy',
-          responseTime: 12,
-          connections: 45,
+          responseTime: 0,
+          connections: 0,
           lastCheck: new Date()
         }
       },
       recentUsers: [],
-      systemAlerts: [
-        {
-          id: '1',
-          type: 'warning',
-          message: 'Gemini API quota at 75% usage',
-          timestamp: new Date(),
-          resolved: false,
-          source: 'api'
-        },
-        {
-          id: '2',
-          type: 'info',
-          message: 'New payment plan activated: Pro Monthly',
-          timestamp: new Date(),
-          resolved: true,
-          source: 'payment'
-        }
-      ],
+      systemAlerts: [],
       revenueMetrics: {
-        totalRevenue: 45678.90,
-        monthlyRecurringRevenue: 12345.67,
-        churnRate: 3.2,
-        averageRevenuePerUser: 23.45,
-        conversionRate: 12.8,
-        trialToPayingConversion: 18.5
+        totalRevenue: 0,
+        monthlyRecurringRevenue: 0,
+        churnRate: 0,
+        averageRevenuePerUser: 0,
+        conversionRate: 0,
+        trialToPayingConversion: 0
       }
     };
 
