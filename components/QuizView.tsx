@@ -27,12 +27,12 @@ const QuizView: React.FC<QuizViewProps> = ({ quiz, onComplete }) => {
           <div className="text-center p-8 bg-slate-800/80 rounded-xl border border-slate-700 animate-fade-in">
               <TrophyIcon className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
               <h2 className="text-3xl font-bold text-white mb-2">Quiz Complete!</h2>
-              <p className="text-slate-300 text-lg mb-6">You scored <strong className="text-white">{score}</strong> out of <strong className="text-white">{quiz.questions.length}</strong>. Fantastic work!</p>
+              <p className="text-slate-300 text-lg mb-6">You scored <strong className="text-white">{score} out of {quiz.questions.length}</strong>. Fantastic work!</p>
               <button
                   onClick={onComplete}
                   className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-3 px-8 rounded-full transition-colors"
               >
-                  Continue to Next Lesson
+                  Continue
               </button>
           </div>
       );
@@ -72,7 +72,7 @@ const QuizView: React.FC<QuizViewProps> = ({ quiz, onComplete }) => {
           } else {
               buttonClass += 'bg-slate-700 border-slate-600 hover:bg-slate-600 hover:border-cyan-500';
           }
-           if (isSelected && !isAnswered) {
+           if (isSelected) {
                buttonClass += ' ring-2 ring-cyan-400';
            }
 
@@ -84,20 +84,27 @@ const QuizView: React.FC<QuizViewProps> = ({ quiz, onComplete }) => {
         })}
       </div>
       
-      {isAnswered && (
-        <div className="mt-6 p-4 rounded-lg flex justify-between items-center animate-fade-in" style={{backgroundColor: isCorrect ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)'}}>
-            <div className={`flex items-center gap-2 font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
-                {isCorrect ? <CheckCircleIcon className="w-6 h-6" /> : <XCircleIcon className="w-6 h-6" />}
-                <span>{isCorrect ? "Correct!" : "Not quite, the right answer is highlighted."}</span>
-            </div>
-            <button 
-              onClick={handleNext}
-              className="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-lg transition-colors"
-            >
-              Next
-            </button>
-        </div>
-      )}
+      <div className="mt-6 flex justify-between items-center">
+        {isAnswered ? (
+          <div className={`flex items-center gap-2 font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'} animate-fade-in`}>
+              {isCorrect ? <CheckCircleIcon className="w-6 h-6" /> : <XCircleIcon className="w-6 h-6" />}
+              <span className="text-sm">{isCorrect ? "Correct!" : "Not quite, the right answer is highlighted."}</span>
+          </div>
+        ) : (
+          <div className="text-sm text-slate-400 italic">Select an answer to proceed</div>
+        )}
+        <button 
+          onClick={handleNext}
+          disabled={!isAnswered}
+          className={`font-bold py-2 px-6 rounded-lg transition-all duration-300 ${
+            !isAnswered 
+              ? 'bg-slate-700 text-slate-500 border border-slate-600/50 cursor-not-allowed opacity-50' 
+              : 'bg-slate-600 hover:bg-slate-500 text-white cursor-pointer active:scale-95'
+          }`}
+        >
+          {currentQuestionIndex === quiz.questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
+        </button>
+      </div>
     </div>
   );
 };

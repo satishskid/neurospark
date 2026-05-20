@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ExerciseView from './ExerciseView';
 import { ExerciseData } from '../types';
@@ -42,8 +42,7 @@ describe('ExerciseView Component', () => {
     render(<ExerciseView exercise={mockExercise} onComplete={mockOnComplete} />);
     
     const textarea = screen.getByLabelText('Your Answer:');
-    await user.clear(textarea);
-    await user.type(textarea, '{"name": "John", "age": 30}');
+    fireEvent.change(textarea, { target: { value: '{"name": "John", "age": 30}' } });
     
     expect(textarea).toHaveValue('{"name": "John", "age": 30}');
   });
@@ -63,8 +62,7 @@ describe('ExerciseView Component', () => {
     const textarea = screen.getByLabelText('Your Answer:');
     const submitButton = screen.getByText('Check My Work');
 
-    await user.clear(textarea);
-    await user.type(textarea, '{"name": "John", "age": 30}');
+    fireEvent.change(textarea, { target: { value: '{"name": "John", "age": 30}' } });
     await user.click(submitButton);
 
     expect(geminiService.evaluateExercise).toHaveBeenCalledWith(
@@ -146,7 +144,7 @@ describe('ExerciseView Component', () => {
     
     render(<ExerciseView exercise={mockExercise} onComplete={mockOnComplete} />);
     
-    const submitButton = screen.getByText('Submit Answer');
+    const submitButton = screen.getByText('Check My Work');
     await user.click(submitButton);
     
     await waitFor(() => {
@@ -158,7 +156,7 @@ describe('ExerciseView Component', () => {
     await user.click(tryAgainButton);
     
     // Should be able to submit again
-    expect(screen.getByText('Submit Answer')).toBeInTheDocument();
+    expect(screen.getByText('Check My Work')).toBeInTheDocument();
   });
 
   it('calls onComplete when continuing after correct submission', async () => {
@@ -172,14 +170,14 @@ describe('ExerciseView Component', () => {
     
     render(<ExerciseView exercise={mockExercise} onComplete={mockOnComplete} />);
     
-    const submitButton = screen.getByText('Submit Answer');
+    const submitButton = screen.getByText('Check My Work');
     await user.click(submitButton);
     
     await waitFor(() => {
-      expect(screen.getByText('Continue to Next Lesson')).toBeInTheDocument();
+      expect(screen.getByText('Continue')).toBeInTheDocument();
     });
     
-    const continueButton = screen.getByText('Continue to Next Lesson');
+    const continueButton = screen.getByText('Continue');
     await user.click(continueButton);
     
     expect(mockOnComplete).toHaveBeenCalled();
@@ -193,7 +191,7 @@ describe('ExerciseView Component', () => {
     
     render(<ExerciseView exercise={mockExercise} onComplete={mockOnComplete} />);
     
-    const submitButton = screen.getByText('Submit Answer');
+    const submitButton = screen.getByText('Check My Work');
     await user.click(submitButton);
     
     await waitFor(() => {
@@ -210,7 +208,7 @@ describe('ExerciseView Component', () => {
     
     render(<ExerciseView exercise={exerciseWithoutInitialCode} onComplete={mockOnComplete} />);
     
-    const submitButton = screen.getByText('Submit Answer');
+    const submitButton = screen.getByText('Check My Work');
     expect(submitButton).toBeDisabled();
   });
 
@@ -225,7 +223,7 @@ describe('ExerciseView Component', () => {
     render(<ExerciseView exercise={exerciseWithoutInitialCode} onComplete={mockOnComplete} />);
     
     const textarea = screen.getByLabelText('Your Answer:');
-    const submitButton = screen.getByText('Submit Answer');
+    const submitButton = screen.getByText('Check My Work');
     
     expect(submitButton).toBeDisabled();
     

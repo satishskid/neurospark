@@ -1,18 +1,26 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+// Unmock geminiService to test the actual implementation
+vi.unmock('./geminiService');
+
 import { evaluateExercise, getChatbotResponse } from './geminiService';
 import { Module } from '../types';
 
 // Mock the Google GenAI module
-vi.mock('@google/genai', () => ({
-  GoogleGenAI: vi.fn().mockImplementation(() => ({
-    models: {
-      generateContent: vi.fn()
-    },
-    chats: {
-      create: vi.fn()
-    }
-  }))
-}));
+vi.mock('@google/genai', () => {
+  const generateContent = vi.fn();
+  const createChat = vi.fn();
+  return {
+    GoogleGenAI: vi.fn().mockImplementation(() => ({
+      models: {
+        generateContent
+      },
+      chats: {
+        create: createChat
+      }
+    }))
+  };
+});
 
 const mockModule: Module = {
   id: 'test-module',

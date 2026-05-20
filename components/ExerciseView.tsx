@@ -51,7 +51,7 @@ const ExerciseView: React.FC<ExerciseViewProps> = ({ exercise, onComplete }) => 
       <div className="mt-6 flex justify-end items-center gap-4">
         <button
           onClick={handleSubmit}
-          disabled={isLoading}
+          disabled={isLoading || !userInput.trim()}
           className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-2 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[150px]"
         >
           {isLoading ? (
@@ -67,12 +67,27 @@ const ExerciseView: React.FC<ExerciseViewProps> = ({ exercise, onComplete }) => 
       </div>
 
       {feedback && (
-        <div className={`mt-6 p-4 rounded-lg flex gap-4 animate-fade-in ${isCorrect ? 'bg-green-500/10' : 'bg-yellow-500/10'} border ${isCorrect ? 'border-green-500/30' : 'border-yellow-500/30'}`}>
-            <LightBulbIcon className={`w-8 h-8 flex-shrink-0 ${isCorrect ? 'text-green-400' : 'text-yellow-400'}`} />
-            <div>
-              <h4 className="font-bold text-lg text-white mb-1">AI Tutor Feedback</h4>
-              <p className="text-slate-300">{feedback}</p>
+        <div className={`mt-6 p-4 rounded-lg flex flex-col gap-4 animate-fade-in ${isCorrect ? 'bg-green-500/10' : 'bg-yellow-500/10'} border ${isCorrect ? 'border-green-500/30' : 'border-yellow-500/30'}`}>
+            <div className="flex gap-4">
+              <LightBulbIcon className={`w-8 h-8 flex-shrink-0 ${isCorrect ? 'text-green-400' : 'text-yellow-400'}`} />
+              <div>
+                <h4 className="font-bold text-lg text-white mb-1">AI Tutor Feedback</h4>
+                <p className="text-slate-300">{feedback}</p>
+              </div>
             </div>
+            {isCorrect === false && (
+              <div className="flex justify-end border-t border-yellow-500/20 pt-3">
+                <button
+                  onClick={() => {
+                    setFeedback(null);
+                    setIsCorrect(null);
+                  }}
+                  className="bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-2 px-6 rounded-lg transition-colors cursor-pointer active:scale-95"
+                >
+                  Try Again
+                </button>
+              </div>
+            )}
         </div>
       )}
 
@@ -83,7 +98,7 @@ const ExerciseView: React.FC<ExerciseViewProps> = ({ exercise, onComplete }) => 
             <p className="text-green-200 mb-4">You've mastered this concept. Let's keep the momentum going!</p>
             <button
               onClick={onComplete}
-              className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors cursor-pointer active:scale-95"
             >
               <TrophyIcon className="w-5 h-5" />
               Continue

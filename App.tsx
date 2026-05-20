@@ -1,5 +1,3 @@
-
-
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { CURRICULUM } from './constants';
 import { AppView, Lesson, Module, UserProgress } from './types';
@@ -12,8 +10,9 @@ import CertificateView from './components/CertificateView';
 import { TutorialView } from './components/TutorialView';
 import AdminApp from './AdminApp';
 import { authService } from './services/firebaseService';
+import { dbService } from './services/dbService';
+import { auth } from './firebaseConfig';
 import LoginScreen from './components/LoginScreen';
-
 
 const APP_STORAGE_KEY = 'greybrain-ai-journey-progress';
 
@@ -97,13 +96,33 @@ export default function App() {
             } else if (parsed.userName) {
                 setView('journey');
             }
-
         }
     } catch (e) { console.error("Failed to parse progress from localStorage", e); }
   }, []);
 
+  // Sync state changes with Firestore
+  const syncProgressToFirestore = useCallback(async (updatedProgress: UserProgress) => {
+    const firebaseUser = auth.currentUser;
+    if (firebaseUser) {
+      try {
+        const completedStepsObj: Record<string, boolean> = {};
+        updatedProgress.completedLessons.forEach(id => {
+          completedStepsObj[id] = true;
+        });
 
-  // Save to localStorage whenever progress changes
+        await dbService.updateUser(firebaseUser.uid, {
+          name: updatedProgress.userName,
+          completedSteps: completedStepsObj,
+          currentLevelIndex: updatedProgress.completedLessons.size,
+          updatedAt: new Date().toISOString()
+        });
+      } catch (e) {
+        console.error("Error syncing progress to Firestore:", e);
+      }
+    }
+  }, []);
+
+  // Save to localStorage whenever progress changes and trigger Firestore sync
   useEffect(() => {
     if (progress.userName) { // Only save if the user has started
         const dataToSave = {
@@ -113,8 +132,9 @@ export default function App() {
             currentLessonId: currentLessonId,
         };
         localStorage.setItem(APP_STORAGE_KEY, JSON.stringify(dataToSave));
+        syncProgressToFirestore(progress);
     }
-  }, [progress, currentLessonId]);
+  }, [progress, currentLessonId, syncProgressToFirestore]);
 
   const allLessons = useMemo(() => CURRICULUM.flatMap(m => m.lessons), []);
   const currentLessonIndex = useMemo(() => allLessons.findIndex(l => l.id === currentLessonId), [allLessons, currentLessonId]);
@@ -163,11 +183,11 @@ export default function App() {
   };
 
   const handleCompleteLesson = (lessonId: string) => {
-    setProgress(prev => {
-      const newCompleted = new Set(prev.completedLessons);
-      newCompleted.add(lessonId);
-      return { ...prev, completedLessons: newCompleted };
-    });
+    const newCompleted = new Set(progress.completedLessons);
+    newCompleted.add(lessonId);
+    
+    const updatedProgress = { ...progress, completedLessons: newCompleted };
+    setProgress(updatedProgress);
 
     const nextLessonIndex = allLessons.findIndex(l => l.id === lessonId) + 1;
     if (nextLessonIndex < allLessons.length) {
@@ -203,7 +223,7 @@ export default function App() {
           onSelectLesson={handleSelectLesson}
           isLessonUnlocked={isLessonUnlocked}
         />
-        <footer className="mt-auto text-center text-xs text-slate-600 pt-4">
+        <footer className="mt-auto text-center text-xs text-slate-600 pt-4 flex flex-col items-center">
           <button onClick={handleLogout} className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-2 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/20 sm:w-auto flex-shrink-0"
           >Sign Out</button>
         </footer>
@@ -237,18 +257,57 @@ export default function App() {
     return <AdminApp />;
   }
 
-  // When the browser is restarted we need to restore to previous state
-  // So it checks if the user is logged into firebase
-  // If so redirect to the appropriate screen
+  // Restore persistence on state changes and check real-time auth
   useEffect(() => {
-    authService.onAuthStateChanged((user) => {
+    if (isAdminMode) return;
+    const unsubscribe = authService.onAuthStateChanged((user) => {
       if (user && user.isLoggedIn) {
         setView('journey');
+        dbService.findUser(user.uid).then((dbUser) => {
+          if (dbUser) {
+            setProgress({
+              completedLessons: new Set(dbUser.completedSteps ? Object.keys(dbUser.completedSteps) : []),
+              userName: dbUser.name || user.name || "Doctor",
+              tutorialCompleted: true
+            });
+          } else {
+            setProgress(p => ({
+              ...p,
+              userName: user.name || "Doctor",
+              tutorialCompleted: true
+            }));
+          }
+        });
       } else {
         setView('onboarding');
       }
     });
-  }, []);
+
+    return () => unsubscribe();
+  }, [isAdminMode]);
+
+  // Runtime active-session revocation check (checks every 15 seconds)
+  useEffect(() => {
+    if (isAdminMode) return;
+    if (view === 'journey' || view === 'tutorial' || view === 'certificate') {
+      const interval = setInterval(async () => {
+        const firebaseUser = auth.currentUser;
+        if (firebaseUser) {
+          try {
+            const isWhitelisted = await dbService.isUserWhitelisted(firebaseUser.email || '');
+            if (!isWhitelisted) {
+              await authService.signOut();
+              handleReset();
+              alert("Access Revoked: Your email is no longer on the whitelisted directory.");
+            }
+          } catch (e) {
+            console.error("Error in active-session verification:", e);
+          }
+        }
+      }, 15000);
+      return () => clearInterval(interval);
+    }
+  }, [view, isAdminMode]);
 
   if (view === 'onboarding') {
     return <OnboardingScreen onStart={() => setView('login')} />;
