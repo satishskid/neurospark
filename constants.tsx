@@ -9,7 +9,7 @@ import {
   FolderOpenIcon, CommandLineIcon, CloudIcon, ComputerDesktopIcon, 
   DocumentDuplicateIcon, FaceSmileIcon, CircleStackIcon, AcademicCapIcon, 
   HomeModernIcon, ArrowDownTrayIcon, ShieldCheckIcon, GlobeAmericasIcon, 
-  ServerIcon, GitBranchIcon 
+  ServerIcon, GitBranchIcon, ChatBubbleLeftRightIcon
 } from './components/Icons';
 
 const Callout = ({ icon, children }: { icon: React.ReactNode, children: React.ReactNode }) => (
@@ -23,65 +23,48 @@ export const CURRICULUM: Module[] = [
   {
     id: 'module-1',
     title: 'Module 1: Software as a Biological System',
-    description: 'Deconstruct modern software architecture using clinical anatomy and patient charting.',
+    description: 'Deconstruct modern software architecture using clinical anatomy.',
     lessons: [
       {
         id: '1-1',
         title: 'The Anatomy of a Medical Application',
         type: 'content',
         estimatedTimeMinutes: 4,
+        videoLinks: [
+          { title: 'What is an API?', url: 'https://youtu.be/s7wmiS2mSXY' }
+        ],
         content: (
           <div className="space-y-4">
             <p>Welcome, Doctor! Entering the world of tech can feel like learning a foreign language. Let&apos;s skip the jargon and translate software architecture into a language you already speak: <strong className="text-cyan-400">Human Biology</strong>.</p>
-            <p>Every digital application—from a simple hospital calculator to a global electronic health record (EHR)—functions exactly like a living human body, with specialized systems cooperating to keep the organism running.</p>
             
             <Callout icon={<BrainIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">The Body-Software Mapping System:</p>
+              <p className="font-semibold text-white">The Body-Software Map</p>
               <ul className="mt-2 space-y-3">
                 <li>
                   <strong className="text-cyan-400">The Skin & Senses (Frontend):</strong> 
-                  The visual storefront (HTML, CSS, React). Like skin, it forms the outer boundary, presenting the app to the world. Like sensory organs (eyes, ears), it detects user interactions—taps, clicks, typed words.
+                  The visual screen you tap on. Like skin, it is the outer boundary. Like eyes, it detects interactions (clicks and taps).
                 </li>
                 <li>
                   <strong className="text-yellow-400">The Nervous System (APIs):</strong> 
-                  Rapid-signaling neural pathways. They carry sensory signals (user clicks) from the exterior skin (frontend) down into the internal visceral organs (backend), and carry metabolic responses back to the skin.
+                  The rapid-signaling neural pathways. When you click a button, the API carries that sensory signal from the skin down to the internal organs.
                 </li>
                 <li>
                   <strong className="text-green-400">The Visceral Organs (Backend):</strong> 
-                  The heart, lungs, and liver (Servers, Cloud Functions). Operating silently behind the scenes, these heavy engines digest raw inputs, execute complex logical rules, calculate risks, and drive metabolism.
+                  The heavy engines (Servers). They sit silently in the dark, digesting inputs and executing complex clinical risk scores.
                 </li>
                 <li>
                   <strong className="text-purple-400">The Hippocampus (Database):</strong> 
-                  Long-term memory storage (Firestore, SQL). Where all patient histories, medication lists, and user configurations are cataloged securely. Without it, the application suffers from global anterograde amnesia.
+                  Long-term memory storage. Where all patient histories are locked away safely.
                 </li>
               </ul>
             </Callout>
 
             <div className="p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl">
-              <h4 className="font-bold text-white mb-2 text-lg">🏥 Case Study: The Emergency Room Triage App</h4>
+              <h4 className="font-bold text-white mb-2 text-lg">🏥 Triage App Example</h4>
               <p className="text-sm text-slate-300">
-                Let&apos;s trace this biological flow in action: A triage nurse uses a tablet app to check in a patient presenting with acute chest pain.
+                You type "chest pain" on the iPad (<strong className="text-cyan-400">Frontend</strong>). The signal fires down the nerve (<strong className="text-yellow-400">API</strong>) to the heart/liver (<strong className="text-green-400">Backend</strong>). The engine calculates a high HEART score, saves it to long-term memory (<strong className="text-purple-400">Database</strong>), and fires a signal back to the iPad causing it to flash red.
               </p>
-              <ol className="mt-3 space-y-2 text-sm text-slate-300 list-decimal list-inside">
-                <li>
-                  <span className="text-cyan-400 font-semibold">Frontend Sensory Input:</span> The nurse types "chest pain, substernal, radiating to left arm" and enters a heart rate of 115 bpm on the tablet screen.
-                </li>
-                <li>
-                  <span className="text-yellow-400 font-semibold">Nervous System (API) Signal:</span> The moment the nurse hits "Triage," a neural signaling packet (an API request) is fired off through the network.
-                </li>
-                <li>
-                  <span className="text-green-400 font-semibold">Backend Organ Processing:</span> The signal reaches the server (the heart/liver). The backend engine runs a risk-stratification algorithm (e.g., HEART Score). It determines this is a high-risk cardiac alert.
-                </li>
-                <li>
-                  <span className="text-purple-400 font-semibold">Hippocampus Memory Storage:</span> The backend commits the patient&apos;s symptoms and priority score to the database, ensuring it is permanently saved in the chart history.
-                </li>
-                <li>
-                  <span className="text-cyan-400 font-semibold">Frontend Sensory Response:</span> The API fires back a message, and the tablet screen immediately flashes a red border, prompting: <em className="text-red-400 font-semibold">"ESCORT TO RESUSCITATION ROOM 1 IMMEDIATELY."</em>
-                </li>
-              </ol>
             </div>
-            
-            <p className="mt-4">By understanding this flow, you can now diagnose software bugs like clinical symptoms: a UI that won&apos;t load is a skin/sensory issue, a lagging response is a slow neural synapse (API latency), and a lost record is a hippocampal (database) failure.</p>
           </div>
         )
       },
@@ -90,26 +73,28 @@ export const CURRICULUM: Module[] = [
         title: 'The Clinical Chart of Data (JSON)',
         type: 'exercise',
         estimatedTimeMinutes: 5,
+        videoLinks: [
+          { title: 'JSON in 100 Seconds', url: 'https://youtu.be/iiADhChRriM' }
+        ],
         exercise: {
           prompt: (
             <div className="space-y-3">
-              <p>In medicine, you write progress notes using a standard format (like SOAP notes) so that other doctors, nurses, and pharmacists can read your chart instantly. In software, apps do the exact same thing using <strong className="text-cyan-400">JSON (JavaScript Object Notation)</strong>.</p>
-              <p>JSON is just a digital clinical chart. It uses <strong className="text-yellow-400">"keys"</strong> (symptom names or labels) mapped to <strong className="text-green-400">"values"</strong> (symptom descriptions or numbers). Every key is placed in double quotes, followed by a colon, and separated by commas.</p>
+              <p>In medicine, you write progress notes using a standard format (SOAP) so everyone can read your chart. In software, apps do the exact same thing using a format called <strong className="text-cyan-400">JSON</strong>.</p>
               
               <Callout icon={<CodeBracketSquareIcon className="w-8 h-8" />}>
-                <p className="font-semibold text-white">How a SOAP Note translates to JSON:</p>
+                <p className="font-semibold text-white">JSON: The Digital Chart</p>
+                <p className="mt-2 text-sm text-slate-300">JSON simply maps <strong className="text-yellow-400">"labels"</strong> to <strong className="text-green-400">"values"</strong>.</p>
                 <div className="mt-2 p-3 bg-slate-900 rounded-md font-mono text-xs text-slate-300">
                   {`{`}
                   <div className="pl-4"><span className="text-yellow-400">"patientName"</span>: <span className="text-green-400">"John Doe"</span>,</div>
                   <div className="pl-4"><span className="text-yellow-400">"chiefComplaint"</span>: <span className="text-green-400">"chest pain"</span>,</div>
-                  <div className="pl-4"><span className="text-yellow-400">"heartRateBpm"</span>: <span className="text-green-400">108</span>,</div>
-                  <div className="pl-4"><span className="text-yellow-400">"needsEcg"</span>: <span className="text-green-400">true</span></div>
+                  <div className="pl-4"><span className="text-yellow-400">"heartRateBpm"</span>: <span className="text-green-400">108</span></div>
                   {`}`}
                 </div>
               </Callout>
               
               <p className="font-bold text-white">Your Turn:</p>
-              <p>Let&apos;s practice writing a structured digital chart (JSON) for a new patient. Inside the curly braces, modify the JSON code to represent a patient presenting with an <code className="text-cyan-400">"appendicitis"</code> diagnosis, an age of <code className="text-cyan-400">24</code>, and set a key named <code className="text-cyan-400">"needsSurgery"</code> to <code className="text-cyan-400">true</code>.</p>
+              <p>Modify the JSON code below to represent a patient presenting with <code className="text-cyan-400">"appendicitis"</code>, an age of <code className="text-cyan-400">24</code>, and set <code className="text-cyan-400">"needsSurgery"</code> to <code className="text-cyan-400">true</code>.</p>
             </div>
           ),
           evaluationPrompt: `Evaluate the user's JSON. The JSON must be valid. It must contain the keys "diagnosis" (with value "appendicitis" or similar), "age" (with value 24 as a number), and "needsSurgery" (with value true as a boolean).`,
@@ -124,7 +109,7 @@ export const CURRICULUM: Module[] = [
         quiz: {
           questions: [
             {
-              question: 'If a clinician updates a patient\'s medication list on their screen, which "biological system" acts as the long-term memory to save that record?',
+              question: 'Which "biological system" acts as the long-term memory to save patient records?',
               options: ['The Frontend (Skin & Senses)', 'The API (Nervous System)', 'The Backend (Visceral Organs)', 'The Database (Hippocampus)'],
               correctAnswer: 'The Database (Hippocampus)'
             },
@@ -149,8 +134,8 @@ export const CURRICULUM: Module[] = [
         type: 'content',
         estimatedTimeMinutes: 4,
         videoLinks: [
-          { title: 'Large Language Models explained briefly', url: 'https://youtu.be/LPZh9BOjkQs?si=v4N29hhFN-My7SXR' },
-          { title: 'How Large Language Models Work', url: 'https://youtu.be/5sLYAQS9sWQ?si=LHjdVtAC4JwIkutd' }
+          { title: 'Large Language Models explained briefly', url: 'https://youtu.be/LPZh9BOjkQs' },
+          { title: 'How Large Language Models Work', url: 'https://youtu.be/5sLYAQS9sWQ' }
         ],
         content: (
           <div className="space-y-4">
@@ -185,9 +170,9 @@ export const CURRICULUM: Module[] = [
         type: 'content',
         estimatedTimeMinutes: 5,
         videoLinks: [
-          { title: 'But what is a neural network?', url: 'https://youtu.be/aircAruvnKk?si=Wg1RuoKtYVfMQj2Z' },
-          { title: 'Transformers, the tech behind LLMs', url: 'https://youtu.be/wjZofJX0v4M?si=mG8HXUjg7P14cc7o' },
-          { title: 'How LLMs Actually Generate Text', url: 'https://youtu.be/NKnZYvZA7w4?si=C9ptbpxfsIvoxiUb' }
+          { title: 'But what is a neural network?', url: 'https://youtu.be/aircAruvnKk' },
+          { title: 'Transformers, the tech behind LLMs', url: 'https://youtu.be/wjZofJX0v4M' },
+          { title: 'How LLMs Actually Generate Text', url: 'https://youtu.be/NKnZYvZA7w4' }
         ],
         content: (
           <div className="space-y-4">
@@ -195,19 +180,18 @@ export const CURRICULUM: Module[] = [
             
             <Callout icon={<BrainIcon className="w-8 h-8" />}>
               <p className="font-semibold text-white">Next-Token Prediction</p>
-              <p className="mt-2 text-slate-300">If you type: <em>"The patient has a history of severe..."</em>, the AI looks at the map of words and calculates the probability of the next word. It might calculate: "allergies" (40%), "asthma" (30%), "pain" (20%), "cabbage" (0.0001%). It picks the highest probability word and writes it down. Then, it repeats the process.</p>
+              <p className="mt-2 text-slate-300">If you type: <em>"The patient has a history of severe..."</em>, the AI looks at the map of words and calculates the probability of the next word. It might calculate: "allergies" (40%), "asthma" (30%), "pain" (20%). It picks the highest probability word and writes it down. Then, it repeats the process.</p>
             </Callout>
 
             <Callout icon={<BoltIcon className="w-8 h-8" />}>
               <p className="font-semibold text-white">The "Transformer" (Attention Mechanism)</p>
-              <p className="mt-2 text-slate-300">How does it know which word to predict so accurately? It uses a revolutionary architecture called the <strong>Transformer</strong>. The secret sauce of the Transformer is <em>Self-Attention</em>.</p>
               <p className="mt-2 text-slate-300 text-sm">Imagine a triage nurse reading a 50-page messy patient chart. The nurse pays intense <strong>attention</strong> to the phrase <em>"Allergy: Penicillin"</em> on page 1, and ignores the phrase <em>"Patient wore a blue shirt"</em> on page 2. Transformers do exactly this. They mathematically "pay attention" to the most clinically relevant words in your prompt, no matter how far apart they are.</p>
             </Callout>
 
             <div className="p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl mt-4">
               <h4 className="font-bold text-white mb-2 text-lg">💾 Context Window</h4>
               <p className="text-sm text-slate-300">
-                The <strong>Context Window</strong> is simply how much text the AI can "pay attention" to at one time. Older models were like a doctor who could only remember the last 2 pages of a chart. Modern models (like Gemini) have massive context windows—they can read a 500-page medical record and hold the entire thing in their working memory simultaneously.
+                The <strong>Context Window</strong> is how much text the AI can "pay attention" to at one time. Modern models (like Gemini) have massive context windows—they can read a 500-page medical record and hold the entire thing in their working memory simultaneously.
               </p>
             </div>
           </div>
@@ -225,7 +209,7 @@ export const CURRICULUM: Module[] = [
             <Callout icon={<FaceSmileIcon className="w-8 h-8" />}>
               <p className="font-semibold text-white">Giving the AI Eyes and Ears</p>
               <p className="text-slate-300 mt-2">
-                Standard text LLMs are like diagnosing a patient over the phone. You only know what the patient explicitly tells you. <strong className="text-white">Multimodal models</strong> are like standing in the exam room.
+                Standard text LLMs are like diagnosing a patient over the phone. <strong className="text-white">Multimodal models</strong> are like standing in the exam room.
               </p>
               <ul className="mt-3 space-y-2 text-sm text-slate-300 list-disc list-inside">
                 <li><strong className="text-cyan-400">Vision:</strong> They can look at a chest X-ray or a photograph of a rash.</li>
@@ -267,41 +251,34 @@ export const CURRICULUM: Module[] = [
   {
     id: 'module-3',
     title: 'Module 3: Clinicians as "Vibe Coders"',
-    description: 'Learn to build complete clinical applications and guide AI clinical reasoning using advanced prompting.',
+    description: 'Learn to build complete clinical applications and guide AI clinical reasoning.',
     lessons: [
       {
         id: '3-1',
         title: 'Directing the Digital Resident (AI Coding)',
         type: 'content',
         estimatedTimeMinutes: 4,
+        videoLinks: [
+          { title: 'Prompt Engineering Tutorial', url: 'https://youtu.be/jC4v5AS4ART' }
+        ],
         content: (
           <div className="space-y-4">
-            <p>For decades, building a custom medical tool meant hiring programmers, waiting months, and spending tens of thousands of dollars. Today, you can build full-scale software yourself by becoming a <strong className="text-cyan-400">"Vibe Coder"</strong>.</p>
-            <p>Vibe coding is the art of directing code generation engines using natural language. You don&apos;t write code; you direct it, exactly like supervising a brilliant but highly literal resident physician.</p>
+            <p>Today, you can build full-scale clinical software yourself by becoming a <strong className="text-cyan-400">"Vibe Coder"</strong>.</p>
+            <p>Vibe coding is the art of directing AI using natural language. You don&apos;t write code; you direct it, exactly like supervising a brilliant but highly literal resident physician.</p>
 
             <Callout icon={<WrenchScrewdriverIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">Guidelines for Supervising the Digital Resident:</p>
+              <p className="font-semibold text-white">Prompting Guidelines</p>
               <ul className="mt-2 space-y-3 text-sm text-slate-300">
                 <li>
-                  <strong className="text-cyan-400">1. Define the Clinical Persona:</strong> 
-                  Begin your prompt by giving the AI a clear professional role. <em>"Act as a Senior Clinical Informatics Specialist with 20 years of experience building secure EHR workflows."</em>
+                  <strong className="text-cyan-400">1. Define the Persona:</strong> 
+                  Give the AI a role. <em>"Act as a Senior Clinical Informatics Specialist."</em>
                 </li>
                 <li>
-                  <strong className="text-yellow-400">2. Give Explicit Clinical Guardrails:</strong> 
-                  Tell the resident what to avoid. <em>"Ensure this pediatric dosage calculator automatically caps the dosage at the adult maximum weight."</em>
+                  <strong className="text-yellow-400">2. Set Clinical Guardrails:</strong> 
+                  Tell the resident what to avoid. <em>"Ensure this pediatric dosage calculator caps at the adult maximum weight."</em>
                 </li>
               </ul>
             </Callout>
-
-            <div className="p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl">
-              <h4 className="font-bold text-white mb-2 text-lg">🛠️ Vibe Coding Example: Pediatric Dosage Tool</h4>
-              <p className="text-sm text-slate-300">
-                Imagine you want to build a web-based dosage calculator for Amoxicillin based on a child&apos;s weight. You "vibe code" it by telling the AI:
-              </p>
-              <blockquote className="mt-2 pl-3 border-l-4 border-cyan-500 text-xs italic text-slate-400">
-                "Build a clean single-page web app with a dark theme. It must have an input field for patient weight in kilograms... Implement strict guardrails: if the weight exceeds 40kg, display a warning."
-              </blockquote>
-            </div>
           </div>
         )
       },
@@ -310,24 +287,25 @@ export const CURRICULUM: Module[] = [
         title: 'Advanced Clinical Reasoning: Chain-of-Thought',
         type: 'content',
         estimatedTimeMinutes: 5,
+        videoLinks: [
+          { title: 'Chain of Thought Prompting Explained', url: 'https://youtu.be/LGLmxcBv0B8' }
+        ],
         content: (
           <div className="space-y-4">
-            <p>Vibe coding is great for building apps, but what about using AI to assist in complex clinical diagnoses? A standard prompt can lead to <strong className="text-red-400">Premature Closure</strong>—the AI jumping to the most obvious conclusion without considering zebras.</p>
+            <p>What about using AI to assist in complex clinical diagnoses? A standard prompt can lead to <strong className="text-red-400">Premature Closure</strong>—the AI jumping to an obvious conclusion without considering complex zebras.</p>
             
             <Callout icon={<SparklesIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">Chain-of-Thought (CoT) Prompting</p>
-              <p className="text-slate-300 mt-2">
-                You can fundamentally improve the AI&apos;s accuracy by forcing it to "show its math" before it delivers a final answer. This mimics the cognitive forcing strategies taught in medical school.
+              <p className="font-semibold text-white">Chain-of-Thought (CoT)</p>
+              <p className="text-slate-300 mt-2 text-sm">
+                You can fix this by forcing the AI to "show its math". This mirrors how medical schools teach the Differential Diagnosis process.
               </p>
               <div className="mt-3 p-3 bg-slate-900 rounded border border-slate-700 font-mono text-xs text-slate-300">
-                <span className="text-red-400 font-bold">Standard Prompt (Prone to Error):</span><br/>
+                <span className="text-red-400 font-bold">Standard Prompt (Bad):</span><br/>
                 "Patient has right lower quadrant pain and fever. What is the diagnosis?"<br/><br/>
-                <span className="text-green-400 font-bold">Chain-of-Thought Prompt (Highly Accurate):</span><br/>
-                "A 24yo female presents with RLQ pain and fever. <strong>Before giving a final diagnosis, think step-by-step.</strong> 1. List the top 5 differential diagnoses across all organ systems. 2. State the key clinical findings that support or refute each. 3. Propose the next best imaging step. 4. Finally, state the most likely diagnosis."
+                <span className="text-green-400 font-bold">Chain-of-Thought Prompt (Good):</span><br/>
+                "A 24yo female presents with RLQ pain and fever. <strong>Before giving a final diagnosis, think step-by-step.</strong> 1. List the top 5 differential diagnoses. 2. State clinical findings for each. 3. Propose imaging. 4. Finally, state the most likely diagnosis."
               </div>
             </Callout>
-
-            <p className="mt-4">By forcing the AI to generate intermediate reasoning steps, it activates different pathways in its neural network, significantly reducing hallucinations and improving diagnostic safety.</p>
           </div>
         )
       },
@@ -339,14 +317,14 @@ export const CURRICULUM: Module[] = [
         quiz: {
           questions: [
             {
-              question: 'When "vibe coding" an application, why is it important to define a specific Persona and Clinical Guardrails?',
-              options: ['Because AI requires payment based on the persona\'s salary.', 'Because AI models are literal and without boundaries, they might build generic or unsafe features unless explicitly constrained by clinical rules.', 'Because the database will reject code that doesn\'t have a persona attached.', 'Because Figma requires a persona to render CSS.'],
-              correctAnswer: 'Because AI models are literal and without boundaries, they might build generic or unsafe features unless explicitly constrained by clinical rules.'
+              question: 'Why must you define explicit Clinical Guardrails when "vibe coding"?',
+              options: ['Because AI requires payment based on the persona\'s salary.', 'Because AI models are literal and without boundaries, they might build generic or unsafe features unless constrained by rules.', 'Because the database will reject code without a persona.', 'Because Figma requires a persona to render CSS.'],
+              correctAnswer: 'Because AI models are literal and without boundaries, they might build generic or unsafe features unless constrained by rules.'
             },
             {
               question: 'How does Chain-of-Thought (CoT) prompting improve AI diagnostic safety?',
-              options: ['It forces the AI to search Google before answering.', 'It prevents "premature closure" by forcing the model to generate intermediate reasoning steps (like a differential diagnosis) before jumping to a final conclusion.', 'It encrypts the patient\'s PHI automatically.', 'It reduces the context window size to save GPU power.'],
-              correctAnswer: 'It prevents "premature closure" by forcing the model to generate intermediate reasoning steps (like a differential diagnosis) before jumping to a final conclusion.'
+              options: ['It forces the AI to search Google before answering.', 'It prevents "premature closure" by forcing the model to generate intermediate reasoning steps before jumping to a final conclusion.', 'It encrypts the patient\'s PHI automatically.', 'It reduces the context window size to save GPU power.'],
+              correctAnswer: 'It prevents "premature closure" by forcing the model to generate intermediate reasoning steps before jumping to a final conclusion.'
             }
           ]
         }
@@ -356,7 +334,7 @@ export const CURRICULUM: Module[] = [
   {
     id: 'module-4',
     title: 'Module 4: The Hippocratic Oath for Clinical AI',
-    description: 'Enforce patient privacy, diagnose AI hallucinations, and master Retrieval-Augmented Generation (RAG).',
+    description: 'Enforce patient privacy, diagnose AI hallucinations, and master RAG.',
     lessons: [
       {
         id: '4-1',
@@ -365,22 +343,22 @@ export const CURRICULUM: Module[] = [
         estimatedTimeMinutes: 4,
         content: (
           <div className="space-y-4">
-            <p>As physicians, our first duty is to do no harm. In the era of artificial intelligence, that duty translates directly to <strong className="text-cyan-400">protecting patient privacy and enforcing security standards</strong>.</p>
+            <p>Our first duty is to do no harm. In the AI era, this means <strong className="text-cyan-400">protecting patient privacy</strong>.</p>
             
             <Callout icon={<ShieldCheckIcon className="w-8 h-8" />}>
               <p className="font-semibold text-white">The Golden Rule of Clinical AI:</p>
-              <p className="text-red-400 font-bold">NEVER input raw patient identifiers into standard consumer AI models (like public ChatGPT, Claude, or Gemini search portals).</p>
+              <p className="text-red-400 font-bold">NEVER input raw patient identifiers into standard consumer AI models (like public ChatGPT or Gemini search portals).</p>
             </Callout>
 
             <Callout icon={<KeyIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">How to Safely Use AI in Medicine:</p>
+              <p className="font-semibold text-white">How to Safely Use AI:</p>
               <ul className="mt-2 space-y-3 text-sm text-slate-300">
                 <li>
-                  <strong className="text-cyan-400">1. Strict De-identification:</strong> Remove all 18 HIPAA identifiers.
+                  <strong className="text-cyan-400">1. De-identification:</strong> Remove all 18 HIPAA identifiers (names, dates, MRNs) before pasting any chart text.
                 </li>
                 <li>
                   <strong className="text-yellow-400">2. Business Associate Agreements (BAAs):</strong> 
-                  Only input raw data into enterprise environments where the vendor legally guarantees <strong className="text-white">Zero-Data Retention</strong>, promising inputs are never used to train future models.
+                  Only input raw data into hospital-approved enterprise environments that legally guarantee <strong className="text-white">Zero-Data Retention</strong> (meaning your inputs are never stored or used for future model training).
                 </li>
               </ul>
             </Callout>
@@ -392,28 +370,26 @@ export const CURRICULUM: Module[] = [
         title: 'The Open-Book Exam: RAG',
         type: 'content',
         estimatedTimeMinutes: 5,
+        videoLinks: [
+          { title: 'Why do LLMs Hallucinate?', url: 'https://youtu.be/8IhiLYieyQ0' },
+          { title: 'What is Retrieval-Augmented Generation (RAG)?', url: 'https://youtu.be/T-D1OfcDW1M' }
+        ],
         content: (
           <div className="space-y-4">
-            <p>If LLMs can hallucinate because they answer from memory, how do hospitals use AI safely? The answer is <strong className="text-cyan-400">Retrieval-Augmented Generation (RAG)</strong>.</p>
+            <p>If LLMs calculate the next word using math, they can invent fake citations that "look" mathematically perfect. This is called a <strong className="text-red-400">Hallucination</strong>.</p>
+            <p>How do hospitals use AI safely? The answer is <strong className="text-cyan-400">Retrieval-Augmented Generation (RAG)</strong>.</p>
             
             <Callout icon={<BookOpenIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">RAG: The AI\'s Medical Library</p>
-              <p className="text-slate-300 mt-2">
-                Instead of asking the AI a question and letting it guess from its pre-trained synaptic weights, RAG forces the AI to take an "open-book exam".
+              <p className="font-semibold text-white">RAG: The Open-Book Exam</p>
+              <p className="text-slate-300 mt-2 text-sm">
+                Instead of asking the AI to guess an answer from memory, RAG forces the AI to take an "open-book exam".
               </p>
               <ol className="mt-3 space-y-2 text-sm text-slate-300 list-decimal list-inside">
-                <li><strong className="text-cyan-400">Retrieve:</strong> When you ask a question (e.g., "What are our hospital\'s sepsis protocols?"), the system first searches a verified database (like your hospital\'s internal PDF guidelines).</li>
-                <li><strong className="text-yellow-400">Augment:</strong> It pulls the exact paragraphs from that PDF and pastes them invisibly into the AI\'s Context Window.</li>
-                <li><strong className="text-green-400">Generate:</strong> The AI is instructed: <em>"Answer the doctor's question using ONLY the provided text. Cite the page number."</em></li>
+                <li><strong className="text-cyan-400">Retrieve:</strong> You ask a question. The system searches a verified database (like your hospital\'s internal PDF guidelines).</li>
+                <li><strong className="text-yellow-400">Augment:</strong> It pulls the exact paragraphs from the PDF and pastes them invisibly into the AI.</li>
+                <li><strong className="text-green-400">Generate:</strong> The AI is instructed: <em>"Answer the doctor's question using ONLY the provided text."</em></li>
               </ol>
             </Callout>
-
-            <div className="p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl mt-4">
-              <h4 className="font-bold text-white mb-2 text-lg">🏥 Why RAG is the Future of EHRs</h4>
-              <p className="text-sm text-slate-300">
-                By grounding the AI in verified reality, RAG nearly eliminates hallucinations. When an AI tool inside an EHR summarizes a patient chart, it is using RAG to fetch the exact lab results and consult notes from the database, rather than making them up.
-              </p>
-            </div>
           </div>
         )
       },
@@ -425,14 +401,14 @@ export const CURRICULUM: Module[] = [
         quiz: {
           questions: [
             {
-              question: 'What is the primary benefit of Retrieval-Augmented Generation (RAG) in a clinical setting?',
-              options: ['It makes the AI run faster on mobile devices.', 'It prevents hallucinations by forcing the AI to answer based strictly on verified, retrieved documents rather than relying on its internal memory.', 'It automatically bills insurance companies for the consultation.', 'It encrypts the patient\'s data.'],
-              correctAnswer: 'It prevents hallucinations by forcing the AI to answer based strictly on verified, retrieved documents rather than relying on its internal memory.'
+              question: 'What is the primary benefit of Retrieval-Augmented Generation (RAG)?',
+              options: ['It prevents hallucinations by forcing the AI to answer based strictly on retrieved documents rather than its internal memory.', 'It makes the AI run faster on mobile devices.', 'It automatically bills insurance.', 'It encrypts patient data.'],
+              correctAnswer: 'It prevents hallucinations by forcing the AI to answer based strictly on retrieved documents rather than its internal memory.'
             },
             {
-              question: 'You are using an enterprise AI with a signed BAA (Zero-Data Retention policy). Is it acceptable to input PHI?',
-              options: ['Yes, because the vendor legally guarantees the data is securely processed, not stored, and not used for training.', 'No, PHI can never touch any AI system under any circumstance.', 'Yes, but only if the patient signs a specific waiver for that AI model.', 'No, BAAs only cover financial data.'],
-              correctAnswer: 'Yes, because the vendor legally guarantees the data is securely processed, not stored, and not used for training.'
+              question: 'Why do AI models "Hallucinate"?',
+              options: ['Because they are mathematical autocomplete engines predicting the next word, rather than databases of hard facts.', 'Because the server is overheating.', 'Because RAG is turned on.', 'Because the user prompt was too short.'],
+              correctAnswer: 'Because they are mathematical autocomplete engines predicting the next word, rather than databases of hard facts.'
             }
           ]
         }
@@ -442,7 +418,7 @@ export const CURRICULUM: Module[] = [
   {
     id: 'module-5',
     title: 'Module 5: Clinical Workflows in Action',
-    description: 'Master high-yield workflows: automatic prior authorizations, Agentic AI, and custom SOAP notes.',
+    description: 'Master high-yield workflows and explore Agentic AI.',
     lessons: [
       {
         id: '5-1',
@@ -451,23 +427,22 @@ export const CURRICULUM: Module[] = [
         estimatedTimeMinutes: 4,
         content: (
           <div className="space-y-4">
-            <p>Let&apos;s unlock the ultimate superpower of clinical AI: <strong className="text-cyan-400">Workflow Automation</strong>.</p>
-            <p>Every single day, clinicians lose up to 40% of their working hours to administrative burdens. AI can instantly automate these administrative taxations.</p>
+            <p>Clinicians lose up to 40% of their working hours to administrative burdens. AI can instantly automate this.</p>
 
             <Callout icon={<DocumentTextIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">Three High-Yield Automations for Your Practice:</p>
+              <p className="font-semibold text-white">High-Yield Automations:</p>
               <ul className="mt-2 space-y-4 text-sm text-slate-300">
                 <li>
-                  <strong className="text-cyan-400">1. Prior Authorization & Appeal Letters:</strong> 
-                  Feed insurance denial criteria and sanitized clinical facts to draft an evidence-based appeal letter citing objective findings.
+                  <strong className="text-cyan-400">1. Prior Authorization Appeals:</strong> 
+                  Feed insurance denial criteria and sanitized patient facts to automatically draft evidence-based appeal letters.
                 </li>
                 <li>
-                  <strong className="text-yellow-400">2. Medical Translation & Patient Handouts:</strong> 
-                  Translate complex discharge summaries into 5th-grade reading level handouts highlighting medications and red-flag symptoms.
+                  <strong className="text-yellow-400">2. Patient Handouts:</strong> 
+                  Translate complex discharge summaries into 5th-grade reading level handouts highlighting red-flag symptoms.
                 </li>
                 <li>
-                  <strong className="text-green-400">3. Rapid Research Syntheses:</strong> 
-                  Extract absolute numbers, hazard ratios, and adverse events from 30-page PDF clinical trials and format them into comparison tables.
+                  <strong className="text-green-400">3. Research Synthesis:</strong> 
+                  Extract absolute numbers and hazard ratios from a 30-page PDF clinical trial into a clean comparison table.
                 </li>
               </ul>
             </Callout>
@@ -476,46 +451,43 @@ export const CURRICULUM: Module[] = [
       },
       {
         id: '5-2',
-        title: 'Agentic AI & Tool Use (The Autonomous Resident)',
+        title: 'Agentic AI (The Autonomous Resident)',
         type: 'content',
         estimatedTimeMinutes: 5,
+        videoLinks: [
+          { title: 'AI Agents Explained by Andrew Ng', url: 'https://youtu.be/F8NKVhkZZWI' }
+        ],
         content: (
           <div className="space-y-4">
-            <p>The next frontier is moving from passive chatbots to <strong className="text-cyan-400">Agentic AI</strong>. An agent doesn&apos;t just chat with you; it can take actions on your behalf using digital tools.</p>
+            <p>The next frontier is moving from passive chatbots to <strong className="text-cyan-400">Agentic AI</strong>.</p>
+            <p>A chatbot only <em>talks</em>. An Agent can <em>take action</em> using digital tools.</p>
 
             <Callout icon={<CpuChipIcon className="w-8 h-8" />}>
               <p className="font-semibold text-white">Equipping the AI with Tools</p>
-              <p className="text-slate-300 mt-2">
-                Through APIs (the Nervous System), developers can give an AI model tools like calculators, web browsers, or database access.
-              </p>
               <ul className="mt-3 space-y-2 text-sm text-slate-300 list-disc list-inside">
-                <li><strong className="text-cyan-400">The Calculator Tool:</strong> Instead of guessing a math equation (which LLMs are bad at), an agentic AI recognizes it needs to do math, writes a Python script, runs it in a calculator tool, and returns the exact verified number.</li>
-                <li><strong className="text-yellow-400">The EHR Tool:</strong> An AI agent is told "Schedule a follow up for Mrs. Smith in 2 weeks." It uses a scheduling tool API to find an open slot and book it autonomously.</li>
+                <li><strong className="text-cyan-400">Calculators:</strong> An agentic AI writes a Python script, runs it in a calculator tool, and returns the exact verified medical score.</li>
+                <li><strong className="text-yellow-400">The EHR Tool:</strong> An AI agent is told "Schedule a follow up for Mrs. Smith." It autonomously uses a scheduling API to find an open slot and book it.</li>
               </ul>
             </Callout>
             
-            <p className="mt-4">Agentic workflows are the equivalent of upgrading from a medical textbook (which just gives you information) to a resident physician (who can synthesize the information, page the consult, and place the lab order).</p>
+            <p className="mt-4 text-sm text-slate-300">Agentic workflows upgrade the AI from a medical textbook (information) to a resident physician (synthesizing information, pacing the consult, and placing the lab order).</p>
           </div>
         )
       },
       {
         id: '5-3',
-        title: 'Quiz: Workflows & Agents',
-        type: 'quiz',
-        estimatedTimeMinutes: 3,
-        quiz: {
-          questions: [
-            {
-              question: 'What is the defining characteristic of an "Agentic AI" compared to a standard chatbot?',
-              options: ['It has a larger context window.', 'It can autonomously utilize external tools (like calculators or EHR APIs) to take actions and complete multi-step tasks.', 'It can run on mobile devices without an internet connection.', 'It never hallucinates.'],
-              correctAnswer: 'It can autonomously utilize external tools (like calculators or EHR APIs) to take actions and complete multi-step tasks.'
-            },
-            {
-              question: 'Which of the following clinical administration tasks is best suited for automation with an LLM under human supervision?',
-              options: ['Directly prescribing controlled substances to a patient without scheduling an interview.', 'Automatically drafting insurance prior authorization appeal letters by cross-referencing patient records with clinical criteria.', 'Performing complex laparoscopic surgeries using local cache files.', 'Hosting the hospital\'s secure database directly on the browser\'s frontend.'],
-              correctAnswer: 'Automatically drafting insurance prior authorization appeal letters by cross-referencing patient records with clinical criteria.'
-            }
-          ]
+        title: 'Interactive Case Study: The SOAP Note',
+        type: 'exercise',
+        estimatedTimeMinutes: 5,
+        exercise: {
+          prompt: (
+            <div className="space-y-3">
+              <p>Let&apos;s apply everything in a final interactive encounter. You took a rapid history and recorded objective metrics in a messy text file.</p>
+              <p>Your task is to structure this case into a clean JSON SOAP note. Modify the code to set <code className="text-cyan-400">"assessment"</code> to <code className="text-cyan-400">"Essential Hypertension"</code> and complete <code className="text-cyan-400">"bpReading"</code> to <code className="text-cyan-400">"148/92"</code>.</p>
+            </div>
+          ),
+          evaluationPrompt: `Evaluate the user's SOAP JSON. The JSON must be valid. It must contain the keys "assessment" (with value "Essential Hypertension"), and "bpReading" (with value "148/92").`,
+          initialCode: `{\n  "patientId": "PT-9983",\n  "subjective": "Occasional headaches.",\n  "bpReading": "148/92",\n  "assessment": "Essential Hypertension",\n  "plan": "Lisinopril 10mg."\n}`
         }
       }
     ]
@@ -523,38 +495,39 @@ export const CURRICULUM: Module[] = [
   {
     id: 'module-6',
     title: 'Module 6: The Clinical AI Landscape',
-    description: 'A clinician\'s guide to navigating the modern ecosystem of specialized AI models and tools.',
+    description: 'Navigate the modern ecosystem of specialized AI models.',
     lessons: [
       {
         id: '6-1',
         title: 'The Big Three: Gemini, ChatGPT & Claude',
         type: 'content',
         estimatedTimeMinutes: 5,
+        videoLinks: [
+          { title: 'ChatGPT vs Claude vs Gemini', url: 'https://youtu.be/kC6yO9N_Bko' }
+        ],
         content: (
           <div className="space-y-4">
-            <p>The AI landscape moves at blistering speed. While all frontier models are incredibly capable, they each have distinct "personalities" and clinical strengths. Here is how to choose the right resident for the job.</p>
+            <p>Every AI model has a distinct "personality" and clinical strength. Here is how to choose the right resident.</p>
 
             <Callout icon={<BrainIcon className="w-8 h-8" />}>
               <p className="font-semibold text-white">Google Gemini (The Multimodal Researcher)</p>
               <ul className="mt-2 space-y-2 text-sm text-slate-300">
-                <li><strong className="text-cyan-400">Strengths:</strong> Has an unmatched massive context window (up to 2 million tokens). It is the best tool for dropping in entire libraries of medical PDFs, analyzing long patient histories, and natively understanding medical imaging.</li>
-                <li><strong className="text-white">Specialized Variant:</strong> <em className="text-cyan-200">Gemini for Science / Med-PaLM</em> is Google's medically fine-tuned version, specifically trained to answer USMLE questions and synthesize clinical literature with high accuracy.</li>
+                <li><strong className="text-cyan-400">Strengths:</strong> Massive context window. It is the best tool for analyzing huge stacks of PDFs, patient histories, and natively understanding medical imaging.</li>
+                <li><strong className="text-white">Specialized Variant:</strong> <em className="text-cyan-200">Gemini for Science / Med-PaLM</em> is highly tuned for biomedical literature and clinical reasoning.</li>
               </ul>
             </Callout>
 
             <Callout icon={<ChatBubbleLeftRightIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">ChatGPT / OpenAI (The Creative Workhorse)</p>
+              <p className="font-semibold text-white">ChatGPT (The Creative Workhorse)</p>
               <ul className="mt-2 space-y-2 text-sm text-slate-300">
-                <li><strong className="text-green-400">Strengths:</strong> Incredible at code generation, reasoning (especially the `o1` and `o3` models that use intense Chain-of-Thought), and generating patient-friendly biology/anatomy explanations.</li>
-                <li><strong className="text-white">Best Use:</strong> "Vibe coding" clinical apps, drafting nuanced patient communication, and complex logical reasoning tasks.</li>
+                <li><strong className="text-green-400">Strengths:</strong> Incredible at code generation and intense Chain-of-Thought reasoning (via 'o1' and 'o3' models). Perfect for building clinical apps.</li>
               </ul>
             </Callout>
 
             <Callout icon={<DocumentTextIcon className="w-8 h-8" />}>
               <p className="font-semibold text-white">Claude by Anthropic (The Careful Scribe)</p>
               <ul className="mt-2 space-y-2 text-sm text-slate-300">
-                <li><strong className="text-yellow-400">Strengths:</strong> Built with "Constitutional AI," Claude is heavily focused on safety and nuance. It has beautiful, highly professional prose.</li>
-                <li><strong className="text-white">Best Use:</strong> Writing pristine referral letters, drafting sensitive patient breaking-bad-news scripts, and deeply nuanced chart summaries. It rarely hallucinates without heavily qualifying its uncertainty.</li>
+                <li><strong className="text-yellow-400">Strengths:</strong> Built with strict "Constitutional AI." It has pristine, nuanced prose. Best for drafting sensitive patient referral letters and breaking-bad-news scripts.</li>
               </ul>
             </Callout>
           </div>
@@ -562,34 +535,30 @@ export const CURRICULUM: Module[] = [
       },
       {
         id: '6-2',
-        title: 'Specialized Clinical AI: Perplexity & Beyond',
+        title: 'Specialized Clinical AI: Perplexity',
         type: 'content',
         estimatedTimeMinutes: 4,
+        videoLinks: [
+          { title: 'Perplexity AI Tutorial', url: 'https://youtu.be/D5R4_J4vR0E' }
+        ],
         content: (
           <div className="space-y-4">
-            <p>Beyond the "Big Three" generalists, there are tools built specifically for finding objective truth and streamlining daily workflows.</p>
+            <p>Beyond the generalists, there are tools built specifically for finding objective truth.</p>
 
             <Callout icon={<GlobeAltIcon className="w-8 h-8" />}>
               <p className="font-semibold text-white">Perplexity (The AI Search Engine)</p>
               <p className="text-slate-300 mt-2 text-sm">
-                Perplexity is a search engine built entirely on RAG (Retrieval-Augmented Generation). Instead of chatting with an LLM's memory, Perplexity searches the live internet (or PubMed), reads the top 20 links, and writes a synthesis <strong className="text-white">with inline footnote citations</strong>.
+                Perplexity is an engine built entirely on RAG. It searches the live internet (or PubMed), reads the top 20 links, and writes a synthesis <strong className="text-white">with inline footnote citations</strong>.
               </p>
               <p className="text-slate-300 mt-2 text-sm">
-                <em className="text-cyan-400">Clinical use case:</em> "What are the latest 2025 guidelines for managing hypertensive crisis in pregnant patients?" Perplexity will give you the answer heavily cited with links to ACOG or current medical journals.
-              </p>
-            </Callout>
-
-            <Callout icon={<ComputerDesktopIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">OpenRouter / Model Aggregators</p>
-              <p className="text-slate-300 mt-2 text-sm">
-                Platforms like OpenRouter allow you to access almost every AI model on earth (Claude, Gemini, Llama, ChatGPT) through a single dashboard. It's the ultimate playground for testing which "digital resident" is best at your specific clinical specialty.
+                <em className="text-cyan-400">Clinical use case:</em> "What are the latest 2025 guidelines for managing hypertensive crisis?" Perplexity gives you the answer cited with links to current medical journals.
               </p>
             </Callout>
 
             <div className="p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl mt-4">
               <h4 className="font-bold text-white mb-2 text-lg">🚀 The Takeaway</h4>
               <p className="text-sm text-slate-300">
-                No single AI model rules them all. The modern physician's superpower is knowing which tool to pull from the bag: Gemini for mass literature review, Claude for drafting sensitive clinical notes, ChatGPT for coding tools, and Perplexity for live-cited medical research.
+                No single AI model rules them all. The modern physician's superpower is knowing which tool to pull from the bag!
               </p>
             </div>
           </div>
@@ -608,7 +577,7 @@ export const CURRICULUM: Module[] = [
               correctAnswer: 'Perplexity'
             },
             {
-              question: 'If you needed to feed an entire 100-page textbook of medical guidelines into an AI to extract a summary, which model\'s massive context window makes it the best choice?',
+              question: 'If you needed to feed an entire 100-page textbook into an AI, which model\'s massive context window makes it the best choice?',
               options: ['Google Gemini', 'A basic SQL Database', 'A clinical calculator', 'HTML/CSS'],
               correctAnswer: 'Google Gemini'
             }
