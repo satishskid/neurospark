@@ -148,33 +148,32 @@ export const CURRICULUM: Module[] = [
         title: 'Neurons of Meaning: Tokens & Embeddings',
         type: 'content',
         estimatedTimeMinutes: 4,
+        videoLinks: [
+          { title: 'Large Language Models explained briefly', url: 'https://youtu.be/LPZh9BOjkQs?si=v4N29hhFN-My7SXR' },
+          { title: 'How Large Language Models Work', url: 'https://youtu.be/5sLYAQS9sWQ?si=LHjdVtAC4JwIkutd' }
+        ],
         content: (
           <div className="space-y-4">
-            <p>How does a machine read a medical textbook? It doesn&apos;t see words the way you do. It translates text into two crucial units: <strong className="text-cyan-400">Tokens</strong> and <strong className="text-cyan-400">Embeddings</strong>.</p>
+            <p>How does an AI read a medical textbook? It doesn&apos;t see letters or words. It turns text into numbers. Let&apos;s break this down into two simple concepts: <strong className="text-cyan-400">Tokens</strong> and <strong className="text-cyan-400">Embeddings</strong>.</p>
             
             <Callout icon={<PuzzlePieceIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">1. Tokens: The Semantic Syllables</p>
-              <p>Tokens are the basic semantic syllables of language. An LLM reads by breaking down words into chunks. A good clinical rule of thumb: <strong className="text-white">100 tokens is roughly 75 words</strong>. High-frequency terms (like "heart") are usually 1 token, while rare pharmaceutical names (like "Levothyroxine") might be split into multiple tokens ("Levo", "thy", "rox", "ine").</p>
+              <p className="font-semibold text-white">1. Tokens (The Syllables)</p>
+              <p className="mt-2 text-slate-300">An LLM chops words into tiny pieces called <strong>Tokens</strong>. A common word like "Heart" is 1 token. A complex word like "Levothyroxine" gets chopped into four pieces: "Levo", "thy", "rox", "ine".</p>
             </Callout>
 
             <Callout icon={<GlobeAmericasIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">2. Embeddings: The Conceptual GPS</p>
-              <p>Embeddings are the maps of the AI brain. Imagine a giant, 3D library where every medical concept has an exact longitude and latitude (a mathematical coordinate called a vector).</p>
-              <p className="mt-2 text-slate-300">
-                In this multi-dimensional space, the AI groups concepts by <strong className="text-white">semantic relationship</strong>:
-              </p>
-              <ul className="list-disc list-inside mt-2 pl-4 space-y-1 text-sm text-slate-300">
-                <li><strong className="text-cyan-400">Substernal chest pain</strong>, <strong className="text-cyan-400">angina</strong>, and <strong className="text-cyan-400">myocardial infarction</strong> are stored in the exact same medical bookcase.</li>
-                <li><strong className="text-yellow-400">Cough</strong> and <strong className="text-yellow-400">pneumonia</strong> are stored in a neighboring respiratory bookcase.</li>
-                <li><strong className="text-red-400">Cabbage</strong> is placed on a completely different floor of the library, thousands of yards away.</li>
+              <p className="font-semibold text-white">2. Embeddings (The GPS Map)</p>
+              <p className="mt-2 text-slate-300">Once words are chopped up, the AI gives them a mathematical GPS coordinate on a giant 3D map. This map is called an <strong>Embedding</strong>.</p>
+              <ul className="list-disc list-inside mt-3 pl-2 space-y-2 text-sm text-slate-300">
+                <li>Words with similar meanings (like <strong className="text-cyan-400">"chest pain"</strong> and <strong className="text-cyan-400">"angina"</strong>) are placed right next to each other on the map.</li>
+                <li>Totally unrelated words (like <strong className="text-red-400">"cabbage"</strong>) are placed thousands of miles away.</li>
               </ul>
             </Callout>
 
             <div className="p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl">
-              <h4 className="font-bold text-white mb-2 text-lg">🔬 Clinical Anatomy: Mapping Symptoms</h4>
-              <p className="text-sm text-slate-300 font-semibold mb-1">How AI understands synonymy:</p>
+              <h4 className="font-bold text-white mb-2 text-lg">🔬 Why this matters clinically</h4>
               <p className="text-sm text-slate-300">
-                When a doctor types "shortness of breath" and a patient writes "winded," an LLM understands they are talking about the exact same underlying pathology because their vector embeddings sit side-by-side in conceptual space. This is how LLMs break free from rigid keyword matches and read charts with genuine clinical context.
+                Because "shortness of breath" and "winded" are located in the same neighborhood on the AI&apos;s map, the model actually understands the <em>concept</em> of the symptom, rather than just doing a rigid keyword search.
               </p>
             </div>
           </div>
@@ -182,36 +181,35 @@ export const CURRICULUM: Module[] = [
       },
       {
         id: '2-2',
-        title: 'The Working Memory & Processor: Context Windows & GPUs',
+        title: 'The AI Brain: Transformers & Next-Token Prediction',
         type: 'content',
-        estimatedTimeMinutes: 4,
+        estimatedTimeMinutes: 5,
+        videoLinks: [
+          { title: 'But what is a neural network?', url: 'https://youtu.be/aircAruvnKk?si=Wg1RuoKtYVfMQj2Z' },
+          { title: 'Transformers, the tech behind LLMs', url: 'https://youtu.be/wjZofJX0v4M?si=mG8HXUjg7P14cc7o' },
+          { title: 'How LLMs Actually Generate Text', url: 'https://youtu.be/NKnZYvZA7w4?si=C9ptbpxfsIvoxiUb' }
+        ],
         content: (
           <div className="space-y-4">
-            <p>Now that we know how words are mapped, let&apos;s examine the physiological limits of the AI brain: <strong className="text-cyan-400">Context Windows</strong> and the difference between <strong className="text-cyan-400">Training</strong> and <strong className="text-cyan-400">Inference</strong>.</p>
-
-            <Callout icon={<WindowIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">Context Window: The Doctor\'s Working Memory</p>
-              <p>The context window is the short-term working memory of the AI during a single consultation. It dictates how many tokens the model can "hold in its head" at one moment.</p>
-              <ul className="mt-2 space-y-2 text-sm text-slate-300">
-                <li><strong className="text-cyan-400">Small Context Window (Older models):</strong> Like a doctor who can only remember the last 2 pages of a patient&apos;s chart. By the time they read page 3, they forget the patient&apos;s chief complaint on page 1.</li>
-                <li><strong className="text-green-400">Large Context Window (Modern Gemini):</strong> A massive desk. It can hold a 500-page medical record, including every lab result, consult note, and imaging report, digesting the whole system in a single thought.</li>
-              </ul>
+            <p>At its core, an LLM is doing one incredibly simple thing over and over again: <strong className="text-cyan-400">Predicting the next word</strong>. It is exactly like the autocomplete feature on your iPhone, but scaled up by a trillion times.</p>
+            
+            <Callout icon={<BrainIcon className="w-8 h-8" />}>
+              <p className="font-semibold text-white">Next-Token Prediction</p>
+              <p className="mt-2 text-slate-300">If you type: <em>"The patient has a history of severe..."</em>, the AI looks at the map of words and calculates the probability of the next word. It might calculate: "allergies" (40%), "asthma" (30%), "pain" (20%), "cabbage" (0.0001%). It picks the highest probability word and writes it down. Then, it repeats the process.</p>
             </Callout>
 
-            <Callout icon={<CpuChipIcon className="w-8 h-8" />}>
-              <p className="font-semibold text-white">Training vs. Inference: Medical School vs. The Bedside Reflex</p>
-              <p>How does the AI acquire its coordinates, and how does it answer your question? This requires massive compute engines called GPUs.</p>
-              <ul className="mt-2 space-y-3 text-sm text-slate-300">
-                <li>
-                  <strong className="text-cyan-400">Training (Medical School):</strong> 
-                  An incredibly slow, expensive process. The AI consumes millions of textbooks, research journals, and EHR data points. It takes months and millions of dollars on thousands of GPUs, creating the "synaptic weights" (the fixed brain).
-                </li>
-                <li>
-                  <strong className="text-yellow-400">Inference (The Bedside Reflex):</strong> 
-                  Using the pre-trained brain. When you ask Gemini a question, it runs your prompt through its existing synaptic pathways in milliseconds. This is cheap, fast, and represents a split-second diagnostic reflex.
-                </li>
-              </ul>
+            <Callout icon={<BoltIcon className="w-8 h-8" />}>
+              <p className="font-semibold text-white">The "Transformer" (Attention Mechanism)</p>
+              <p className="mt-2 text-slate-300">How does it know which word to predict so accurately? It uses a revolutionary architecture called the <strong>Transformer</strong>. The secret sauce of the Transformer is <em>Self-Attention</em>.</p>
+              <p className="mt-2 text-slate-300 text-sm">Imagine a triage nurse reading a 50-page messy patient chart. The nurse pays intense <strong>attention</strong> to the phrase <em>"Allergy: Penicillin"</em> on page 1, and ignores the phrase <em>"Patient wore a blue shirt"</em> on page 2. Transformers do exactly this. They mathematically "pay attention" to the most clinically relevant words in your prompt, no matter how far apart they are.</p>
             </Callout>
+
+            <div className="p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl mt-4">
+              <h4 className="font-bold text-white mb-2 text-lg">💾 Context Window</h4>
+              <p className="text-sm text-slate-300">
+                The <strong>Context Window</strong> is simply how much text the AI can "pay attention" to at one time. Older models were like a doctor who could only remember the last 2 pages of a chart. Modern models (like Gemini) have massive context windows—they can read a 500-page medical record and hold the entire thing in their working memory simultaneously.
+              </p>
+            </div>
           </div>
         )
       },
@@ -222,24 +220,23 @@ export const CURRICULUM: Module[] = [
         estimatedTimeMinutes: 5,
         content: (
           <div className="space-y-4">
-            <p>Medicine isn&apos;t just text. It is visual, auditory, and kinetic. Similarly, the most advanced AI models have evolved beyond text-only inputs to become <strong className="text-cyan-400">Large Multimodal Models (LMMs)</strong>.</p>
+            <p>Medicine isn&apos;t just text. It is visual, auditory, and kinetic. The most advanced AI models have evolved to become <strong className="text-cyan-400">Multimodal</strong>, meaning they can process images, audio, and text at the same time.</p>
             
             <Callout icon={<FaceSmileIcon className="w-8 h-8" />}>
               <p className="font-semibold text-white">Giving the AI Eyes and Ears</p>
               <p className="text-slate-300 mt-2">
-                Standard LLMs are like diagnosing a patient over the phone. You only know what the patient explicitly tells you. <strong className="text-white">Multimodal models</strong> (like Gemini 1.5 Pro) are like a doctor standing in the exam room. They can simultaneously ingest text, images, audio, and video.
+                Standard text LLMs are like diagnosing a patient over the phone. You only know what the patient explicitly tells you. <strong className="text-white">Multimodal models</strong> are like standing in the exam room.
               </p>
               <ul className="mt-3 space-y-2 text-sm text-slate-300 list-disc list-inside">
-                <li><strong className="text-cyan-400">Vision:</strong> Analyzing a chest X-ray, identifying a suspicious nevus in dermatology, or reading a handwritten scribbled note from a transferring hospital.</li>
-                <li><strong className="text-yellow-400">Audio:</strong> Listening to a live patient interview to automatically generate an ambient scribe SOAP note, capturing nuances like coughing or wheezing.</li>
-                <li><strong className="text-green-400">Video:</strong> Observing a gait analysis video to detect early signs of Parkinson&apos;s disease.</li>
+                <li><strong className="text-cyan-400">Vision:</strong> They can look at a chest X-ray or a photograph of a rash.</li>
+                <li><strong className="text-yellow-400">Audio:</strong> They can listen to a live patient interview and capture nuances like a cough.</li>
               </ul>
             </Callout>
 
             <div className="p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl mt-4">
-              <h4 className="font-bold text-white mb-2 text-lg">🧬 The Unified Vector Space</h4>
+              <h4 className="font-bold text-white mb-2 text-lg">🧬 The Unified Map</h4>
               <p className="text-sm text-slate-300">
-                How does an AI combine a picture of a rash with a text description? They are mapped to the <em>exact same embedding coordinate system</em>. The text "Erythema migrans" and a photograph of a bullseye rash are translated into the same mathematical location in the AI&apos;s brain, allowing the model to seamlessly "think" across different human senses.
+                How does this work? The AI takes the photograph of the rash and translates it into the <em>exact same GPS map</em> as the text words. So a picture of a bullseye rash and the text "Erythema migrans" live in the exact same mathematical spot in the AI&apos;s brain.
               </p>
             </div>
           </div>
@@ -253,14 +250,14 @@ export const CURRICULUM: Module[] = [
         quiz: {
           questions: [
             {
-              question: 'If you want to feed a patient\'s entire 300-page clinical history into an LLM to find a rare drug interaction, which specification of the model determines if it can hold that much text at once?',
-              options: ['The GPU Inference Speed', 'The size of the Context Window', 'The Training dataset cost', 'The non-relational database query speed'],
-              correctAnswer: 'The size of the Context Window'
+              question: 'Which AI architecture allows the model to prioritize clinically relevant words (like "Penicillin Allergy") while ignoring irrelevant background text?',
+              options: ['The Hippocampus Database', 'The Transformer (Attention Mechanism)', 'The Context Window', 'Next-Token Prediction'],
+              correctAnswer: 'The Transformer (Attention Mechanism)'
             },
             {
-              question: 'How do Multimodal models differ from standard Large Language Models (LLMs)?',
-              options: ['They can only be run on massive supercomputers that require quantum processors.', 'They can process and correlate multiple data formats simultaneously, such as text, images (X-rays), and audio (interviews).', 'They are strictly used for backend database management.', 'They cannot perform inference; they only perform training.'],
-              correctAnswer: 'They can process and correlate multiple data formats simultaneously, such as text, images (X-rays), and audio (interviews).'
+              question: 'Fundamentally, what is a Large Language Model doing when it writes a paragraph of text?',
+              options: ['Searching Google for the exact paragraph and pasting it.', 'Calculating the mathematical probability of the single next word, over and over again, like a supercharged autocomplete.', 'Writing HTML code directly to the backend.', 'Translating images into audio files.'],
+              correctAnswer: 'Calculating the mathematical probability of the single next word, over and over again, like a supercharged autocomplete.'
             }
           ]
         }

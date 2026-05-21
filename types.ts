@@ -25,6 +25,7 @@ export interface Lesson {
   quiz?: QuizData;
   exercise?: ExerciseData;
   estimatedTimeMinutes: number;
+  videoLinks?: { title: string; url: string }[];
 }
 
 export interface Module {

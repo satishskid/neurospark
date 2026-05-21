@@ -168,6 +168,28 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, onComplete }) => {
       case 'content':
         return (
           <>
+            {lesson.videoLinks && lesson.videoLinks.length > 0 && (
+              <div className="mb-8 p-6 bg-slate-800/80 border border-slate-700/80 rounded-2xl shadow-lg">
+                <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-red-500">
+                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm14.024-.983a1.125 1.125 0 010 1.966l-5.603 3.113A1.125 1.125 0 019 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113z" clipRule="evenodd" />
+                  </svg>
+                  Visual Learning References
+                </h3>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {lesson.videoLinks.map((video, idx) => (
+                    <a key={idx} href={video.url} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-2 p-4 rounded-xl bg-slate-900 border border-slate-700 hover:border-red-500 transition-colors group">
+                      <div className="flex items-start justify-between">
+                         <span className="font-semibold text-slate-200 group-hover:text-white transition-colors line-clamp-2 text-sm">{video.title}</span>
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-slate-500 group-hover:text-red-400 flex-shrink-0">
+                           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                         </svg>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="prose prose-invert prose-lg max-w-none text-slate-300 prose-strong:text-cyan-400">
                 {lesson.content}
             </div>
