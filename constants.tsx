@@ -9,7 +9,7 @@ import {
   FolderOpenIcon, CommandLineIcon, CloudIcon, ComputerDesktopIcon, 
   DocumentDuplicateIcon, FaceSmileIcon, CircleStackIcon, AcademicCapIcon, 
   HomeModernIcon, ArrowDownTrayIcon, ShieldCheckIcon, GlobeAmericasIcon, 
-  ServerIcon, GitBranchIcon, ChatBubbleLeftRightIcon
+  ServerIcon, GitBranchIcon, ChatBubbleLeftRightIcon, TrophyIcon
 } from './components/Icons';
 
 const Callout = ({ icon, children }: { icon: React.ReactNode, children: React.ReactNode }) => (
@@ -580,6 +580,126 @@ export const CURRICULUM: Module[] = [
               question: 'If you needed to feed an entire 100-page textbook into an AI, which model\'s massive context window makes it the best choice?',
               options: ['Google Gemini', 'A basic SQL Database', 'A clinical calculator', 'HTML/CSS'],
               correctAnswer: 'Google Gemini'
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    id: 'module-7',
+    title: 'Module 7: The World of AI: Mapping the Frontier',
+    description: 'Explore the global AI ecosystem, model architectures, and how to judge an AI.',
+    lessons: [
+      {
+        id: '7-1',
+        title: 'Where AI Lives: Open vs. Closed',
+        type: 'content',
+        estimatedTimeMinutes: 5,
+        content: (
+          <div className="space-y-4">
+            <p>To use AI safely in a hospital, you need to know where it comes from and where it runs.</p>
+
+            <Callout icon={<BuildingStorefrontIcon className="w-8 h-8" />}>
+              <p className="font-semibold text-white">Closed Source (Proprietary Models)</p>
+              <ul className="mt-2 space-y-2 text-sm text-slate-300">
+                <li><strong className="text-cyan-400">Like a Proprietary Drug:</strong> Models like OpenAI&apos;s GPT-4 or Google&apos;s Gemini. You pay to use them, but the company keeps the exact "chemical recipe" (the code and training data) a strict secret.</li>
+                <li><strong className="text-white">Cloud Hosted:</strong> They run on the company&apos;s massive servers. You send your data to them over the internet.</li>
+              </ul>
+            </Callout>
+
+            <Callout icon={<FolderOpenIcon className="w-8 h-8" />}>
+              <p className="font-semibold text-white">Open Source & Hugging Face</p>
+              <ul className="mt-2 space-y-2 text-sm text-slate-300">
+                <li><strong className="text-green-400">Like a Generic Drug:</strong> Models like Meta&apos;s Llama 3. The "recipe" is completely public.</li>
+                <li><strong className="text-white">Hugging Face:</strong> This is a website known as the "GitHub of AI." It is a massive global library where researchers upload and share these open-source models for free (<a href="https://huggingface.co" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">huggingface.co</a>).</li>
+                <li><strong className="text-yellow-400">Local Hosting (HIPAA Safe):</strong> Because the model is free, a hospital can download it from Hugging Face and run it <strong className="text-white">locally</strong> on their own internal servers. Patient data never leaves the hospital firewall!</li>
+              </ul>
+            </Callout>
+          </div>
+        )
+      },
+      {
+        id: '7-2',
+        title: 'Architecture: How the Brain is Built',
+        type: 'content',
+        estimatedTimeMinutes: 5,
+        content: (
+          <div className="space-y-4">
+            <p>Not all AI brains are built the same. Here are the three major architectural choices developers make.</p>
+
+            <Callout icon={<CircleStackIcon className="w-8 h-8" />}>
+              <p className="font-semibold text-white">1. Small vs. Large Models</p>
+              <ul className="mt-2 space-y-2 text-sm text-slate-300">
+                <li><strong className="text-cyan-400">Small Models (e.g., 7 Billion Parameters):</strong> Like a fast medical student. Great for simple tasks (summarizing a single note) and cheap to run on a laptop.</li>
+                <li><strong className="text-purple-400">Large Models (e.g., 1 Trillion Parameters):</strong> Like the Chief of Staff. Massive, expensive, and capable of extremely complex reasoning across thousands of variables.</li>
+              </ul>
+            </Callout>
+
+            <Callout icon={<GitBranchIcon className="w-8 h-8" />}>
+              <p className="font-semibold text-white">2. Mixture of Experts (MoE)</p>
+              <p className="text-slate-300 mt-2 text-sm">
+                Instead of building one massive generalist brain, MoE models route your prompt to specialized sub-networks. If you ask a cardiology question, it sends it to the "Cardiology Expert" network. It is exactly like a hospital routing a patient to a specialist rather than making the General Practitioner do everything. This makes the model incredibly fast and efficient.
+              </p>
+            </Callout>
+
+            <Callout icon={<BoltIcon className="w-8 h-8" />}>
+              <p className="font-semibold text-white">3. "Thinking" vs. "Flash" Models</p>
+              <ul className="mt-2 space-y-2 text-sm text-slate-300">
+                <li><strong className="text-yellow-400">Flash Models (System 1):</strong> Built for split-second reflexes (e.g., Gemini 1.5 Flash, GPT-4o-mini). They are incredibly fast and cheap, perfect for real-time chatbots.</li>
+                <li><strong className="text-green-400">Thinking Models (System 2):</strong> Built for slow, deliberate reasoning (e.g., OpenAI o1). They take 10-30 seconds to answer because they generate a massive internal "Chain of Thought" before responding. Best for complex diagnostics.</li>
+              </ul>
+            </Callout>
+          </div>
+        )
+      },
+      {
+        id: '7-3',
+        title: 'How to Judge an AI (Benchmarks & LMarena)',
+        type: 'content',
+        estimatedTimeMinutes: 4,
+        content: (
+          <div className="space-y-4">
+            <p>Every week, a new AI model claims to be the "smartest in the world." How do we objectively measure their intelligence?</p>
+
+            <Callout icon={<AcademicCapIcon className="w-8 h-8" />}>
+              <p className="font-semibold text-white">Traditional Benchmarks</p>
+              <p className="text-slate-300 mt-2 text-sm">
+                Historically, researchers force the AI to take human tests (like the USMLE or the Bar Exam). While impressive, these tests are flawed because the AI might have accidentally "memorized" the test questions during its massive internet training phase.
+              </p>
+            </Callout>
+
+            <div className="p-6 bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700/80 rounded-2xl shadow-lg">
+              <h4 className="font-bold text-white mb-4 text-xl flex items-center gap-3">
+                <TrophyIcon className="w-6 h-6 text-yellow-400" />
+                The Gold Standard: LMSYS Chatbot Arena
+              </h4>
+              <p className="text-sm text-slate-300 mb-3">
+                The most trusted global leaderboard is the <strong className="text-white">LMSYS Chatbot Arena</strong> (<a href="https://lmarena.ai" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">lmarena.ai</a>).
+              </p>
+              <p className="text-sm text-slate-300">
+                It operates exactly like a blind, randomized controlled clinical trial. You type a prompt, and two anonymous AI models (Model A and Model B) generate an answer side-by-side. You (the human judge) vote on which answer is better. Once you vote, their true identities are revealed. This crowdsourced rating is currently the definitive ranking of global AI intelligence.
+              </p>
+            </div>
+          </div>
+        )
+      },
+      {
+        id: '7-4',
+        title: 'Quiz: The World of AI',
+        type: 'quiz',
+        estimatedTimeMinutes: 3,
+        quiz: {
+          questions: [
+            {
+              question: 'Why might a highly-secure hospital prefer to use an Open-Source AI model from Hugging Face instead of a Proprietary model from OpenAI?',
+              options: ['Because open-source models can be downloaded and run strictly "locally" on the hospital\'s own internal servers, guaranteeing patient data never leaves the firewall.', 'Because open-source models are always much smarter than proprietary models.', 'Because Hugging Face requires a monthly subscription.', 'Because local models have infinite context windows.'],
+              correctAnswer: 'Because open-source models can be downloaded and run strictly "locally" on the hospital\'s own internal servers, guaranteeing patient data never leaves the firewall.'
+            },
+            {
+              question: 'How does the LMSYS Chatbot Arena (lmarena.ai) rank AI models?',
+              options: ['By making them take the US Medical Licensing Exam (USMLE).', 'By counting how many parameters the model has.', 'Through crowdsourced blind A/B testing, where human judges vote on the best answer between two anonymous models.', 'By measuring the API latency speed.'],
+              correctAnswer: 'Through crowdsourced blind A/B testing, where human judges vote on the best answer between two anonymous models.'
             }
           ]
         }
