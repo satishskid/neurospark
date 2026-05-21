@@ -264,11 +264,6 @@ export default function App() {
     </div>
   );
 
-  // Admin mode check
-  if (isAdminMode) {
-    return <AdminApp />;
-  }
-
   // Restore persistence on state changes and check real-time auth
   useEffect(() => {
     if (isAdminMode) return;
@@ -326,6 +321,11 @@ export default function App() {
       return () => clearInterval(interval);
     }
   }, [view, isAdminMode]);
+
+  // Admin mode check
+  if (isAdminMode) {
+    return <AdminApp />;
+  }
 
   if (view === 'onboarding') {
     return <OnboardingScreen onStart={() => setView('login')} />;
