@@ -56,6 +56,7 @@ const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemaining
 export default function App() {
   const [view, setView] = useState<AppView>('onboarding');
   const [isAdminMode, setIsAdminMode] = useState(false);
+  const [isUserAdmin, setIsUserAdmin] = useState(false);
 
   const [progress, setProgress] = useState<UserProgress>({ 
     completedLessons: new Set(), 
@@ -206,6 +207,7 @@ export default function App() {
 
   const handleLogout = () => {
     authService.signOut();
+    setIsUserAdmin(false);
     handleReset();
   }
   
@@ -223,8 +225,18 @@ export default function App() {
           onSelectLesson={handleSelectLesson}
           isLessonUnlocked={isLessonUnlocked}
         />
-        <footer className="mt-auto text-center text-xs text-slate-600 pt-4 flex flex-col items-center">
-          <button onClick={handleLogout} className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-2 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/20 sm:w-auto flex-shrink-0"
+        <footer className="mt-auto text-center text-xs text-slate-600 pt-4 flex flex-col items-center gap-3 w-full">
+          {isUserAdmin && (
+            <button 
+              onClick={() => {
+                window.location.search = '?admin=true';
+              }} 
+              className="w-full bg-slate-850 hover:bg-slate-800 border border-cyan-400/40 hover:border-cyan-400 text-cyan-400 font-semibold py-2 px-6 rounded-full text-sm transition-all duration-300 transform hover:scale-105 shadow-xl shadow-cyan-400/5 mb-1"
+            >
+              ⚙ Go to Admin Portal
+            </button>
+          )}
+          <button onClick={handleLogout} className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-2 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/20 w-full"
           >Sign Out</button>
         </footer>
       </aside>
@@ -261,8 +273,14 @@ export default function App() {
   useEffect(() => {
     if (isAdminMode) return;
     const unsubscribe = authService.onAuthStateChanged((user) => {
-      if (user && user.isLoggedIn) {
+      if (user) {
         setView('journey');
+        
+        // Detect if logged in user is admin
+        dbService.isUserAdmin(user.email).then((isAdmin) => {
+          setIsUserAdmin(isAdmin);
+        });
+
         dbService.findUser(user.uid).then((dbUser) => {
           if (dbUser) {
             setProgress({

@@ -41,6 +41,7 @@ vi.mock('./services/dbService', () => ({
     createUser: vi.fn().mockResolvedValue({}),
     updateUser: vi.fn().mockResolvedValue({}),
     isUserWhitelisted: vi.fn().mockResolvedValue(true),
+    isUserAdmin: vi.fn().mockResolvedValue(true),
     getAllUsersProgress: vi.fn().mockResolvedValue([])
   }
 }));
