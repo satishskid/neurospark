@@ -23,21 +23,20 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onStart }) => {
         </div>
       <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center max-w-6xl mx-auto flex-grow justify-center">
         <div className="relative h-96 hidden lg:flex items-center justify-center">
-             <ConceptCard icon={<BrainIcon className="w-7 h-7 text-cyan-400" />} name="AI Models" className="absolute top-10 left-0 animate-float" />
-             <ConceptCard icon={<CodeBracketSquareIcon className="w-7 h-7 text-green-400" />} name="JSON Data" className="absolute top-32 right-0 animate-float animation-delay-1000" />
-             <ConceptCard icon={<CubeTransparentIcon className="w-7 h-7 text-yellow-400" />} name="Frontend/Backend" className="absolute bottom-20 left-10 animate-float animation-delay-2000" />
+             <ConceptCard icon={<BrainIcon className="w-7 h-7 text-cyan-400" />} name="Clinical AI" className="absolute top-10 left-0 animate-float" />
+             <ConceptCard icon={<CodeBracketSquareIcon className="w-7 h-7 text-green-400" />} name="RAG & Privacy" className="absolute top-32 right-0 animate-float animation-delay-1000" />
+             <ConceptCard icon={<CubeTransparentIcon className="w-7 h-7 text-yellow-400" />} name="Agentic Workflows" className="absolute bottom-20 left-10 animate-float animation-delay-2000" />
              <LogoIcon className="w-40 h-40 text-slate-500" />
         </div>
         <div className="text-center lg:text-left">
             <div className="inline-block lg:hidden p-4 bg-slate-800 rounded-full mb-6">
               <LogoIcon className="w-16 h-16 text-cyan-400" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight tracking-tighter">
-              GreyWaken<br/>Awaken Your AI Potential
+            <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight tracking-tighter">
+              Greywaken:<br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">The Clinical AI Masterclass</span>
             </h1>
-            <p className="text-lg md:text-xl text-slate-400 mb-8 max-w-lg mx-auto lg:mx-0">
-              You&apos;re standing at the dawn of a new age. From government halls to startup garages, everyone is talking about Artificial Intelligence. Why? Because it&apos;s a fundamental shift in civilization, like the invention of electricity or the internet.
-              AI is helping cure diseases, create breathtaking art, and solve global challenges. Becoming AI-aware is the key to participating in the future. This journey will empower you to understand this revolution and turn its potential into your personal superpower.
+            <p className="text-lg md:text-xl text-slate-400 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+              Stop feeling behind the curve. Master the modern AI ecosystem through the lens of human biology and clinical reasoning. From understanding how LLMs diagnose via Chain-of-Thought, to building Agentic workflows and navigating the frontier of Open-Source models. This is your definitive guide to safely deploying AI in healthcare.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
                 <button

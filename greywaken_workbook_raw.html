@@ -1,0 +1,149 @@
+<h1>Greywaken Clinical AI Workbook: Mapping the Frontier</h1>
+<p><strong>A Reference Guide for Medical Professionals</strong></p>
+<hr>
+<h2>Module 1: Software as a Biological System</h2>
+<p><em>Deconstruct modern software architecture using clinical anatomy.</em></p>
+<p>Welcome, Doctor! Entering the world of tech can feel like learning a foreign language. Let&#39;s skip the jargon and translate software architecture into a language you already speak: <strong>Human Biology</strong>.</p>
+<h3>The Body-Software Map</h3>
+<ul>
+<li><strong>The Skin &amp; Senses (Frontend):</strong> The visual screen you tap on. Like skin, it is the outer boundary. Like eyes, it detects interactions (clicks and taps).</li>
+<li><strong>The Nervous System (APIs):</strong> The rapid-signaling neural pathways. When you click a button, the API carries that sensory signal from the skin down to the internal organs.</li>
+<li><strong>The Visceral Organs (Backend):</strong> The heavy engines (Servers). They sit silently in the dark, digesting inputs and executing complex clinical risk scores.</li>
+<li><strong>The Hippocampus (Database):</strong> Long-term memory storage. Where all patient histories are locked away safely.</li>
+</ul>
+<h3>The Clinical Chart of Data (JSON)</h3>
+<p>In medicine, you write progress notes using a standard format (SOAP) so everyone can read your chart. In software, apps do the exact same thing using a format called <strong>JSON</strong>. JSON simply maps &quot;labels&quot; to &quot;values&quot;.</p>
+<pre><code class="language-json">{
+  &quot;patientName&quot;: &quot;John Doe&quot;,
+  &quot;chiefComplaint&quot;: &quot;chest pain&quot;,
+  &quot;heartRateBpm&quot;: 108
+}
+</code></pre>
+<hr>
+<h2>Module 2: Anatomy &amp; Physiology of the LLM Brain</h2>
+<p><em>Learn how large language models think, recall medical facts, and process clinical text.</em></p>
+<p>How does an AI read a medical textbook? It doesn&#39;t see letters or words. It turns text into numbers. Let&#39;s break this down into two simple concepts: <strong>Tokens</strong> and <strong>Embeddings</strong>.</p>
+<h3>Neurons of Meaning</h3>
+<ol>
+<li><strong>Tokens (The Syllables):</strong> An LLM chops words into tiny pieces called Tokens. A common word like &quot;Heart&quot; is 1 token. A complex word like &quot;Levothyroxine&quot; gets chopped into four pieces.</li>
+<li><strong>Embeddings (The GPS Map):</strong> Once words are chopped up, the AI gives them a mathematical GPS coordinate on a giant 3D map. Words with similar meanings (like &quot;chest pain&quot; and &quot;angina&quot;) are placed right next to each other on the map. Totally unrelated words (like &quot;cabbage&quot;) are placed thousands of miles away.</li>
+</ol>
+<h3>The AI Brain: Transformers &amp; Next-Token Prediction</h3>
+<p>At its core, an LLM is doing one incredibly simple thing over and over again: <strong>Predicting the next word</strong>. It is exactly like the autocomplete feature on your iPhone, but scaled up by a trillion times.</p>
+<p><strong>The Transformer (Attention Mechanism)</strong>
+How does it know which word to predict so accurately? It uses the Transformer architecture. Imagine a triage nurse reading a 50-page messy patient chart. The nurse pays intense <strong>attention</strong> to the phrase <em>&quot;Allergy: Penicillin&quot;</em> and ignores <em>&quot;Patient wore a blue shirt&quot;</em>. Transformers mathematically &quot;pay attention&quot; to the most clinically relevant words in your prompt.</p>
+<h3>Multimodality (The Senses of AI)</h3>
+<p>Standard text LLMs are like diagnosing a patient over the phone. <strong>Multimodal models</strong> (like Gemini 1.5 Pro) are like standing in the exam room. They can look at a chest X-ray or listen to a live patient interview because they translate images and audio into the <em>exact same GPS map</em> as text!</p>
+<hr>
+<h2>Module 3: Clinicians as &quot;Vibe Coders&quot;</h2>
+<p><em>Learn to direct AI clinical reasoning.</em></p>
+<p>Today, you can build full-scale clinical software yourself by becoming a <strong>&quot;Vibe Coder&quot;</strong>. You don&#39;t write code; you direct it, exactly like supervising a brilliant but highly literal resident physician.</p>
+<h3>Prompting Guidelines</h3>
+<ol>
+<li><strong>Define the Persona:</strong> Give the AI a role. <em>&quot;Act as a Senior Clinical Informatics Specialist.&quot;</em></li>
+<li><strong>Set Clinical Guardrails:</strong> Tell the resident what to avoid. <em>&quot;Ensure this pediatric dosage calculator caps at the adult maximum weight.&quot;</em></li>
+</ol>
+<h3>Advanced Clinical Reasoning: Chain-of-Thought (CoT)</h3>
+<p>A standard prompt can lead to <strong>Premature Closure</strong>—the AI jumping to an obvious conclusion without considering complex zebras.
+You can fix this by forcing the AI to &quot;show its math&quot; using Chain-of-Thought prompting, which mirrors how medical schools teach the Differential Diagnosis process.
+<strong>Example:</strong> <em>&quot;A 24yo female presents with RLQ pain and fever. Before giving a final diagnosis, think step-by-step. 1. List top 5 differentials. 2. State clinical findings for each. 3. Propose imaging. 4. Finally, state the most likely diagnosis.&quot;</em></p>
+<hr>
+<h2>Module 4: The Hippocratic Oath for Clinical AI</h2>
+<p><em>Enforce patient privacy and diagnose AI hallucinations.</em></p>
+<h3>Preserving Patient Privacy: HIPAA &amp; PHI</h3>
+<p>The Golden Rule of Clinical AI: <strong>NEVER input raw patient identifiers into standard consumer AI models.</strong>
+To use AI safely:</p>
+<ol>
+<li><strong>De-identification:</strong> Remove all 18 HIPAA identifiers before pasting any chart text.</li>
+<li><strong>Business Associate Agreements (BAAs):</strong> Only input raw data into hospital-approved enterprise environments that legally guarantee <strong>Zero-Data Retention</strong>.</li>
+</ol>
+<h3>The Open-Book Exam: RAG</h3>
+<p>If LLMs calculate the next word using math, they can invent fake citations that &quot;look&quot; mathematically perfect. This is called a <strong>Hallucination</strong>.
+How do hospitals use AI safely? <strong>Retrieval-Augmented Generation (RAG)</strong>.
+Instead of asking the AI to guess an answer from memory, RAG forces the AI to take an &quot;open-book exam&quot;.</p>
+<ol>
+<li><strong>Retrieve:</strong> The system searches a verified internal hospital database.</li>
+<li><strong>Augment:</strong> It pulls the exact paragraphs from the verified PDF.</li>
+<li><strong>Generate:</strong> The AI answers the question using ONLY the provided text.</li>
+</ol>
+<hr>
+<h2>Module 5: Clinical Workflows in Action</h2>
+<p><em>Master high-yield workflows and explore Agentic AI.</em></p>
+<h3>Agentic AI (The Autonomous Resident)</h3>
+<p>The next frontier is moving from passive chatbots to <strong>Agentic AI</strong>. A chatbot only <em>talks</em>. An Agent can <em>take action</em> using digital tools.</p>
+<ul>
+<li><strong>Calculators:</strong> An agent writes a script, runs it in a calculator tool, and returns the verified medical score.</li>
+<li><strong>The EHR Tool:</strong> An agent autonomously uses a scheduling API to find an open slot and book a patient appointment.
+Agentic workflows upgrade the AI from a medical textbook to a resident physician synthesizing information and placing orders.</li>
+</ul>
+<hr>
+<h2>Module 6: The Clinical AI Landscape</h2>
+<p><em>Navigate the modern ecosystem of specialized AI models.</em></p>
+<h3>The Big Three</h3>
+<ul>
+<li><strong>Google Gemini (The Multimodal Researcher):</strong> Massive context window. Best tool for analyzing huge stacks of PDFs, patient histories, and natively understanding medical imaging.</li>
+<li><strong>ChatGPT (The Creative Workhorse):</strong> Incredible at code generation and intense Chain-of-Thought reasoning (o1/o3 models). Perfect for building clinical apps.</li>
+<li><strong>Claude by Anthropic (The Careful Scribe):</strong> Built with &quot;Constitutional AI.&quot; Pristine, nuanced prose. Best for drafting sensitive patient referral letters.</li>
+</ul>
+<h3>Specialized AI: Perplexity</h3>
+<p>Perplexity is an engine built entirely on RAG. It searches the live internet (or PubMed), reads the top 20 links, and writes a synthesis <strong>with inline footnote citations</strong>.</p>
+<hr>
+<h2>Module 7: The World of AI: Mapping the Frontier</h2>
+<p><em>Explore the global AI ecosystem and model architectures.</em></p>
+<h3>Where AI Lives: Open vs. Closed</h3>
+<ul>
+<li><strong>Closed Source (Proprietary):</strong> Like a proprietary drug (e.g., GPT-4). You pay to use it, but the company keeps the recipe a secret. Cloud-hosted.</li>
+<li><strong>Open Source &amp; Hugging Face:</strong> Like a generic drug (e.g., Llama 3). The recipe is public. <strong>Hugging Face</strong> is the global library where developers share these models for free. Hospitals can download them and run them <strong>locally</strong> on their own servers for 100% HIPAA compliance.</li>
+</ul>
+<h3>Architecture: How the Brain is Built</h3>
+<ul>
+<li><strong>Small vs. Large Models:</strong> A 7-Billion Parameter model (fast medical student) vs a 1-Trillion Parameter model (the Chief of Staff).</li>
+<li><strong>Mixture of Experts (MoE):</strong> MoE routes your prompt to specialized sub-networks (like a hospital routing a patient to a Cardiologist instead of a General Practitioner).</li>
+<li><strong>Thinking vs. Flash Models:</strong><ul>
+<li><em>Flash Models (System 1):</em> Split-second reflexes (Gemini 1.5 Flash). Cheap, perfect for real-time chatbots.</li>
+<li><em>Thinking Models (System 2):</em> Slow, deliberate reasoning (OpenAI o1). Takes 10-30 seconds to answer via Chain of Thought. Best for complex diagnostics.</li>
+</ul>
+</li>
+</ul>
+<h3>How to Judge an AI</h3>
+<p>The gold standard is the <strong>LMSYS Chatbot Arena</strong>. It operates exactly like a blind, randomized controlled clinical trial. Humans vote on which answer is better between two anonymous models.</p>
+<hr>
+<h2>Appendix: Visual Learning References</h2>
+<p>Below is the curated list of recommended YouTube explainer videos corresponding to the curriculum:</p>
+<p><strong>Module 1: Software Biology &amp; JSON</strong></p>
+<ul>
+<li><em>What is an API? (Codecademy)</em> - <a href="https://youtu.be/s7wmiS2mSXY">https://youtu.be/s7wmiS2mSXY</a></li>
+<li><em>JSON in 100 Seconds (Fireship)</em> - <a href="https://youtu.be/iiADhChRriM">https://youtu.be/iiADhChRriM</a></li>
+</ul>
+<p><strong>Module 2: The LLM Brain</strong></p>
+<ul>
+<li><em>Large Language Models explained briefly</em> - <a href="https://youtu.be/LPZh9BOjkQs">https://youtu.be/LPZh9BOjkQs</a></li>
+<li><em>How Large Language Models Work</em> - <a href="https://youtu.be/5sLYAQS9sWQ">https://youtu.be/5sLYAQS9sWQ</a></li>
+<li><em>But what is a neural network?</em> - <a href="https://youtu.be/aircAruvnKk">https://youtu.be/aircAruvnKk</a></li>
+<li><em>Transformers, the tech behind LLMs</em> - <a href="https://youtu.be/wjZofJX0v4M">https://youtu.be/wjZofJX0v4M</a></li>
+<li><em>How LLMs Actually Generate Text</em> - <a href="https://youtu.be/NKnZYvZA7w4">https://youtu.be/NKnZYvZA7w4</a></li>
+</ul>
+<p><strong>Module 3: Prompt Engineering</strong></p>
+<ul>
+<li><em>Prompt Engineering Tutorial</em> - <a href="https://youtu.be/jC4v5AS4ART">https://youtu.be/jC4v5AS4ART</a></li>
+<li><em>Chain of Thought Prompting Explained</em> - <a href="https://youtu.be/LGLmxcBv0B8">https://youtu.be/LGLmxcBv0B8</a></li>
+</ul>
+<p><strong>Module 4: RAG &amp; Hallucinations</strong></p>
+<ul>
+<li><em>Why do LLMs Hallucinate?</em> - <a href="https://youtu.be/8IhiLYieyQ0">https://youtu.be/8IhiLYieyQ0</a></li>
+<li><em>What is Retrieval-Augmented Generation (RAG)?</em> - <a href="https://youtu.be/T-D1OfcDW1M">https://youtu.be/T-D1OfcDW1M</a></li>
+</ul>
+<p><strong>Module 5: Agentic AI</strong></p>
+<ul>
+<li><em>AI Agents Explained by Dr. Andrew Ng</em> - <a href="https://youtu.be/F8NKVhkZZWI">https://youtu.be/F8NKVhkZZWI</a></li>
+</ul>
+<p><strong>Module 6: Frontier Models</strong></p>
+<ul>
+<li><em>ChatGPT vs Claude vs Gemini</em> - <a href="https://youtu.be/kC6yO9N_Bko">https://youtu.be/kC6yO9N_Bko</a></li>
+<li><em>Perplexity AI Tutorial</em> - <a href="https://youtu.be/D5R4_J4vR0E">https://youtu.be/D5R4_J4vR0E</a></li>
+</ul>
+<p><strong>Module 7: The AI World</strong></p>
+<ul>
+<li><em>Hugging Face</em> - <a href="https://huggingface.co">https://huggingface.co</a></li>
+<li><em>LMSYS Chatbot Arena</em> - <a href="https://lmarena.ai">https://lmarena.ai</a></li>
+</ul>
