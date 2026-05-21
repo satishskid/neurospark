@@ -1,7 +1,7 @@
 // Simple API test script for greybrain.ai
 // This tests the Gemini API integration without requiring a full React environment
 
-import { evaluateExercise, getChatbotResponse } from './services/geminiService.js';
+import { evaluateExercise, getChatbotResponse } from './services/aiService.js';
 import { CURRICULUM } from './constants.tsx';
 
 async function testAPIIntegration() {

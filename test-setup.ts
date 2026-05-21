@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 // Mock the Gemini API for testing
-vi.mock('./services/geminiService', () => ({
+vi.mock('./services/aiService', () => ({
   evaluateExercise: vi.fn().mockResolvedValue({
     isCorrect: true,
     feedback: 'Great job! This is a test response.'

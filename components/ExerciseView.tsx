@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { ExerciseData } from '../types';
-import { evaluateExercise } from '../services/geminiService';
+import { evaluateExercise } from '../services/aiService';
 import { LightBulbIcon, CheckCircleIcon, TrophyIcon } from './Icons';
 
 interface ExerciseViewProps {

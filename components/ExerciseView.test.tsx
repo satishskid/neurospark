@@ -3,10 +3,10 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ExerciseView from './ExerciseView';
 import { ExerciseData } from '../types';
-import * as geminiService from '../services/geminiService';
+import * as aiService from '../services/aiService';
 
 // Mock the gemini service
-vi.mock('../services/geminiService');
+vi.mock('../services/aiService');
 
 const mockExercise: ExerciseData = {
   prompt: <div>Create a JSON object with name and age properties</div>,
@@ -52,7 +52,7 @@ describe('ExerciseView Component', () => {
     const mockOnComplete = vi.fn();
     
     // Mock successful evaluation
-    vi.mocked(geminiService.evaluateExercise).mockResolvedValue({
+    vi.mocked(aiService.evaluateExercise).mockResolvedValue({
       isCorrect: true,
       feedback: 'Perfect! Your JSON object is correctly formatted.'
     });
@@ -65,7 +65,7 @@ describe('ExerciseView Component', () => {
     fireEvent.change(textarea, { target: { value: '{"name": "John", "age": 30}' } });
     await user.click(submitButton);
 
-    expect(geminiService.evaluateExercise).toHaveBeenCalledWith(
+    expect(aiService.evaluateExercise).toHaveBeenCalledWith(
       'Check if the JSON object has name and age properties',
       '{"name": "John", "age": 30}'
     );
@@ -76,7 +76,7 @@ describe('ExerciseView Component', () => {
     const mockOnComplete = vi.fn();
 
     // Mock delayed evaluation
-    vi.mocked(geminiService.evaluateExercise).mockImplementation(
+    vi.mocked(aiService.evaluateExercise).mockImplementation(
       () => new Promise(resolve => setTimeout(() => resolve({
         isCorrect: true,
         feedback: 'Great job!'
@@ -96,7 +96,7 @@ describe('ExerciseView Component', () => {
     const user = userEvent.setup();
     const mockOnComplete = vi.fn();
 
-    vi.mocked(geminiService.evaluateExercise).mockResolvedValue({
+    vi.mocked(aiService.evaluateExercise).mockResolvedValue({
       isCorrect: true,
       feedback: 'Excellent work! Your solution is perfect.'
     });
@@ -116,7 +116,7 @@ describe('ExerciseView Component', () => {
     const user = userEvent.setup();
     const mockOnComplete = vi.fn();
 
-    vi.mocked(geminiService.evaluateExercise).mockResolvedValue({
+    vi.mocked(aiService.evaluateExercise).mockResolvedValue({
       isCorrect: false,
       feedback: 'Good try! You\'re missing the age property. Try adding it to your JSON object.'
     });
@@ -137,7 +137,7 @@ describe('ExerciseView Component', () => {
     const mockOnComplete = vi.fn();
     
     // First submission - incorrect
-    vi.mocked(geminiService.evaluateExercise).mockResolvedValueOnce({
+    vi.mocked(aiService.evaluateExercise).mockResolvedValueOnce({
       isCorrect: false,
       feedback: 'Try again!'
     });
@@ -163,7 +163,7 @@ describe('ExerciseView Component', () => {
     const user = userEvent.setup();
     const mockOnComplete = vi.fn();
     
-    vi.mocked(geminiService.evaluateExercise).mockResolvedValue({
+    vi.mocked(aiService.evaluateExercise).mockResolvedValue({
       isCorrect: true,
       feedback: 'Perfect!'
     });
@@ -187,7 +187,7 @@ describe('ExerciseView Component', () => {
     const user = userEvent.setup();
     const mockOnComplete = vi.fn();
     
-    vi.mocked(geminiService.evaluateExercise).mockRejectedValue(new Error('Network error'));
+    vi.mocked(aiService.evaluateExercise).mockRejectedValue(new Error('Network error'));
     
     render(<ExerciseView exercise={mockExercise} onComplete={mockOnComplete} />);
     

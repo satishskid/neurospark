@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// Unmock geminiService to test the actual implementation
-vi.unmock('./geminiService');
+// Unmock aiService to test the actual implementation
+vi.unmock('./aiService');
 
-import { evaluateExercise, getChatbotResponse } from './geminiService';
+import { evaluateExercise, getChatbotResponse } from './aiService';
 import { Module } from '../types';
 
 // Mock the Google GenAI module
@@ -17,6 +17,20 @@ vi.mock('@google/genai', () => {
       },
       chats: {
         create: createChat
+      }
+    }))
+  };
+});
+
+// Mock the Groq module
+vi.mock('groq-sdk', () => {
+  const createCompletion = vi.fn();
+  return {
+    Groq: vi.fn().mockImplementation(() => ({
+      chat: {
+        completions: {
+          create: createCompletion
+        }
       }
     }))
   };
@@ -36,28 +50,38 @@ const mockModule: Module = {
   ]
 };
 
-describe('Gemini Service', () => {
+describe('AI Service', () => {
+  let localStorageMock: { getItem: ReturnType<typeof vi.fn> };
+
   beforeEach(() => {
     vi.clearAllMocks();
+    
+    // Setup localStorage mock
+    localStorageMock = {
+      getItem: vi.fn(),
+    };
+    Object.defineProperty(global, 'localStorage', {
+      value: localStorageMock,
+      writable: true
+    });
+    
+    // Clear meta env
+    (import.meta as any).env = {};
   });
 
   describe('evaluateExercise', () => {
     it('returns fallback response when API key is not set', async () => {
-      // Mock missing API key
-      const originalEnv = process.env.API_KEY;
-      delete process.env.API_KEY;
+      localStorageMock.getItem.mockReturnValue(null);
       
       const result = await evaluateExercise('Test prompt', 'Test input');
       
       expect(result.isCorrect).toBe(false);
-      expect(result.feedback).toContain('API Key is not configured');
-      
-      // Restore original env
-      process.env.API_KEY = originalEnv;
+      expect(result.feedback).toContain('API Key in the settings');
     });
 
     it('handles API errors gracefully', async () => {
-      // Mock API error
+      localStorageMock.getItem.mockReturnValue('test-gemini-key');
+      
       const { GoogleGenAI } = await import('@google/genai');
       const mockAI = new GoogleGenAI({ apiKey: 'test' });
       mockAI.models.generateContent.mockRejectedValue(new Error('API Error'));
@@ -69,6 +93,8 @@ describe('Gemini Service', () => {
     });
 
     it('parses successful API response correctly', async () => {
+      localStorageMock.getItem.mockReturnValue('test-gemini-key');
+      
       const mockResponse = {
         text: JSON.stringify({
           isCorrect: true,
@@ -87,6 +113,8 @@ describe('Gemini Service', () => {
     });
 
     it('handles malformed JSON responses', async () => {
+      localStorageMock.getItem.mockReturnValue('test-gemini-key');
+      
       const mockResponse = {
         text: 'Invalid JSON response'
       };
@@ -104,19 +132,16 @@ describe('Gemini Service', () => {
 
   describe('getChatbotResponse', () => {
     it('returns fallback response when API key is not set', async () => {
-      // Mock missing API key
-      const originalEnv = process.env.API_KEY;
-      delete process.env.API_KEY;
+      localStorageMock.getItem.mockReturnValue(null);
       
       const result = await getChatbotResponse(mockModule, 'Test curriculum', [], 'Test query');
       
-      expect(result).toContain('AI Tutor is currently unavailable');
-      
-      // Restore original env
-      process.env.API_KEY = originalEnv;
+      expect(result).toContain('currently unavailable');
     });
 
     it('handles API errors gracefully', async () => {
+      localStorageMock.getItem.mockReturnValue('test-gemini-key');
+      
       const { GoogleGenAI } = await import('@google/genai');
       const mockAI = new GoogleGenAI({ apiKey: 'test' });
       const mockChat = {
@@ -126,10 +151,12 @@ describe('Gemini Service', () => {
       
       const result = await getChatbotResponse(mockModule, 'Test curriculum', [], 'Test query');
       
-      expect(result).toContain('trouble connecting');
+      expect(result).toContain('unavailable or you might be out of quota');
     });
 
     it('processes successful chat response', async () => {
+      localStorageMock.getItem.mockReturnValue('test-gemini-key');
+      
       const { GoogleGenAI } = await import('@google/genai');
       const mockAI = new GoogleGenAI({ apiKey: 'test' });
       const mockChat = {
@@ -146,6 +173,8 @@ describe('Gemini Service', () => {
     });
 
     it('includes proper system instructions', async () => {
+      localStorageMock.getItem.mockReturnValue('test-gemini-key');
+      
       const { GoogleGenAI } = await import('@google/genai');
       const mockAI = new GoogleGenAI({ apiKey: 'test' });
       const mockChat = {
@@ -165,6 +194,8 @@ describe('Gemini Service', () => {
     });
 
     it('formats chat history correctly', async () => {
+      localStorageMock.getItem.mockReturnValue('test-gemini-key');
+      
       const { GoogleGenAI } = await import('@google/genai');
       const mockAI = new GoogleGenAI({ apiKey: 'test' });
       const mockChat = {

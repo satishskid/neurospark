@@ -153,10 +153,12 @@ const WhitelistPanel: React.FC = () => {
   };
 
   // Filter whitelist based on search
-  const filteredWhitelist = whitelist.filter(item => 
-    item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.addedBy.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredWhitelist = whitelist.filter(item => {
+    const emailStr = item.email || '';
+    const addedByStr = item.addedBy || '';
+    const query = searchQuery.toLowerCase();
+    return emailStr.toLowerCase().includes(query) || addedByStr.toLowerCase().includes(query);
+  });
 
   return (
     <div className="space-y-6">

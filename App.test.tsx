@@ -47,7 +47,7 @@ vi.mock('./services/dbService', () => ({
 }));
 
 // Mock the Gemini service to avoid real API calls
-vi.mock('./services/geminiService', () => ({
+vi.mock('./services/aiService', () => ({
   evaluateExercise: vi.fn().mockResolvedValue({
     isCorrect: true,
     feedback: 'Great job! This is a test response.'

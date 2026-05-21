@@ -1,27 +1,29 @@
 import { GoogleGenAI } from "@google/genai";
+import { Groq } from "groq-sdk";
 import { ChatHistoryItem, Module } from "../types";
 
-// Ensure the API key is available. In a real app, this would be handled by the environment.
-if (!process.env.API_KEY) {
-  // In a real scenario, you might have a fallback or error message.
-  // For this example, we'll log a warning.
-  console.warn("API_KEY environment variable not set. AI features will be disabled.");
-}
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
-const model = "gemini-2.5-flash";
-
+const GEMINI_MODEL = "gemini-2.5-flash";
+const GROQ_MODEL = "llama-3.1-8b-instant"; // or another valid groq model
 
 interface EvaluationResult {
   isCorrect: boolean;
   feedback: string;
 }
 
+const getKeys = () => {
+  return {
+    geminiKey: localStorage.getItem('byok_gemini_key') || import.meta.env.VITE_GEMINI_API_KEY || '',
+    groqKey: localStorage.getItem('byok_groq_key') || import.meta.env.VITE_GROQ_API_KEY || ''
+  };
+};
+
 export async function evaluateExercise(exerciseGoal: string, userInput: string): Promise<EvaluationResult> {
-  if (!process.env.API_KEY) {
+  const { geminiKey, groqKey } = getKeys();
+  
+  if (!geminiKey && !groqKey) {
      return {
       isCorrect: false,
-      feedback: "API Key is not configured. Cannot evaluate exercise.",
+      feedback: "Please configure your Gemini or Groq API Key in the settings to use this feature.",
     };
   }
 
@@ -50,46 +52,74 @@ export async function evaluateExercise(exerciseGoal: string, userInput: string):
     }
     The "isCorrect" field must be \`true\` if the solution is perfect, otherwise \`false\`.`;
 
-  try {
-    const response = await ai.models.generateContent({
-      model: model,
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-      }
-    });
-    
-    const text = response.text;
+  let lastError: any = null;
 
-    // The response is expected to be a clean JSON string because of responseMimeType
-    const result: EvaluationResult = JSON.parse(text || '{}');
-    return result;
-
-  } catch (error) {
-    console.error("Error evaluating exercise with Gemini:", error);
-    // Attempt to parse a potentially malformed response as a fallback
-    if (error instanceof SyntaxError && error.message.includes("JSON")) {
-       try {
-         const rawResponse = (error as any).response?.text || '';
-         const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
-         if (jsonMatch) {
-            return JSON.parse(jsonMatch[0]) as EvaluationResult;
-         }
-       } catch (e) {
-         // fall through to generic error
-       }
+  // Try Gemini first
+  if (geminiKey) {
+    try {
+      const ai = new GoogleGenAI({ apiKey: geminiKey });
+      const response = await ai.models.generateContent({
+        model: GEMINI_MODEL,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+        }
+      });
+      
+      const text = response.text;
+      return JSON.parse(text || '{}');
+    } catch (error) {
+      console.error("Error evaluating exercise with Gemini:", error);
+      lastError = error;
+      // Fall through to Groq if available
     }
-
-    return {
-      isCorrect: false,
-      feedback: "Sorry, I had a little trouble processing that. It might be a temporary hiccup. Please try submitting again!",
-    };
   }
+
+  // Fallback to Groq
+  if (groqKey) {
+    try {
+      const groq = new Groq({ apiKey: groqKey, dangerouslyAllowBrowser: true });
+      const response = await groq.chat.completions.create({
+        messages: [
+          { role: "system", content: "You are an AI programming tutor. Always output raw JSON with no markdown." },
+          { role: "user", content: prompt }
+        ],
+        model: GROQ_MODEL,
+        response_format: { type: "json_object" }
+      });
+      
+      const text = response.choices[0]?.message?.content;
+      return JSON.parse(text || '{}');
+    } catch (error) {
+      console.error("Error evaluating exercise with Groq:", error);
+      lastError = error;
+    }
+  }
+
+  // Attempt to parse a potentially malformed response as a fallback
+  if (lastError instanceof SyntaxError && lastError.message.includes("JSON")) {
+     try {
+       const rawResponse = (lastError as any).response?.text || '';
+       const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
+       if (jsonMatch) {
+          return JSON.parse(jsonMatch[0]) as EvaluationResult;
+       }
+     } catch (e) {
+       // fall through
+     }
+  }
+
+  return {
+    isCorrect: false,
+    feedback: "Sorry, I had a little trouble processing that. It might be a temporary hiccup or your API quota is exhausted. Please try submitting again!",
+  };
 }
 
 export async function getChatbotResponse(module: Module, curriculumSummary: string, chatHistory: ChatHistoryItem[], newUserQuery: string): Promise<string> {
-    if (!process.env.API_KEY) {
-        return "Sorry, the AI Tutor is currently unavailable because the API Key is not configured.";
+    const { geminiKey, groqKey } = getKeys();
+    
+    if (!geminiKey && !groqKey) {
+        return "Sorry, the AI Tutor is currently unavailable. Please configure your Gemini or Groq API Key in the settings.";
     }
 
     const systemPrompt = `You are greybrain.ai, a friendly, patient, and brilliant AI Tutor. Your student is a complete beginner with zero programming background. Your tone is always encouraging and supportive.
@@ -122,25 +152,51 @@ export async function getChatbotResponse(module: Module, curriculumSummary: stri
         - Keep answers concise. Offer to elaborate if they want more detail.
         - Do not provide code unless the module is explicitly about it (like JSON).`;
 
-    const conversation = chatHistory.map(item => ({
-        role: item.role,
-        parts: [{ text: item.content }]
-    }));
+    // Try Gemini first
+    if (geminiKey) {
+      try {
+          const ai = new GoogleGenAI({ apiKey: geminiKey });
+          const conversation = chatHistory.map(item => ({
+              role: item.role,
+              parts: [{ text: item.content }]
+          }));
 
-    try {
-        const chat = ai.chats.create({
-            model: model,
-            history: conversation,
-            config: {
-                systemInstruction: systemPrompt,
-            }
-        });
-        
-        const response = await chat.sendMessage({message: newUserQuery});
-
-        return response.text || "I'm sorry, I couldn't generate a response.";
-    } catch (error) {
-        console.error("Error getting chatbot response from Gemini:", error);
-        return "I'm sorry, I seem to be having a little trouble connecting. Please try asking again in a moment.";
+          const chat = ai.chats.create({
+              model: GEMINI_MODEL,
+              history: conversation,
+              config: {
+                  systemInstruction: systemPrompt,
+              }
+          });
+          
+          const response = await chat.sendMessage({message: newUserQuery});
+          return response.text || "I'm sorry, I couldn't generate a response.";
+      } catch (error) {
+          console.error("Error getting chatbot response from Gemini:", error);
+          // Fall through to Groq
+      }
     }
+
+    // Fallback to Groq
+    if (groqKey) {
+       try {
+          const groq = new Groq({ apiKey: groqKey, dangerouslyAllowBrowser: true });
+          const messages = [
+            { role: "system", content: systemPrompt },
+            ...chatHistory.map(item => ({ role: item.role === 'model' ? 'assistant' : item.role, content: item.content })),
+            { role: "user", content: newUserQuery }
+          ] as any[];
+
+          const response = await groq.chat.completions.create({
+            messages,
+            model: GROQ_MODEL
+          });
+
+          return response.choices[0]?.message?.content || "I'm sorry, I couldn't generate a response.";
+       } catch (error) {
+          console.error("Error getting chatbot response from Groq:", error);
+       }
+    }
+
+    return "I'm sorry, both AI services seem to be unavailable or you might be out of quota. Please check your API keys or try again later.";
 }
