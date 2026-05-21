@@ -5,14 +5,15 @@ import OnboardingScreen from './components/OnboardingScreen';
 import CurriculumView from './components/CurriculumView';
 import LessonView from './components/LessonView';
 import NextStepsView from './components/NextStepsView';
-import { LogoIcon, ArrowPathIcon } from './components/Icons';
 import CertificateView from './components/CertificateView';
 import { TutorialView } from './components/TutorialView';
+import { LogoIcon, ArrowPathIcon, Cog6ToothIcon } from './components/Icons';
 import AdminApp from './AdminApp';
 import { authService } from './services/firebaseService';
 import { dbService } from './services/dbService';
 import { auth } from './firebaseConfig';
 import LoginScreen from './components/LoginScreen';
+import SettingsModal from './components/SettingsModal';
 
 const APP_STORAGE_KEY = 'greybrain-ai-journey-progress';
 
@@ -25,7 +26,7 @@ const formatTime = (minutes: number) => {
   return `${hours}h ${remainingMinutes}m`;
 }
 
-const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void }) => {
+const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemainingTime, totalRemainingTime, onReload, onOpenSettings }: { allLessonsCount: number, completedLessonsCount: number, moduleRemainingTime: number, totalRemainingTime: number, onReload: () => void, onOpenSettings: () => void }) => {
   const progressPercentage = allLessonsCount > 0 ? (completedLessonsCount / allLessonsCount) * 100 : 0;
   
   return (
@@ -35,6 +36,9 @@ const JourneyHeader = ({ allLessonsCount, completedLessonsCount, moduleRemaining
                 Your Journey
                  <button onClick={onReload} title="Stuck? Reload Journey" className="p-1 rounded-full hover:bg-slate-700 transition-colors">
                     <ArrowPathIcon className="w-4 h-4 text-slate-400" />
+                </button>
+                 <button onClick={onOpenSettings} title="Settings & API Keys" className="p-1 rounded-full hover:bg-slate-700 transition-colors">
+                    <Cog6ToothIcon className="w-5 h-5 text-slate-400" />
                 </button>
             </h2>
              <div className="text-right">
@@ -57,6 +61,7 @@ export default function App() {
   const [view, setView] = useState<AppView>('onboarding');
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const [progress, setProgress] = useState<UserProgress>({ 
     completedLessons: new Set(), 
@@ -160,11 +165,12 @@ export default function App() {
   }, [currentLessonId, progress.completedLessons]);
 
   const isLessonUnlocked = useCallback((lessonId: string) => {
+    if (isUserAdmin) return true;
     const lessonIndex = allLessons.findIndex(l => l.id === lessonId);
     if (lessonIndex === 0) return true;
     const previousLesson = allLessons[lessonIndex - 1];
     return progress.completedLessons.has(previousLesson.id);
-  }, [allLessons, progress.completedLessons]);
+  }, [allLessons, progress.completedLessons, isUserAdmin]);
 
   const handleStartJourney = (name: string) => {
     setProgress({ completedLessons: new Set(), userName: name, tutorialCompleted: false });
@@ -224,6 +230,7 @@ export default function App() {
           currentLessonId={currentLessonId}
           onSelectLesson={handleSelectLesson}
           isLessonUnlocked={isLessonUnlocked}
+          isUserAdmin={isUserAdmin}
         />
         <footer className="mt-auto text-center text-xs text-slate-600 pt-4 flex flex-col items-center gap-3 w-full">
           {isUserAdmin && (
@@ -248,6 +255,7 @@ export default function App() {
             moduleRemainingTime={moduleRemainingTime}
             totalRemainingTime={remainingTime}
             onReload={() => window.location.reload()}
+            onOpenSettings={() => setIsSettingsOpen(true)}
           />
          <div className="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12 relative">
             {currentLesson ? (
@@ -261,6 +269,7 @@ export default function App() {
             )}
          </div>
       </main>
+      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>
   );
 

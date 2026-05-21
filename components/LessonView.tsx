@@ -11,9 +11,7 @@ const ChatbotModal = ({ module, onClose }: { module: Module | undefined, onClose
     const [history, setHistory] = useState<ChatHistoryItem[]>([]);
     const [userInput, setUserInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [showSettings, setShowSettings] = useState(false);
-    const [geminiKey, setGeminiKey] = useState(() => localStorage.getItem('byok_gemini_key') || '');
-    const [groqKey, setGroqKey] = useState(() => localStorage.getItem('byok_groq_key') || '');
+    const [hasKeys, setHasKeys] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const curriculumSummary = useMemo(() => CURRICULUM.map(m => `Module ${m.id.split('-')[1]}: ${m.title}`).join('\n'), []);
@@ -22,7 +20,10 @@ const ChatbotModal = ({ module, onClose }: { module: Module | undefined, onClose
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    useEffect(scrollToBottom, [history]);
+    useEffect(() => {
+        setHasKeys(!!localStorage.getItem('byok_gemini_key') || !!localStorage.getItem('byok_groq_key'));
+        scrollToBottom();
+    }, [history]);
     
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -43,78 +44,32 @@ const ChatbotModal = ({ module, onClose }: { module: Module | undefined, onClose
         }
     };
 
-    const saveKeys = () => {
-        localStorage.setItem('byok_gemini_key', geminiKey);
-        localStorage.setItem('byok_groq_key', groqKey);
-        setShowSettings(false);
-    };
+
     
     return (
         <div className="fixed inset-0 bg-black/60 z-40 flex justify-center items-center p-4 animate-fade-in-fast" onClick={onClose}>
             <div className="bg-slate-800 rounded-2xl w-full max-w-2xl h-[80vh] flex flex-col shadow-2xl border border-slate-700 animate-slide-up" onClick={e => e.stopPropagation()}>
                 <header className="p-4 border-b border-slate-700 flex justify-between items-center flex-shrink-0">
                     <div>
-                        <h3 className="font-bold text-white text-lg">AI Tutor {showSettings && 'Settings'}</h3>
-                        <p className="text-sm text-slate-400">{showSettings ? 'Configure your BYOK API Keys' : `Asking about: ${module?.title || 'Current Topic'}`}</p>
+                        <h3 className="font-bold text-white text-lg">AI Tutor</h3>
+                        <p className="text-sm text-slate-400">{`Asking about: ${module?.title || 'Current Topic'}`}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <button onClick={() => setShowSettings(!showSettings)} className={`p-2 rounded-full transition-colors ${showSettings ? 'bg-cyan-500/20 text-cyan-400' : 'hover:bg-slate-700 text-slate-400'}`} title="Configure API Keys">
-                            <Cog6ToothIcon className="w-6 h-6" />
-                        </button>
+
                         <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-700 text-slate-400">
                             <XMarkIcon className="w-6 h-6" />
                         </button>
                     </div>
                 </header>
                 
-                {showSettings ? (
-                    <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                        <div className="bg-slate-700/30 p-5 rounded-2xl border border-slate-700">
-                            <div className="flex items-center gap-3 mb-4">
-                                <KeyIcon className="w-6 h-6 text-cyan-400" />
-                                <h4 className="text-white font-semibold">Gemini API Key (Primary)</h4>
-                            </div>
-                            <input
-                                type="password"
-                                value={geminiKey}
-                                onChange={e => setGeminiKey(e.target.value)}
-                                placeholder="AIzaSy..."
-                                className="w-full bg-slate-900 border border-slate-600 text-white rounded-lg py-3 px-4 focus:ring-2 focus:ring-cyan-500 transition-all mb-2"
-                            />
-                            <p className="text-xs text-slate-400">Get your free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">Google AI Studio</a></p>
-                        </div>
-
-                        <div className="bg-slate-700/30 p-5 rounded-2xl border border-slate-700">
-                            <div className="flex items-center gap-3 mb-4">
-                                <KeyIcon className="w-6 h-6 text-green-400" />
-                                <h4 className="text-white font-semibold">Groq API Key (Fallback)</h4>
-                            </div>
-                            <input
-                                type="password"
-                                value={groqKey}
-                                onChange={e => setGroqKey(e.target.value)}
-                                placeholder="gsk_..."
-                                className="w-full bg-slate-900 border border-slate-600 text-white rounded-lg py-3 px-4 focus:ring-2 focus:ring-green-500 transition-all mb-2"
-                            />
-                            <p className="text-xs text-slate-400">Get your ultra-fast API key at <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:underline">Groq Console</a></p>
-                        </div>
-                        
-                        <div className="pt-4 flex justify-end">
-                            <button onClick={saveKeys} className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 px-6 rounded-xl transition-colors">
-                                Save Configuration
-                            </button>
-                        </div>
-                    </div>
-                ) : (
-                    <>
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
                             {history.length === 0 && (
                                 <div className="text-center text-slate-400 py-10 px-4">
                                     <LogoIcon className="w-12 h-12 text-slate-600 mx-auto mb-4" />
                                     <p className="mb-2">Hello! I'm your AI Tutor.</p>
                                     <p className="text-sm">Ask me anything about the current module, or ask for an analogy to help you understand better!</p>
-                                    {(!geminiKey && !groqKey) && (
-                                        <p className="text-amber-400 text-sm mt-4 font-semibold">Please click the gear icon to configure your API keys first.</p>
+                                    {!hasKeys && (
+                                        <p className="text-amber-400 text-sm mt-4 font-semibold">Please click the gear icon in the top right header to configure your API keys first.</p>
                                     )}
                                 </div>
                             )}
@@ -143,11 +98,9 @@ const ChatbotModal = ({ module, onClose }: { module: Module | undefined, onClose
                                 onChange={(e) => setUserInput(e.target.value)}
                                 placeholder="Ask a question about this module..."
                                 className="w-full bg-slate-700 border border-slate-600 text-white placeholder-slate-400 rounded-lg py-2 px-4 focus:ring-2 focus:ring-cyan-500 transition-all"
-                                disabled={isLoading || (!geminiKey && !groqKey)}
+                                disabled={isLoading || !hasKeys}
                             />
                         </form>
-                    </>
-                )}
             </div>
         </div>
     );

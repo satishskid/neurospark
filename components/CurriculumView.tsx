@@ -9,6 +9,7 @@ interface CurriculumViewProps {
   currentLessonId: string | null;
   isLessonUnlocked: (lessonId: string) => boolean;
   onSelectLesson: (lessonId:string) => void;
+  isUserAdmin: boolean;
 }
 
 const CurriculumView: React.FC<CurriculumViewProps> = ({
@@ -17,6 +18,7 @@ const CurriculumView: React.FC<CurriculumViewProps> = ({
   currentLessonId,
   isLessonUnlocked,
   onSelectLesson,
+  isUserAdmin,
 }) => {
   return (
     <nav className="space-y-8 flex-1 overflow-y-auto pr-2 -mr-4">
@@ -37,7 +39,7 @@ const CurriculumView: React.FC<CurriculumViewProps> = ({
               {module.lessons.map((lesson) => {
                 const isCompleted = progress.completedLessons.has(lesson.id);
                 const isCurrent = lesson.id === currentLessonId;
-                const isUnlocked = isLessonUnlocked(lesson.id);
+                const isUnlocked = isUserAdmin || isLessonUnlocked(lesson.id);
 
                 let statusIcon;
                 if (isCompleted) {

@@ -70,8 +70,8 @@ describe('App Component', () => {
   it('renders onboarding screen initially', () => {
     render(<App />);
     
-    expect(screen.getAllByText(/GreyWaken/i)[0]).toBeInTheDocument();
-    expect(screen.getByText(/Awaken Your AI Potential/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Greywaken/i)[0]).toBeInTheDocument();
+    expect(screen.getByText(/The Clinical AI Masterclass/i)).toBeInTheDocument();
     expect(screen.getByText(/Get Started/i)).toBeInTheDocument();
   });
 
