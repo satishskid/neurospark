@@ -6,7 +6,7 @@ const USERS_COLLECTION = 'users';
 const WHITELIST_COLLECTION = 'whitelist';
 const ADMINS_COLLECTION = 'admins';
 
-export const SUPER_ADMINS = ['pranitskid@gmail.com', 'satishskid@gmail.com'];
+export const SUPER_ADMINS = ['pranitskid@gmail.com', 'satishskid@gmail.com', 'satish@skids.health', 'pranit@skids.health'];
 
 export const dbService = {
 
