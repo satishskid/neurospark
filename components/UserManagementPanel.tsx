@@ -16,7 +16,11 @@ import {
 // Calculate total lessons dynamically
 const totalLessons = CURRICULUM.flatMap(m => m.lessons).length;
 
-const UserCard = ({ user, onView }: { user: User; onView: (user: User) => void }) => {
+const UserCard = ({ user, onView, onDelete }: { 
+  user: User; 
+  onView: (user: User) => void;
+  onDelete: (uid: string, email: string) => void;
+}) => {
   const completedCount = Object.keys(user.completedSteps || {}).length;
   const progressPercentage = totalLessons > 0 ? (completedCount / totalLessons) * 100 : 0;
   const isCertified = completedCount >= totalLessons && totalLessons > 0;
@@ -47,6 +51,17 @@ const UserCard = ({ user, onView }: { user: User; onView: (user: User) => void }
             >
               <EyeIcon className="w-4 h-4" />
             </button>
+            
+            <button
+              onClick={() => onDelete(user.uid, user.email || '')}
+              className="p-2 bg-slate-850 hover:bg-red-500/10 border border-slate-800 hover:border-red-500/20 rounded-lg text-slate-400 hover:text-red-400 transition-all"
+              title="Delete student profile"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+
             <div className={`w-2.5 h-2.5 rounded-full ${user.isLoggedIn ? 'bg-green-500 animate-pulse' : 'bg-slate-700'}`} title={user.isLoggedIn ? 'Online' : 'Offline'} />
           </div>
         </div>
@@ -261,6 +276,22 @@ const UserManagementPanel: React.FC = () => {
     }
   };
 
+  const handleDeleteUser = async (uid: string, email: string) => {
+    if (!confirm(`Are you sure you want to permanently delete the profile and learning progress for ${email || 'this anonymous user'}? This will erase all logged lesson progress.`)) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await dbService.deleteUser(uid);
+      loadUsers();
+    } catch (e) {
+      console.error("Failed to delete user profile:", e);
+      alert("Failed to delete user profile.");
+      setLoading(false);
+    }
+  };
+
   // Filter users based on search query
   const filteredUsers = users.filter(user => {
     const nameStr = (user.name || '').toLowerCase();
@@ -332,6 +363,7 @@ const UserManagementPanel: React.FC = () => {
               key={user.uid}
               user={user}
               onView={setSelectedUser}
+              onDelete={handleDeleteUser}
             />
           ))}
         </div>

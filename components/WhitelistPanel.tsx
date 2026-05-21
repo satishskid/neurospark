@@ -8,6 +8,17 @@ interface WhitelistEntry {
   addedAt: string;
 }
 
+const formatDate = (dateVal: any) => {
+  if (!dateVal) return 'N/A';
+  const parsed = new Date(dateVal);
+  if (isNaN(parsed.getTime())) return 'N/A';
+  return parsed.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+};
+
 const WhitelistPanel: React.FC = () => {
   const [whitelist, setWhitelist] = useState<WhitelistEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -127,7 +138,7 @@ const WhitelistPanel: React.FC = () => {
     const csvRows = [headers.join(',')];
 
     whitelist.forEach(item => {
-      const dateStr = new Date(item.addedAt).toLocaleDateString();
+      const dateStr = formatDate(item.addedAt);
       csvRows.push(`"${item.email}","${item.addedBy}","${dateStr}"`);
     });
 
@@ -295,11 +306,7 @@ const WhitelistPanel: React.FC = () => {
                       {item.addedBy}
                     </td>
                     <td className="py-4 px-6 text-sm text-slate-400">
-                      {new Date(item.addedAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                      })}
+                      {formatDate(item.addedAt)}
                     </td>
                     <td className="py-4 px-6 text-center">
                       <button

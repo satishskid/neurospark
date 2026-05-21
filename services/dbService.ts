@@ -150,5 +150,10 @@ export const dbService = {
     updateUser: async (uid: string, user: any): Promise<void> => {
         const docRef = doc(db, USERS_COLLECTION, uid);
         await updateDoc(docRef, user);
+    },
+
+    deleteUser: async (uid: string): Promise<void> => {
+        const docRef = doc(db, USERS_COLLECTION, uid);
+        await deleteDoc(docRef);
     }
 };
